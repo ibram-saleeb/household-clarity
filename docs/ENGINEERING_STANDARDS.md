@@ -1,6 +1,6 @@
 # Engineering & Architecture Standards
 
-**Project**: Household Financial Clarity  
+**Project**: Project Tandem (App: Tandem)  
 **Author**: CTO  
 **Last Updated**: 2026-07-27  
 

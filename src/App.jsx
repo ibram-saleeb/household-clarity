@@ -131,7 +131,7 @@ export default function App() {
       <footer className="app-footer">
         <div className="footer-content">
           <p>
-            <strong>Household Financial Clarity (MVP)</strong> — Built for dual-income couples seeking shared financial transparency.
+            <strong>Tandem</strong> — Built for dual-income couples seeking shared household financial clarity.
           </p>
           <p className="footer-disclaimer">
             Calculations strictly show mathematical cash flow models based on user inputs and ATO resident tax rates. This application does NOT recommend financial products, loans, or financial advice.

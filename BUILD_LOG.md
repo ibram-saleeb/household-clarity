@@ -1,6 +1,6 @@
 # Continuous Build & Quality Log
 
-This file records automated build metrics, lint results, bundle size audits, and milestone release validations for **Household Financial Clarity**.
+This file records automated build metrics, lint results, bundle size audits, and milestone release validations for **Tandem** (Project Tandem).
 
 ---
 

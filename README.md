@@ -1,4 +1,4 @@
-# Household Financial Clarity (MVP)
+# Tandem (Project Tandem)
 
 [![React](https://img.shields.io/badge/React-19.0-61DAFB?logo=react&logoColor=black)](https://react.dev/)
 [![Vite](https://img.shields.io/badge/Vite-6.0-646CFF?logo=vite&logoColor=white)](https://vitejs.dev/)
@@ -7,7 +7,7 @@
 [![Build Status](https://img.shields.io/badge/Build-Passing-brightgreen)]()
 
 > **Shared Clarity. Less Money Stress.**  
-> A mobile-first household financial clarity web application designed for dual-income couples to establish their true spendable position and live stress-test "what-if" financial scenarios.
+> **Tandem** is a mobile-first household financial clarity web application designed for dual-income couples to establish their true spendable position and live stress-test "what-if" financial scenarios.
 
 ---
 

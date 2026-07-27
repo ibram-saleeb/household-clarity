@@ -17,9 +17,9 @@ export function Header({
             <span className="logo-icon">⚖️</span>
           </div>
           <div>
-            <h1 className="app-title">Household Financial Clarity</h1>
+            <h1 className="app-title">Tandem</h1>
             <p className="app-subtitle">
-              True spendable cash flow & live what-if stress-testing for dual-income couples
+              Household financial clarity & live what-if stress-testing for dual-income couples
             </p>
           </div>
         </div>

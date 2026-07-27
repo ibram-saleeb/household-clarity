@@ -1,6 +1,6 @@
 # Product Scoping & Vision Document
 
-**Project**: Household Financial Clarity  
+**Project**: Project Tandem (App: Tandem)  
 **Author**: CTO & Engineering Team  
 **Status**: Active / Production Baseline  
 **Version**: 1.0.0  

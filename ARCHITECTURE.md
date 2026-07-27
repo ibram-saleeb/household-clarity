@@ -1,6 +1,6 @@
 # Technical Architecture & System Design
 
-**Project**: Household Financial Clarity (MVP)  
+**Project**: Project Tandem (App: Tandem)  
 **Author**: Engineering Team  
 **Last Updated**: 2026-07-27  
 
