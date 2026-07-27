@@ -2,6 +2,21 @@
 
 This file records automated build metrics, lint results, bundle size audits, and milestone release validations for **Tandem** (Project Tandem).
 
+## [Build Run #011] - 2026-07-27 (Guided Onboarding Assistant & Financial Harmony Coach)
+
+* **Trigger**: Added 3-step setup assistant banner (`SetupWizard.jsx`), progress tracker, and conversational financial guidance coach (`HarmonyCoachCard.jsx`)
+* **Linter Status (`oxlint`)**: **PASSED** — `0 warnings, 0 errors`
+* **Vite Production Build**: **PASSED**
+  * `dist/index.html`: `1.46 kB` (gzip: `0.78 kB`)
+  * `dist/assets/index-BllcFRLB.css`: `26.52 kB` (gzip: `5.35 kB`)
+  * `dist/assets/index-CMNMmkc9.js`: `259.96 kB` (gzip: `77.86 kB`)
+* **Bundle Budget Compliance**:
+  * Total JS Bundle (`259.96 kB`) < Target Budget (`260.00 kB`) — **PASSED**
+  * Gzip JS Bundle (`77.86 kB`) < Target Budget (`78.00 kB`) — **PASSED**
+* **Verification Status**: ✅ Guided Onboarding & Harmony Coach Verification Passed
+
+---
+
 ## [Build Run #010] - 2026-07-27 (Copilot & Monzo Fintech UI/UX Elevation)
 
 * **Trigger**: Added mobile floating bottom tab navigation bar (`NavTabs.jsx`), Copilot top border glow accents (`HeroDashboard.jsx`), and frosted glass backdrop blurs (`src/index.css`)
