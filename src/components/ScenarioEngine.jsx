@@ -1,6 +1,6 @@
 import React from 'react';
-import { Zap, ArrowRight, RotateCcw, AlertTriangle, CheckCircle, Plus, Trash2, Sliders } from 'lucide-react';
-import { formatMoney } from './HeroDashboard';
+import { Zap, RotateCcw, Plus, Trash2, Sliders } from 'lucide-react';
+import { formatMoney } from '../utils/formatters.js';
 
 export function ScenarioEngine({
   scenarioMode,

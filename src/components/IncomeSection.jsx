@@ -1,6 +1,6 @@
 import React from 'react';
-import { User, Plus, Trash2, HelpCircle, DollarSign, Calculator, Lock } from 'lucide-react';
-import { formatMoney } from './HeroDashboard';
+import { User, Plus, Trash2, Lock } from 'lucide-react';
+import { formatMoney } from '../utils/formatters.js';
 import { ATO_TAX_CONFIG } from '../config/atoTaxConfig';
 
 export function IncomeSection({ partners, onUpdatePartner, calculatedData }) {

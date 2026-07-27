@@ -1,23 +1,6 @@
 import React from 'react';
 import { TrendingUp, TrendingDown, PiggyBank, Shield, ArrowRight, Sparkles } from 'lucide-react';
-
-export function formatMoney(amount, forceSign = false) {
-  const val = Number(amount) || 0;
-  const absFormatted = Math.abs(val).toLocaleString('en-AU', {
-    style: 'currency',
-    currency: 'AUD',
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2
-  });
-
-  if (val < 0) {
-    return `-${absFormatted}`;
-  }
-  if (val > 0 && forceSign) {
-    return `+${absFormatted}`;
-  }
-  return absFormatted;
-}
+import { formatMoney } from '../utils/formatters.js';
 
 export function HeroDashboard({ data, scenarioMode, savingsTargetMonthly, onSavingsChange }) {
   const { baseline, scenario, deltas } = data;

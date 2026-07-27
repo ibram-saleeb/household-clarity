@@ -49,9 +49,14 @@ Net Cashflow (Hero)  = Combined Spendable Cashflow - Total Outgoings (Normalised
 
 ```
 household-clarity/
+├── docs/                        # Scoping, architectural, and quality standards
+│   ├── SCOPING.md              # Product vision, scope, and v1.1 roadmap
+│   ├── ENGINEERING_STANDARDS.md# Architecture, coding rules, and module standards
+│   └── QUALITY_GATES.md        # Quality budgets, lint targets, and release rules
 ├── index.html                  # Entry point with SEO meta tags
 ├── package.json                # Project dependencies & npm scripts
 ├── ARCHITECTURE.md             # Senior engineer system architecture design
+├── BUILD_LOG.md                 # Continuous build & quality validation log
 ├── CHANGELOG.md                # Semantic versioning release log
 ├── LICENSE                     # MIT open-source license
 ├── src/

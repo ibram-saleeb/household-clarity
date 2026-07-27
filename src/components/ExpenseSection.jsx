@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { CreditCard, Plus, Trash2, Tag, Layers, Filter } from 'lucide-react';
-import { formatMoney } from './HeroDashboard';
+import { CreditCard, Plus, Trash2 } from 'lucide-react';
+import { formatMoney } from '../utils/formatters.js';
 import { annualiseAmount, deannualiseToMonthly } from '../logic/calculator';
 
 export function ExpenseSection({ expenses, onUpdateExpenses, partners }) {
