@@ -63,12 +63,15 @@ export function IncomeSection({ partners, onUpdatePartner, calculatedData }) {
       <div className="partners-grid">
         {partners.map((partner, index) => {
           const calc = index === 0 ? p1Calc : p2Calc;
+          const glowClass = index === 0 ? 'metric-card-primary' : 'metric-card-warning';
 
           return (
-            <div key={partner.id || index} className="partner-card">
+            <div key={partner.id || index} className={`partner-card ${glowClass}`}>
               {/* Partner Header */}
               <div className="partner-header">
-                <span className="partner-avatar">{partner.initials || `P${index + 1}`}</span>
+                <span className={`partner-avatar ${index === 0 ? 'avatar-p1' : 'avatar-p2'}`}>
+                  {partner.initials || `P${index + 1}`}
+                </span>
                 <input
                   type="text"
                   className="partner-title-input"
@@ -113,7 +116,7 @@ export function IncomeSection({ partners, onUpdatePartner, calculatedData }) {
               <div className="super-config-box">
                 <div className="super-header">
                   <span className="form-label">
-                    <Lock className="icon-xs inline-icon text-info" /> Superannuation (Wealth Fund)
+                    <Lock className="icon-xs inline-icon text-info" /> Super Guarantee
                   </span>
                   <div className="super-pill-toggle">
                     <button
@@ -169,13 +172,13 @@ export function IncomeSection({ partners, onUpdatePartner, calculatedData }) {
                       <span className="input-suffix">%</span>
                     </div>
                     <span className="super-calc-badge">
-                      = {formatMoney(calc?.superMonthly || 0)} /mo
+                      = {formatMoney(calc?.superMonthly || 0)} /mo wealth
                     </span>
                   </div>
                 )}
               </div>
 
-              {/* Extra Incomes */}
+              {/* Extra Incomes Section */}
               <div className="extra-incomes-section">
                 <div className="extra-incomes-header">
                   <span className="form-label">Extra Incomes (Rental, Dividends)</span>
@@ -184,55 +187,60 @@ export function IncomeSection({ partners, onUpdatePartner, calculatedData }) {
                     className="btn btn-ghost btn-sm"
                     onClick={() => handleAddExtraIncome(index)}
                   >
-                    <Plus className="icon-xs" /> Add Line
+                    <Plus className="icon-xs inline-icon" /> Add Line
                   </button>
                 </div>
 
                 {partner.extraIncomes && partner.extraIncomes.length > 0 ? (
-                  <div className="extra-incomes-list">
+                  <div className="extra-incomes-cards-list">
                     {partner.extraIncomes.map((extra) => (
-                      <div key={extra.id} className="extra-income-row">
-                        <input
-                          type="text"
-                          className="input-field extra-label-input"
-                          value={extra.label}
-                          onChange={(e) => handleUpdateExtraIncome(index, extra.id, 'label', e.target.value)}
-                          placeholder="Label"
-                        />
-                        <div className="input-prefix-wrapper extra-amount-input">
-                          <span className="input-prefix">$</span>
+                      <div key={extra.id} className="extra-income-item-card">
+                        <div className="extra-income-top">
                           <input
-                            type="number"
-                            min="0"
-                            className="input-field"
-                            value={extra.amount}
-                            onChange={(e) => handleUpdateExtraIncome(index, extra.id, 'amount', Math.max(0, Number(e.target.value) || 0))}
+                            type="text"
+                            className="input-field extra-label-input"
+                            value={extra.label}
+                            onChange={(e) => handleUpdateExtraIncome(index, extra.id, 'label', e.target.value)}
+                            placeholder="Income source label"
                           />
+                          <button
+                            type="button"
+                            className="btn-icon-danger"
+                            onClick={() => handleRemoveExtraIncome(index, extra.id)}
+                            title="Remove extra income line"
+                          >
+                            <Trash2 className="icon-xs" />
+                          </button>
                         </div>
-                        <select
-                          className="select-field extra-freq-select"
-                          value={extra.frequency}
-                          onChange={(e) => handleUpdateExtraIncome(index, extra.id, 'frequency', e.target.value)}
-                        >
-                          <option value="monthly">/ mo</option>
-                          <option value="annual">/ yr</option>
-                          <option value="fortnightly">/ fortnight</option>
-                          <option value="weekly">/ wk</option>
-                        </select>
-                        <button
-                          type="button"
-                          className="btn-icon-danger"
-                          onClick={() => handleRemoveExtraIncome(index, extra.id)}
-                          title="Remove line"
-                        >
-                          <Trash2 className="icon-xs" />
-                        </button>
+
+                        <div className="extra-income-bottom">
+                          <div className="input-prefix-wrapper flex-2">
+                            <span className="input-prefix">$</span>
+                            <input
+                              type="number"
+                              min="0"
+                              className="input-field"
+                              value={extra.amount}
+                              onChange={(e) => handleUpdateExtraIncome(index, extra.id, 'amount', Math.max(0, Number(e.target.value) || 0))}
+                            />
+                          </div>
+                          <select
+                            className="select-field flex-1"
+                            value={extra.frequency}
+                            onChange={(e) => handleUpdateExtraIncome(index, extra.id, 'frequency', e.target.value)}
+                          >
+                            <option value="monthly">/ mo</option>
+                            <option value="annual">/ yr</option>
+                            <option value="fortnightly">/ fortnight</option>
+                            <option value="weekly">/ wk</option>
+                          </select>
+                        </div>
                       </div>
                     ))}
                   </div>
                 ) : (
                   <div className="no-extra-incomes">
-                    No extra incomes. Click "+ Add Line" for side business, rental, or dividend income.
+                    No extra incomes. Click "+ Add Line" for rental, side business, or dividend income.
                   </div>
                 )}
               </div>

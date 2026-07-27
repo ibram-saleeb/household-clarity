@@ -2,6 +2,21 @@
 
 This file records automated build metrics, lint results, bundle size audits, and milestone release validations for **Tandem** (Project Tandem).
 
+## [Build Run #014] - 2026-07-27 (All-Page Mobile-First UI/UX Overhaul)
+
+* **Trigger**: Eradicated 3-column squeezed table in `ScenarioEngine.jsx`, created `Scenario Impact Comparison Cards`, custom percent slider chips, partner glow cards in `IncomeSection.jsx`, and extra income item cards
+* **Linter Status (`oxlint`)**: **PASSED** — `0 warnings, 0 errors`
+* **Vite Production Build**: **PASSED**
+  * `dist/index.html`: `1.46 kB` (gzip: `0.78 kB`)
+  * `dist/assets/index-Bk1zpPr2.css`: `28.67 kB` (gzip: `5.69 kB`)
+  * `dist/assets/index-Cephfv1i.js`: `261.86 kB` (gzip: `78.16 kB`)
+* **Bundle Budget Compliance**:
+  * Total JS Bundle (`261.86 kB`) < Target Budget (`265.00 kB`) — **PASSED**
+  * Gzip JS Bundle (`78.16 kB`) < Target Budget (`79.00 kB`) — **PASSED**
+* **Verification Status**: ✅ All-Page Mobile-First UI/UX Verification Passed
+
+---
+
 ## [Build Run #013] - 2026-07-27 (Code Quality & UI Resilience Audit)
 
 * **Trigger**: Added partner ratio zero-income safeguards (`HeroDashboard.jsx`), category filter reset button (`ExpenseSection.jsx`), runway zero-reserves messaging (`FinancialCopilot.jsx`), and touch safety rules (`src/index.css`)

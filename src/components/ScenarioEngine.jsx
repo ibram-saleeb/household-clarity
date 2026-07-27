@@ -1,5 +1,5 @@
 import React from 'react';
-import { Zap, RotateCcw, Plus, Trash2, Sliders } from 'lucide-react';
+import { Zap, RotateCcw, Plus, Trash2, Sliders, ArrowRight } from 'lucide-react';
 import { formatMoney } from '../utils/formatters.js';
 
 export function ScenarioEngine({
@@ -139,6 +139,70 @@ export function ScenarioEngine({
     });
   };
 
+  // Comparison Metrics Config
+  const baseline = scenarioData?.baseline;
+  const scenario = scenarioData?.scenario;
+  const deltas = scenarioData?.deltas;
+
+  const comparisonMetrics = [
+    {
+      title: 'Net Monthly Cash Flow (Hero Metric)',
+      isHero: true,
+      baselineVal: baseline?.netCashflowMonthly,
+      scenarioVal: scenario?.netCashflowMonthly,
+      deltaVal: deltas?.netCashflowMonthly,
+      inverseDelta: false
+    },
+    {
+      title: 'Net Cash Flow After Savings Target',
+      isHero: false,
+      baselineVal: baseline?.netAfterSavingsMonthly,
+      scenarioVal: scenario?.netAfterSavingsMonthly,
+      deltaVal: deltas?.netAfterSavingsMonthly,
+      inverseDelta: false
+    },
+    {
+      title: 'Combined Usable Spendable Income',
+      isHero: false,
+      baselineVal: baseline?.combinedUsableMonthly,
+      scenarioVal: scenario?.combinedUsableMonthly,
+      deltaVal: deltas?.combinedUsableMonthly,
+      inverseDelta: false
+    },
+    {
+      title: 'Total Household Outgoings',
+      isHero: false,
+      baselineVal: baseline?.totalExpensesMonthly,
+      scenarioVal: scenario?.totalExpensesMonthly,
+      deltaVal: deltas?.totalExpensesMonthly,
+      inverseDelta: true
+    },
+    {
+      title: `${p1Name} Spendable Cash`,
+      isHero: false,
+      baselineVal: baseline?.p1?.spendableIncomeMonthly,
+      scenarioVal: scenario?.p1?.spendableIncomeMonthly,
+      deltaVal: (scenario?.p1?.spendableIncomeMonthly || 0) - (baseline?.p1?.spendableIncomeMonthly || 0),
+      inverseDelta: false
+    },
+    {
+      title: `${p2Name} Spendable Cash`,
+      isHero: false,
+      baselineVal: baseline?.p2?.spendableIncomeMonthly,
+      scenarioVal: scenario?.p2?.spendableIncomeMonthly,
+      deltaVal: (scenario?.p2?.spendableIncomeMonthly || 0) - (baseline?.p2?.spendableIncomeMonthly || 0),
+      inverseDelta: false
+    },
+    {
+      title: 'Superannuation Wealth Accumulation',
+      isHero: false,
+      baselineVal: baseline?.totalSuperMonthly,
+      scenarioVal: scenario?.totalSuperMonthly,
+      deltaVal: deltas?.totalSuperMonthly,
+      inverseDelta: false
+    }
+  ];
+
   return (
     <section className="section-container scenario-section">
       <div className="section-header">
@@ -147,7 +211,7 @@ export function ScenarioEngine({
             <Zap className="icon-md inline-icon text-zap" /> What-If Live Scenario Engine
           </h2>
           <p className="section-subtitle">
-            Simulate life events—job changes, parental leave, mortgage rate increases—and immediately compare your Baseline vs Scenario side-by-side.
+            Simulate life events—job changes, parental leave, mortgage surge—and instantly compare your Baseline vs Scenario position.
           </p>
         </div>
 
@@ -162,7 +226,7 @@ export function ScenarioEngine({
         </div>
       </div>
 
-      {/* Quick Presets Bar */}
+      {/* Quick Presets Grid */}
       <div className="presets-bar">
         <span className="presets-title">Quick Stress-Test Presets:</span>
         <div className="preset-cards-grid">
@@ -196,7 +260,11 @@ export function ScenarioEngine({
             
             {/* P1 Controls */}
             <div className="scenario-partner-control">
-              <label className="input-label font-weight-bold">{p1Name} Salary Adjustment:</label>
+              <div className="control-label-row">
+                <span className="control-name">{p1Name} Salary Adjustment:</span>
+                <span className="percent-pill">{currentOverrides.p1?.salaryPercent ?? 100}%</span>
+              </div>
+
               <div className="scenario-slider-row">
                 <input
                   type="range"
@@ -207,12 +275,23 @@ export function ScenarioEngine({
                   value={currentOverrides.p1?.salaryPercent ?? 100}
                   onChange={(e) => handlePartnerPercentChange('p1', e.target.value)}
                 />
-                <span className="percent-badge">
-                  {currentOverrides.p1?.salaryPercent ?? 100}%
-                </span>
               </div>
+
+              <div className="quick-percent-buttons">
+                {[0, 50, 75, 100, 125].map(pct => (
+                  <button
+                    key={pct}
+                    type="button"
+                    className={`btn-pct-chip ${(currentOverrides.p1?.salaryPercent ?? 100) === pct ? 'active' : ''}`}
+                    onClick={() => handlePartnerPercentChange('p1', pct)}
+                  >
+                    {pct}%
+                  </button>
+                ))}
+              </div>
+
               <div className="override-direct-input">
-                <span className="text-xs text-muted">Or override dollar amount:</span>
+                <span className="text-xs text-muted">Or dollar amount override:</span>
                 <div className="input-prefix-wrapper">
                   <span className="input-prefix">$</span>
                   <input
@@ -229,7 +308,11 @@ export function ScenarioEngine({
 
             {/* P2 Controls */}
             <div className="scenario-partner-control">
-              <label className="input-label font-weight-bold">{p2Name} Salary Adjustment:</label>
+              <div className="control-label-row">
+                <span className="control-name">{p2Name} Salary Adjustment:</span>
+                <span className="percent-pill">{currentOverrides.p2?.salaryPercent ?? 100}%</span>
+              </div>
+
               <div className="scenario-slider-row">
                 <input
                   type="range"
@@ -240,12 +323,23 @@ export function ScenarioEngine({
                   value={currentOverrides.p2?.salaryPercent ?? 100}
                   onChange={(e) => handlePartnerPercentChange('p2', e.target.value)}
                 />
-                <span className="percent-badge">
-                  {currentOverrides.p2?.salaryPercent ?? 100}%
-                </span>
               </div>
+
+              <div className="quick-percent-buttons">
+                {[0, 50, 75, 100, 125].map(pct => (
+                  <button
+                    key={pct}
+                    type="button"
+                    className={`btn-pct-chip ${(currentOverrides.p2?.salaryPercent ?? 100) === pct ? 'active' : ''}`}
+                    onClick={() => handlePartnerPercentChange('p2', pct)}
+                  >
+                    {pct}%
+                  </button>
+                ))}
+              </div>
+
               <div className="override-direct-input">
-                <span className="text-xs text-muted">Or override dollar amount:</span>
+                <span className="text-xs text-muted">Or dollar amount override:</span>
                 <div className="input-prefix-wrapper">
                   <span className="input-prefix">$</span>
                   <input
@@ -264,7 +358,7 @@ export function ScenarioEngine({
           {/* Scenario Expenses Overrides Card */}
           <div className="scenario-card">
             <div className="scenario-card-header">
-              <h3 className="card-subtitle">Scenario Expense Lines</h3>
+              <h3 className="card-subtitle">Scenario Outgoings Overrides</h3>
               <button className="btn btn-ghost-sm" onClick={handleAddScenarioExpense}>
                 <Plus className="icon-xs inline-icon" /> Add Test Expense
               </button>
@@ -272,39 +366,44 @@ export function ScenarioEngine({
             
             <div className="scenario-expenses-list">
               {scenarioExpenseList.map((exp) => (
-                <div key={exp.id} className="scenario-expense-item">
-                  <input
-                    type="text"
-                    className="input-field input-xs"
-                    value={exp.label}
-                    onChange={(e) => handleUpdateScenarioExpense(exp.id, 'label', e.target.value)}
-                  />
-                  <div className="input-prefix-wrapper input-xs-amount">
-                    <span className="input-prefix">$</span>
+                <div key={exp.id} className="scenario-expense-item-card">
+                  <div className="scenario-expense-item-top">
                     <input
-                      type="number"
-                      className="input-field input-xs"
-                      value={exp.amount}
-                      onChange={(e) => handleUpdateScenarioExpense(exp.id, 'amount', Math.max(0, Number(e.target.value) || 0))}
+                      type="text"
+                      className="input-field scenario-expense-title"
+                      value={exp.label}
+                      onChange={(e) => handleUpdateScenarioExpense(exp.id, 'label', e.target.value)}
                     />
+                    <button
+                      className="btn-icon-danger"
+                      onClick={() => handleDeleteScenarioExpense(exp.id)}
+                      title="Remove expense from scenario"
+                    >
+                      <Trash2 className="icon-xs" />
+                    </button>
                   </div>
-                  <select
-                    className="input-select input-xs-freq"
-                    value={exp.frequency}
-                    onChange={(e) => handleUpdateScenarioExpense(exp.id, 'frequency', e.target.value)}
-                  >
-                    <option value="monthly">/ mo</option>
-                    <option value="weekly">/ wk</option>
-                    <option value="fortnightly">/ fortnight</option>
-                    <option value="annual">/ yr</option>
-                  </select>
-                  <button
-                    className="btn-icon-danger"
-                    onClick={() => handleDeleteScenarioExpense(exp.id)}
-                    title="Remove expense from scenario"
-                  >
-                    <Trash2 className="icon-xs" />
-                  </button>
+
+                  <div className="scenario-expense-item-bottom">
+                    <div className="input-prefix-wrapper">
+                      <span className="input-prefix">$</span>
+                      <input
+                        type="number"
+                        className="input-field"
+                        value={exp.amount}
+                        onChange={(e) => handleUpdateScenarioExpense(exp.id, 'amount', Math.max(0, Number(e.target.value) || 0))}
+                      />
+                    </div>
+                    <select
+                      className="input-select"
+                      value={exp.frequency}
+                      onChange={(e) => handleUpdateScenarioExpense(exp.id, 'frequency', e.target.value)}
+                    >
+                      <option value="monthly">/ mo</option>
+                      <option value="weekly">/ wk</option>
+                      <option value="fortnightly">/ fortnight</option>
+                      <option value="annual">/ yr</option>
+                    </select>
+                  </div>
                 </div>
               ))}
             </div>
@@ -312,98 +411,46 @@ export function ScenarioEngine({
         </div>
       )}
 
-      {/* Side-by-Side Baseline vs Scenario Comparison Table */}
-      {scenarioMode && scenarioData?.baseline && scenarioData?.scenario && (
-        <div className="comparison-card">
-          <h3 className="comparison-title">
-            <Zap className="icon-xs inline-icon text-zap" /> Baseline vs Scenario Side-by-Side Comparison
+      {/* Mobile-First Scenario Impact Comparison Cards */}
+      {scenarioMode && baseline && scenario && (
+        <div className="comparison-section-wrapper">
+          <h3 className="comparison-section-title">
+            <Zap className="icon-xs inline-icon text-zap" /> Baseline vs Scenario Position Impact
           </h3>
 
-          <div className="table-responsive">
-            <table className="comparison-table">
-              <thead>
-                <tr>
-                  <th>Financial Metric</th>
-                  <th>Baseline</th>
-                  <th>What-If Scenario</th>
-                  <th>Delta / Impact</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr className="highlight-row">
-                  <td>
-                    <strong>Net Monthly Cash Flow (Hero Metric)</strong>
-                  </td>
-                  <td className={scenarioData.baseline.netCashflowMonthly >= 0 ? 'text-surplus' : 'text-deficit'}>
-                    {formatMoney(scenarioData.baseline.netCashflowMonthly, true)} / mo
-                  </td>
-                  <td className={scenarioData.scenario.netCashflowMonthly >= 0 ? 'text-surplus' : 'text-deficit'}>
-                    {formatMoney(scenarioData.scenario.netCashflowMonthly, true)} / mo
-                  </td>
-                  <td className={`delta-cell ${scenarioData.deltas.netCashflowMonthly >= 0 ? 'text-surplus' : 'text-deficit'}`}>
-                    {formatMoney(scenarioData.deltas.netCashflowMonthly, true)} / mo
-                  </td>
-                </tr>
+          <div className="scenario-impact-cards-grid">
+            {comparisonMetrics.map((m, idx) => {
+              const delta = m.deltaVal || 0;
+              const isPositive = m.inverseDelta ? delta <= 0 : delta >= 0;
+              const deltaClass = isPositive ? 'delta-tag-surplus' : 'delta-tag-deficit';
 
-                <tr>
-                  <td>Net Cash Flow After Savings Target</td>
-                  <td>{formatMoney(scenarioData.baseline.netAfterSavingsMonthly, true)} / mo</td>
-                  <td>{formatMoney(scenarioData.scenario.netAfterSavingsMonthly, true)} / mo</td>
-                  <td className={scenarioData.deltas.netAfterSavingsMonthly >= 0 ? 'text-surplus' : 'text-deficit'}>
-                    {formatMoney(scenarioData.deltas.netAfterSavingsMonthly, true)} / mo
-                  </td>
-                </tr>
+              return (
+                <div key={idx} className={`scenario-impact-card ${m.isHero ? 'hero-impact-card' : ''}`}>
+                  <div className="impact-card-header">
+                    <span className="impact-metric-title">{m.title}</span>
+                    <span className={`impact-delta-tag ${deltaClass}`}>
+                      {delta >= 0 ? '+' : ''}{formatMoney(delta, true)} / mo
+                    </span>
+                  </div>
 
-                <tr>
-                  <td>Combined Usable Spendable Income (Post-Tax)</td>
-                  <td>{formatMoney(scenarioData.baseline.combinedUsableMonthly)} / mo</td>
-                  <td>{formatMoney(scenarioData.scenario.combinedUsableMonthly)} / mo</td>
-                  <td className={scenarioData.deltas.combinedUsableMonthly >= 0 ? 'text-surplus' : 'text-deficit'}>
-                    {formatMoney(scenarioData.deltas.combinedUsableMonthly, true)} / mo
-                  </td>
-                </tr>
+                  <div className="impact-comparison-row">
+                    <div className="impact-value-box">
+                      <span className="impact-value-label">Baseline</span>
+                      <span className="impact-value-number">{formatMoney(m.baselineVal, true)}</span>
+                    </div>
 
-                <tr>
-                  <td>Total Outgoings & Expenses</td>
-                  <td>{formatMoney(scenarioData.baseline.totalExpensesMonthly)} / mo</td>
-                  <td>{formatMoney(scenarioData.scenario.totalExpensesMonthly)} / mo</td>
-                  <td className={scenarioData.deltas.totalExpensesMonthly <= 0 ? 'text-surplus' : 'text-deficit'}>
-                    {formatMoney(scenarioData.deltas.totalExpensesMonthly, true)} / mo
-                  </td>
-                </tr>
+                    <div className="impact-arrow">
+                      <ArrowRight className="icon-xs" />
+                    </div>
 
-                <tr>
-                  <td>{p1Name} Spendable Cash</td>
-                  <td>{formatMoney(scenarioData.baseline.p1?.spendableIncomeMonthly)} / mo</td>
-                  <td>{formatMoney(scenarioData.scenario.p1?.spendableIncomeMonthly)} / mo</td>
-                  <td>
-                    {formatMoney(
-                      (scenarioData.scenario.p1?.spendableIncomeMonthly || 0) - (scenarioData.baseline.p1?.spendableIncomeMonthly || 0),
-                      true
-                    )} / mo
-                  </td>
-                </tr>
-
-                <tr>
-                  <td>{p2Name} Spendable Cash</td>
-                  <td>{formatMoney(scenarioData.baseline.p2?.spendableIncomeMonthly)} / mo</td>
-                  <td>{formatMoney(scenarioData.scenario.p2?.spendableIncomeMonthly)} / mo</td>
-                  <td>
-                    {formatMoney(
-                      (scenarioData.scenario.p2?.spendableIncomeMonthly || 0) - (scenarioData.baseline.p2?.spendableIncomeMonthly || 0),
-                      true
-                    )} / mo
-                  </td>
-                </tr>
-
-                <tr>
-                  <td>Superannuation Wealth Accumulation</td>
-                  <td>{formatMoney(scenarioData.baseline.totalSuperMonthly)} / mo</td>
-                  <td>{formatMoney(scenarioData.scenario.totalSuperMonthly)} / mo</td>
-                  <td>{formatMoney(scenarioData.deltas.totalSuperMonthly, true)} / mo</td>
-                </tr>
-              </tbody>
-            </table>
+                    <div className="impact-value-box highlight">
+                      <span className="impact-value-label">Scenario</span>
+                      <span className="impact-value-number">{formatMoney(m.scenarioVal, true)}</span>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
       )}
