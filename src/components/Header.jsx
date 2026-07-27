@@ -1,6 +1,7 @@
 import React from 'react';
 import { ShieldCheck, RefreshCw, Info, Zap, Trash2, Download } from 'lucide-react';
 import { ATO_TAX_CONFIG } from '../config/atoTaxConfig';
+import { TandemLogo } from './TandemLogo';
 
 export function Header({ 
   scenarioMode, 
@@ -14,14 +15,10 @@ export function Header({
     <header className="app-header">
       <div className="header-container">
         <div className="brand-section">
-          <div className="logo-badge">
-            <span className="logo-icon">⚖️</span>
-          </div>
+          <TandemLogo size="md" />
           <div>
             <h1 className="app-title">Tandem</h1>
-            <p className="app-subtitle">
-              Household financial clarity & live what-if stress-testing for dual-income couples
-            </p>
+            <p className="app-subtitle">Financial harmony in tandem.</p>
           </div>
         </div>
 

@@ -17,17 +17,17 @@ export function HeroDashboard({ data, scenarioMode, savingsTargetMonthly, onSavi
             <span className="hero-badge">
               {isSurplus ? (
                 <>
-                  <TrendingUp className="icon-sm" /> Real Monthly Household Surplus
+                  <TrendingUp className="icon-sm" /> Monthly Cashflow Buffer (Surplus)
                 </>
               ) : (
                 <>
-                  <TrendingDown className="icon-sm" /> Real Monthly Household Deficit
+                  <TrendingDown className="icon-sm" /> Monthly Cashflow Deficit
                 </>
               )}
             </span>
             {scenarioMode && (
               <span className="scenario-pill-badge">
-                <Sparkles className="icon-xs inline-icon" /> Live What-If Scenario View
+                <Sparkles className="icon-xs inline-icon" /> What-If Stress Test View
               </span>
             )}
           </div>
@@ -40,7 +40,7 @@ export function HeroDashboard({ data, scenarioMode, savingsTargetMonthly, onSavi
               <span className="hero-period">/ month</span>
             </h2>
             <p className="hero-number-subtext">
-              Usable Spendable Income ({formatMoney(current.combinedUsableMonthly)}/mo) minus Total Outgoings ({formatMoney(current.totalExpensesMonthly)}/mo)
+              Take-Home Pay ({formatMoney(current.combinedUsableMonthly)}/mo) minus Household Expenses ({formatMoney(current.totalExpensesMonthly)}/mo)
             </p>
           </div>
 
@@ -62,7 +62,7 @@ export function HeroDashboard({ data, scenarioMode, savingsTargetMonthly, onSavi
         <div className="hero-savings-bar">
           <div className="savings-input-group">
             <label className="savings-label">
-              <PiggyBank className="icon-sm inline-icon" /> Monthly Savings / Emergency Fund Allocation:
+              <PiggyBank className="icon-sm inline-icon" /> Monthly Savings & Emergency Reserves:
             </label>
             <div className="input-prefix-wrapper">
               <span className="input-prefix">$</span>
@@ -80,7 +80,7 @@ export function HeroDashboard({ data, scenarioMode, savingsTargetMonthly, onSavi
           </div>
 
           <div className="net-after-savings-result">
-            <span className="after-savings-label">Net Surplus After Savings:</span>
+            <span className="after-savings-label">Buffer Remaining After Savings:</span>
             <span className={`after-savings-value ${isAfterSavingsSurplus ? 'text-surplus' : 'text-deficit'}`}>
               {formatMoney(current.netAfterSavingsMonthly, true)} <span className="text-muted">/mo</span>
             </span>
@@ -91,50 +91,50 @@ export function HeroDashboard({ data, scenarioMode, savingsTargetMonthly, onSavi
       {/* Summary Metrics Bar */}
       <div className="dashboard-metrics-grid">
         <div className="metric-card">
-          <div className="metric-label">Combined Usable Cash Income</div>
+          <div className="metric-label">What You Take Home Together</div>
           <div className="metric-value text-primary">
             {formatMoney(current.combinedUsableMonthly)} <span className="metric-period">/mo</span>
           </div>
           <div className="metric-subtext">
-            Post-tax & post-super combined spendable cash ({formatMoney(current.combinedUsableAnnual)}/yr)
+            Combined spendable cash ({formatMoney(current.combinedUsableAnnual)}/yr post-tax & super)
           </div>
         </div>
 
         <div className="metric-card">
-          <div className="metric-label">Total Outgoings & Expenses</div>
+          <div className="metric-label">Household Expenses</div>
           <div className="metric-value text-warning">
             {formatMoney(current.totalExpensesMonthly)} <span className="metric-period">/mo</span>
           </div>
           <div className="metric-subtext">
-            Normalised across all weekly, monthly & annual line items
+            Normalized across all weekly, fortnightly, monthly & annual expenses
           </div>
         </div>
 
         <div className="metric-card">
           <div className="metric-label">
-            <Shield className="icon-xs inline-icon" /> Superannuation (Wealth Fund)
+            <Shield className="icon-xs inline-icon" /> Retirement Wealth Building (Super)
           </div>
           <div className="metric-value text-info">
             {formatMoney(current.totalSuperMonthly)} <span className="metric-period">/mo</span>
           </div>
           <div className="metric-subtext">
-            {formatMoney(current.totalSuperMonthly * 12)}/yr total employer super (Excluded from cash flow)
+            {formatMoney(current.totalSuperMonthly * 12)}/yr total employer super (Protected for retirement)
           </div>
         </div>
 
         <div className="metric-card">
-          <div className="metric-label">Partner Cash Flow Split</div>
+          <div className="metric-label">Partner Cashflow Split</div>
           <div className="partner-split-values">
             <span className="split-partner">
-              <strong>{current.p1?.name || 'P1'}:</strong> {formatMoney(current.p1NetMonthly, true)}/mo
+              <strong>{current.p1?.name || 'Partner 1'}:</strong> {formatMoney(current.p1NetMonthly, true)}/mo
             </span>
             <span className="split-divider">|</span>
             <span className="split-partner">
-              <strong>{current.p2?.name || 'P2'}:</strong> {formatMoney(current.p2NetMonthly, true)}/mo
+              <strong>{current.p2?.name || 'Partner 2'}:</strong> {formatMoney(current.p2NetMonthly, true)}/mo
             </span>
           </div>
           <div className="metric-subtext">
-            Individual spendable income minus personal & 50% shared outgoings
+            Take-home pay minus personal & 50% shared expenses
           </div>
         </div>
       </div>
