@@ -1,6 +1,7 @@
 import React from 'react';
 import { TrendingUp, TrendingDown, PiggyBank, Shield, ArrowRight, Sparkles } from 'lucide-react';
 import { formatMoney } from '../utils/formatters.js';
+import { Tooltip } from './Tooltip.jsx';
 
 export function HeroDashboard({ data, scenarioMode, savingsTargetMonthly, onSavingsChange }) {
   const { baseline, scenario, deltas } = data;
@@ -40,7 +41,8 @@ export function HeroDashboard({ data, scenarioMode, savingsTargetMonthly, onSavi
               <span className="hero-period">/ month</span>
             </h2>
             <p className="hero-number-subtext">
-              Take-Home Pay ({formatMoney(current.combinedUsableMonthly)}/mo) minus Household Expenses ({formatMoney(current.totalExpensesMonthly)}/mo)
+              Take-Home Pay minus Household Expenses{' '}
+              <Tooltip text={`Combined Spendable Income (${formatMoney(current.combinedUsableMonthly)}/mo) minus Total Expenses (${formatMoney(current.totalExpensesMonthly)}/mo)`} />
             </p>
           </div>
 
@@ -62,7 +64,7 @@ export function HeroDashboard({ data, scenarioMode, savingsTargetMonthly, onSavi
         <div className="hero-savings-bar">
           <div className="savings-input-group">
             <label className="savings-label">
-              <PiggyBank className="icon-sm inline-icon" /> Monthly Savings & Emergency Reserves:
+              <PiggyBank className="icon-sm inline-icon" /> Monthly Savings Allocation:
             </label>
             <div className="input-prefix-wrapper">
               <span className="input-prefix">$</span>
@@ -80,7 +82,7 @@ export function HeroDashboard({ data, scenarioMode, savingsTargetMonthly, onSavi
           </div>
 
           <div className="net-after-savings-result">
-            <span className="after-savings-label">Buffer Remaining After Savings:</span>
+            <span className="after-savings-label">Buffer Remaining:</span>
             <span className={`after-savings-value ${isAfterSavingsSurplus ? 'text-surplus' : 'text-deficit'}`}>
               {formatMoney(current.netAfterSavingsMonthly, true)} <span className="text-muted">/mo</span>
             </span>
@@ -91,50 +93,60 @@ export function HeroDashboard({ data, scenarioMode, savingsTargetMonthly, onSavi
       {/* Summary Metrics Bar */}
       <div className="dashboard-metrics-grid">
         <div className="metric-card">
-          <div className="metric-label">What You Take Home Together</div>
+          <div className="metric-label">
+            Take-Home Pay Together{' '}
+            <Tooltip text="Combined post-tax & post-Medicare spendable cash for both partners" />
+          </div>
           <div className="metric-value text-primary">
             {formatMoney(current.combinedUsableMonthly)} <span className="metric-period">/mo</span>
           </div>
           <div className="metric-subtext">
-            Combined spendable cash ({formatMoney(current.combinedUsableAnnual)}/yr post-tax & super)
-          </div>
-        </div>
-
-        <div className="metric-card">
-          <div className="metric-label">Household Expenses</div>
-          <div className="metric-value text-warning">
-            {formatMoney(current.totalExpensesMonthly)} <span className="metric-period">/mo</span>
-          </div>
-          <div className="metric-subtext">
-            Normalized across all weekly, fortnightly, monthly & annual expenses
+            {formatMoney(current.combinedUsableAnnual)}/yr combined spendable cash
           </div>
         </div>
 
         <div className="metric-card">
           <div className="metric-label">
-            <Shield className="icon-xs inline-icon" /> Retirement Wealth Building (Super)
+            Household Expenses{' '}
+            <Tooltip text="Sum of all shared & personal expenses normalized to a monthly figure" />
+          </div>
+          <div className="metric-value text-warning">
+            {formatMoney(current.totalExpensesMonthly)} <span className="metric-period">/mo</span>
+          </div>
+          <div className="metric-subtext">
+            Normalized across all regular outgoings
+          </div>
+        </div>
+
+        <div className="metric-card">
+          <div className="metric-label">
+            <Shield className="icon-xs inline-icon" /> Super Guarantee (Wealth){' '}
+            <Tooltip text="Employer Super Guarantee (12%) is protected for retirement and strictly excluded from spendable cashflow" />
           </div>
           <div className="metric-value text-info">
             {formatMoney(current.totalSuperMonthly)} <span className="metric-period">/mo</span>
           </div>
           <div className="metric-subtext">
-            {formatMoney(current.totalSuperMonthly * 12)}/yr total employer super (Protected for retirement)
+            {formatMoney(current.totalSuperMonthly * 12)}/yr total employer super
           </div>
         </div>
 
         <div className="metric-card">
-          <div className="metric-label">Partner Cashflow Split</div>
+          <div className="metric-label">
+            Partner Cashflow Split{' '}
+            <Tooltip text="Individual take-home pay minus personal expenses and 50% of shared expenses" />
+          </div>
           <div className="partner-split-values">
             <span className="split-partner">
-              <strong>{current.p1?.name || 'Partner 1'}:</strong> {formatMoney(current.p1NetMonthly, true)}/mo
+              <strong>{current.p1?.name || 'P1'}:</strong> {formatMoney(current.p1NetMonthly, true)}/mo
             </span>
             <span className="split-divider">|</span>
             <span className="split-partner">
-              <strong>{current.p2?.name || 'Partner 2'}:</strong> {formatMoney(current.p2NetMonthly, true)}/mo
+              <strong>{current.p2?.name || 'P2'}:</strong> {formatMoney(current.p2NetMonthly, true)}/mo
             </span>
           </div>
           <div className="metric-subtext">
-            Take-home pay minus personal & 50% shared expenses
+            Net position per partner
           </div>
         </div>
       </div>

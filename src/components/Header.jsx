@@ -1,6 +1,5 @@
 import React from 'react';
-import { ShieldCheck, RefreshCw, Info, Zap, Trash2, Download } from 'lucide-react';
-import { ATO_TAX_CONFIG } from '../config/atoTaxConfig';
+import { ShieldCheck, RefreshCw, Zap, Trash2, Download } from 'lucide-react';
 import { TandemLogo } from './TandemLogo';
 
 export function Header({ 
@@ -67,15 +66,6 @@ export function Header({
             <Trash2 className="icon-sm" />
           </button>
         </div>
-      </div>
-      
-      <div className="tax-banner">
-        <span className="tax-tag">
-          <Info className="icon-xs inline-icon" /> Official Tax Rules: {ATO_TAX_CONFIG.financialYearLabel} (Stage 3 Rates + 2% Medicare Levy + 12% SG)
-        </span>
-        <span className="tax-disclaimer">
-          Spendable income excludes super (transferred directly to super funds). Calculations are estimates.
-        </span>
       </div>
     </header>
   );
