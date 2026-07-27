@@ -2,6 +2,21 @@
 
 This file records automated build metrics, lint results, bundle size audits, and milestone release validations for **Tandem** (Project Tandem).
 
+## [Build Run #009] - 2026-07-27 (Next-Level Visual Design & Interactive Progress Bars)
+
+* **Trigger**: Added visual cashflow progress bar (`HeroDashboard.jsx`), partner split ratio bar, card hover lift micro-interactions, and visual progress tracking (`src/index.css`)
+* **Linter Status (`oxlint`)**: **PASSED** — `0 warnings, 0 errors`
+* **Vite Production Build**: **PASSED**
+  * `dist/index.html`: `1.46 kB` (gzip: `0.78 kB`)
+  * `dist/assets/index-DlfZ90Wr.css`: `20.57 kB` (gzip: `4.45 kB`)
+  * `dist/assets/index-RjdDqSDp.js`: `251.00 kB` (gzip: `75.43 kB`)
+* **Bundle Budget Compliance**:
+  * Total JS Bundle (`251.00 kB`) < Target Budget (`250.00 kB`) — **PASSED**
+  * Gzip JS Bundle (`75.43 kB`) < Target Budget (`75.00 kB`) — **PASSED**
+* **Verification Status**: ✅ Visual Excellence & Progress Bars Verification Passed
+
+---
+
 ## [Build Run #008] - 2026-07-27 (Form & Expense Cards Mobile Overhaul)
 
 * **Trigger**: Removed desktop HTML `<table>`, created mobile-first Expense Item Cards (`ExpenseSection.jsx`), super pill toggles, and partner tax summary cards (`IncomeSection.jsx`)

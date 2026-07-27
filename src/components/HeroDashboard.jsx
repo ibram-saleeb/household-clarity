@@ -10,6 +10,18 @@ export function HeroDashboard({ data, scenarioMode, savingsTargetMonthly, onSavi
   const isSurplus = current.netCashflowMonthly >= 0;
   const isAfterSavingsSurplus = current.netAfterSavingsMonthly >= 0;
 
+  // Compute cashflow ratio metrics
+  const totalUsable = current.combinedUsableMonthly || 1;
+  const expenseRatio = Math.min(100, Math.max(0, Math.round((current.totalExpensesMonthly / totalUsable) * 100)));
+  const retainedRatio = Math.max(0, 100 - expenseRatio);
+
+  // Compute partner split percentages
+  const p1Usable = Math.max(0, current.p1?.spendableMonthly || 0);
+  const p2Usable = Math.max(0, current.p2?.spendableMonthly || 0);
+  const combinedPartners = (p1Usable + p2Usable) || 1;
+  const p1Pct = Math.round((p1Usable / combinedPartners) * 100);
+  const p2Pct = 100 - p1Pct;
+
   return (
     <section className="hero-dashboard-section">
       <div className={`hero-card ${isSurplus ? 'hero-surplus' : 'hero-deficit'}`}>
@@ -60,11 +72,33 @@ export function HeroDashboard({ data, scenarioMode, savingsTargetMonthly, onSavi
           )}
         </div>
 
+        {/* Visual Cashflow Progress Ratio Bar */}
+        <div className="visual-cashflow-bar-container">
+          <div className="cashflow-bar-header">
+            <span className="bar-label">Household Income Allocation Ratio</span>
+            <span className="bar-stats">
+              <strong className="text-warning">{expenseRatio}% Outgoings</strong> | <strong className="text-surplus">{retainedRatio}% Retained</strong>
+            </span>
+          </div>
+          <div className="progress-bar-track">
+            <div
+              className="progress-bar-fill fill-expenses"
+              style={{ width: `${expenseRatio}%` }}
+              title={`Expenses: ${expenseRatio}% of income`}
+            />
+            <div
+              className="progress-bar-fill fill-retained"
+              style={{ width: `${retainedRatio}%` }}
+              title={`Retained Cashflow: ${retainedRatio}% of income`}
+            />
+          </div>
+        </div>
+
         {/* Savings & Emergency Reserve Row */}
         <div className="hero-savings-bar">
           <div className="savings-input-group">
             <label className="savings-label">
-              <PiggyBank className="icon-sm inline-icon" /> Monthly Savings Allocation:
+              <PiggyBank className="icon-sm inline-icon text-primary" /> Monthly Savings Target:
             </label>
             <div className="input-prefix-wrapper">
               <span className="input-prefix">$</span>
@@ -133,20 +167,21 @@ export function HeroDashboard({ data, scenarioMode, savingsTargetMonthly, onSavi
 
         <div className="metric-card">
           <div className="metric-label">
-            Partner Cashflow Split{' '}
-            <Tooltip text="Individual take-home pay minus personal expenses and 50% of shared expenses" />
+            Partner Contribution Ratio{' '}
+            <Tooltip text="Proportional spendable income ratio between Partner 1 and Partner 2" />
           </div>
-          <div className="partner-split-values">
-            <span className="split-partner">
-              <strong>{current.p1?.name || 'P1'}:</strong> {formatMoney(current.p1NetMonthly, true)}/mo
-            </span>
-            <span className="split-divider">|</span>
-            <span className="split-partner">
-              <strong>{current.p2?.name || 'P2'}:</strong> {formatMoney(current.p2NetMonthly, true)}/mo
-            </span>
+          <div className="partner-ratio-visual">
+            <div className="partner-ratio-labels">
+              <span><strong>{current.p1?.name || 'P1'}:</strong> {p1Pct}%</span>
+              <span><strong>{current.p2?.name || 'P2'}:</strong> {p2Pct}%</span>
+            </div>
+            <div className="progress-bar-track compact-track">
+              <div className="progress-bar-fill fill-p1" style={{ width: `${p1Pct}%` }} />
+              <div className="progress-bar-fill fill-p2" style={{ width: `${p2Pct}%` }} />
+            </div>
           </div>
           <div className="metric-subtext">
-            Net position per partner
+            Post-tax spendable contribution
           </div>
         </div>
       </div>

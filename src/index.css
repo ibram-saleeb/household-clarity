@@ -917,6 +917,94 @@ h1, h2, h3, h4, h5, h6 {
   border-color: rgba(15, 23, 42, 0.95) transparent transparent transparent;
 }
 
+/* Visual Cashflow Progress Bar */
+.visual-cashflow-bar-container {
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-md);
+  padding: 0.85rem 1rem;
+  margin: 1.15rem 0;
+}
+
+.cashflow-bar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.775rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: var(--text-muted);
+}
+
+.progress-bar-track {
+  height: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  display: flex;
+  gap: 2px;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  border-radius: var(--radius-full);
+  transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.fill-expenses {
+  background: linear-gradient(90deg, #F59E0B, #EF4444);
+}
+
+.fill-retained {
+  background: linear-gradient(90deg, #10B981, #059669);
+}
+
+.fill-p1 {
+  background: linear-gradient(90deg, #6366F1, #818CF8);
+}
+
+.fill-p2 {
+  background: linear-gradient(90deg, #F59E0B, #FBBF24);
+}
+
+/* Partner Ratio Visual */
+.partner-ratio-visual {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-top: 0.2rem;
+}
+
+.partner-ratio-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  color: var(--text-main);
+}
+
+.compact-track {
+  height: 6px;
+}
+
+/* Card Lift & Glow Micro-Interactions */
+.metric-card {
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.metric-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(99, 102, 241, 0.3);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+.hero-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hero-card:hover {
+  box-shadow: 0 12px 40px rgba(16, 185, 129, 0.12);
+}
+
 /* Expense Cards & Form Styling */
 .add-expense-card {
   background: var(--bg-card-subtle);
