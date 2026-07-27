@@ -2,6 +2,7 @@ import React from 'react';
 import { User, Plus, Trash2, Lock } from 'lucide-react';
 import { formatMoney } from '../utils/formatters.js';
 import { ATO_TAX_CONFIG } from '../config/atoTaxConfig';
+import { Tooltip } from './Tooltip.jsx';
 
 export function IncomeSection({ partners, onUpdatePartner, calculatedData }) {
   const p1Calc = calculatedData?.baseline?.p1;
@@ -20,7 +21,7 @@ export function IncomeSection({ partners, onUpdatePartner, calculatedData }) {
     const updated = [...partners];
     const newExtra = {
       id: 'extra_' + Date.now(),
-      label: 'Rental / Dividend Income',
+      label: 'Dividend / Rental Income',
       amount: 500,
       frequency: 'monthly'
     };
@@ -47,14 +48,14 @@ export function IncomeSection({ partners, onUpdatePartner, calculatedData }) {
   };
 
   return (
-    <section className="section-container">
+    <section className="section-panel">
       <div className="section-header">
         <div>
           <h2 className="section-title">
-            <User className="icon-md inline-icon" /> Partner Incomes & Tax Picture
+            <User className="icon-md text-primary inline-icon" /> Partner Incomes & ATO Tax Picture
           </h2>
-          <p className="section-subtitle">
-            Enter each partner's gross salary, superannuation setup, and extra income lines. Tax is computed using official ATO resident tax brackets.
+          <p className="app-subtitle">
+            Enter each partner's gross salary, super guarantee, and extra income. ATO income tax & Medicare levy are calculated automatically.
           </p>
         </div>
       </div>
@@ -66,36 +67,24 @@ export function IncomeSection({ partners, onUpdatePartner, calculatedData }) {
           return (
             <div key={partner.id || index} className="partner-card">
               {/* Partner Header */}
-              <div className="partner-card-header">
-                <div className="partner-identity">
-                  <span className="partner-avatar-badge">{partner.initials || `P${index + 1}`}</span>
-                  <input
-                    type="text"
-                    className="input-field input-ghost partner-name-input"
-                    value={partner.name}
-                    onChange={(e) => handlePartnerChange(index, 'name', e.target.value)}
-                    placeholder={`Partner ${index + 1}`}
-                  />
-                </div>
-                <div className="partner-initials-box">
-                  <label className="label-xs">Initials:</label>
-                  <input
-                    type="text"
-                    maxLength={3}
-                    className="input-field input-xs partner-initials-input"
-                    value={partner.initials}
-                    onChange={(e) => handlePartnerChange(index, 'initials', e.target.value.toUpperCase())}
-                  />
-                </div>
+              <div className="partner-header">
+                <span className="partner-avatar">{partner.initials || `P${index + 1}`}</span>
+                <input
+                  type="text"
+                  className="partner-title-input"
+                  value={partner.name}
+                  onChange={(e) => handlePartnerChange(index, 'name', e.target.value)}
+                  placeholder={`Partner ${index + 1}`}
+                />
               </div>
 
               {/* Primary Salary Input */}
               <div className="form-group">
-                <label className="input-label">
+                <label className="form-label">
                   Primary Gross Salary (excluding super)
                 </label>
-                <div className="input-with-select">
-                  <div className="input-prefix-wrapper">
+                <div className="form-input-row">
+                  <div className="input-prefix-wrapper flex-2">
                     <span className="input-prefix">$</span>
                     <input
                       type="number"
@@ -108,7 +97,7 @@ export function IncomeSection({ partners, onUpdatePartner, calculatedData }) {
                     />
                   </div>
                   <select
-                    className="input-select"
+                    className="select-field flex-1"
                     value={partner.salaryFrequency || 'annual'}
                     onChange={(e) => handlePartnerChange(index, 'salaryFrequency', e.target.value)}
                   >
@@ -120,21 +109,23 @@ export function IncomeSection({ partners, onUpdatePartner, calculatedData }) {
                 </div>
               </div>
 
-              {/* Superannuation Configuration */}
+              {/* Superannuation Setup */}
               <div className="super-config-box">
                 <div className="super-header">
-                  <span className="super-title">
-                    <Lock className="icon-xs inline-icon text-info" /> Superannuation (Non-Cash Fund)
+                  <span className="form-label">
+                    <Lock className="icon-xs inline-icon text-info" /> Superannuation (Wealth Fund)
                   </span>
-                  <div className="super-mode-toggle">
+                  <div className="super-pill-toggle">
                     <button
-                      className={`btn-toggle-sm ${partner.superMode !== 'fixed' ? 'active' : ''}`}
+                      type="button"
+                      className={`pill-option ${partner.superMode !== 'fixed' ? 'active' : ''}`}
                       onClick={() => handlePartnerChange(index, 'superMode', 'rate')}
                     >
                       Rate (%)
                     </button>
                     <button
-                      className={`btn-toggle-sm ${partner.superMode === 'fixed' ? 'active' : ''}`}
+                      type="button"
+                      className={`pill-option ${partner.superMode === 'fixed' ? 'active' : ''}`}
                       onClick={() => handlePartnerChange(index, 'superMode', 'fixed')}
                     >
                       Fixed ($)
@@ -143,8 +134,8 @@ export function IncomeSection({ partners, onUpdatePartner, calculatedData }) {
                 </div>
 
                 {partner.superMode === 'fixed' ? (
-                  <div className="input-with-select">
-                    <div className="input-prefix-wrapper">
+                  <div className="form-input-row">
+                    <div className="input-prefix-wrapper flex-2">
                       <span className="input-prefix">$</span>
                       <input
                         type="number"
@@ -155,7 +146,7 @@ export function IncomeSection({ partners, onUpdatePartner, calculatedData }) {
                       />
                     </div>
                     <select
-                      className="input-select"
+                      className="select-field flex-1"
                       value={partner.superFixedFrequency || 'annual'}
                       onChange={(e) => handlePartnerChange(index, 'superFixedFrequency', e.target.value)}
                     >
@@ -164,8 +155,8 @@ export function IncomeSection({ partners, onUpdatePartner, calculatedData }) {
                     </select>
                   </div>
                 ) : (
-                  <div className="super-rate-input-row">
-                    <div className="input-prefix-wrapper">
+                  <div className="super-rate-row">
+                    <div className="input-prefix-wrapper flex-1">
                       <input
                         type="number"
                         step="0.5"
@@ -177,25 +168,23 @@ export function IncomeSection({ partners, onUpdatePartner, calculatedData }) {
                       />
                       <span className="input-suffix">%</span>
                     </div>
-                    <span className="super-calculated-badge">
-                      = {formatMoney(calc?.superMonthly || 0)} / month
+                    <span className="super-calc-badge">
+                      = {formatMoney(calc?.superMonthly || 0)} /mo
                     </span>
                   </div>
                 )}
-                <p className="super-note">
-                  Super is excluded from spendable cash and tracked separately as retirement wealth.
-                </p>
               </div>
 
-              {/* Extra Income Lines */}
+              {/* Extra Incomes */}
               <div className="extra-incomes-section">
                 <div className="extra-incomes-header">
-                  <span className="extra-title">Extra Incomes (Dividends, Rental, Bonus)</span>
+                  <span className="form-label">Extra Incomes (Rental, Dividends)</span>
                   <button
-                    className="btn btn-ghost-sm"
+                    type="button"
+                    className="btn btn-ghost btn-sm"
                     onClick={() => handleAddExtraIncome(index)}
                   >
-                    <Plus className="icon-xs inline-icon" /> Add Line
+                    <Plus className="icon-xs" /> Add Line
                   </button>
                 </div>
 
@@ -208,7 +197,7 @@ export function IncomeSection({ partners, onUpdatePartner, calculatedData }) {
                           className="input-field extra-label-input"
                           value={extra.label}
                           onChange={(e) => handleUpdateExtraIncome(index, extra.id, 'label', e.target.value)}
-                          placeholder="Income Label"
+                          placeholder="Label"
                         />
                         <div className="input-prefix-wrapper extra-amount-input">
                           <span className="input-prefix">$</span>
@@ -221,19 +210,20 @@ export function IncomeSection({ partners, onUpdatePartner, calculatedData }) {
                           />
                         </div>
                         <select
-                          className="input-select extra-freq-select"
+                          className="select-field extra-freq-select"
                           value={extra.frequency}
                           onChange={(e) => handleUpdateExtraIncome(index, extra.id, 'frequency', e.target.value)}
                         >
                           <option value="monthly">/ mo</option>
                           <option value="annual">/ yr</option>
-                          <option value="fortnightly">/ fortnite</option>
+                          <option value="fortnightly">/ fortnight</option>
                           <option value="weekly">/ wk</option>
                         </select>
                         <button
+                          type="button"
                           className="btn-icon-danger"
                           onClick={() => handleRemoveExtraIncome(index, extra.id)}
-                          title="Remove extra income line"
+                          title="Remove line"
                         >
                           <Trash2 className="icon-xs" />
                         </button>
@@ -242,25 +232,28 @@ export function IncomeSection({ partners, onUpdatePartner, calculatedData }) {
                   </div>
                 ) : (
                   <div className="no-extra-incomes">
-                    No extra incomes added. Click "+ Add Line" for rental, side business, or dividend income.
+                    No extra incomes. Click "+ Add Line" for side business, rental, or dividend income.
                   </div>
                 )}
               </div>
 
-              {/* Calculated Results Summary Card */}
+              {/* Partner Take-Home Pay Breakdown Card */}
               {calc && (
                 <div className="partner-calc-summary">
                   <div className="summary-row">
-                    <span className="summary-label">Gross Taxable Income:</span>
-                    <span className="summary-value">{formatMoney(calc.taxableIncomeMonthly)} / mo</span>
+                    <span className="summary-label">Gross Income:</span>
+                    <span className="summary-value">{formatMoney(calc.taxableIncomeMonthly)} /mo</span>
                   </div>
                   <div className="summary-row text-muted-row">
-                    <span className="summary-label">ATO Income Tax & Medicare (Est.):</span>
-                    <span className="summary-value text-warning">-{formatMoney(calc.totalTaxMonthly)} / mo</span>
+                    <span className="summary-label">
+                      Estimated ATO Tax & Medicare:{' '}
+                      <Tooltip text={`Stage 3 Tax & 2% Medicare Levy based on $${Math.round(calc.taxableIncomeAnnual).toLocaleString()}/yr taxable income`} />
+                    </span>
+                    <span className="summary-value text-warning">-{formatMoney(calc.totalTaxMonthly)} /mo</span>
                   </div>
                   <div className="summary-row summary-usable-row">
-                    <span className="summary-label-highlight">Usable Spendable Cash:</span>
-                    <span className="summary-value-highlight">{formatMoney(calc.spendableIncomeMonthly)} / mo</span>
+                    <span className="summary-label-highlight">Take-Home Pay:</span>
+                    <span className="summary-value-highlight text-surplus">{formatMoney(calc.spendableIncomeMonthly)} /mo</span>
                   </div>
                   <div className="summary-annual-sub">
                     ({formatMoney(calc.spendableIncomeAnnual)} / year spendable post-tax)

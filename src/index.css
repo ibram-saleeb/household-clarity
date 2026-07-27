@@ -917,6 +917,347 @@ h1, h2, h3, h4, h5, h6 {
   border-color: rgba(15, 23, 42, 0.95) transparent transparent transparent;
 }
 
+/* Expense Cards & Form Styling */
+.add-expense-card {
+  background: var(--bg-card-subtle);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 1.15rem;
+  margin-bottom: 1.25rem;
+}
+
+.add-expense-title {
+  font-size: 0.875rem;
+  font-weight: 700;
+  margin-bottom: 0.85rem;
+  color: var(--text-main);
+}
+
+.add-expense-form-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+
+  margin-bottom: 0.85rem;
+}
+
+.flex-1 { flex: 1; min-width: 120px; }
+.flex-2 { flex: 2; min-width: 180px; }
+
+.add-expense-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* Expense Item Cards List */
+.expenses-card-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.expense-item-card {
+  background: var(--bg-card-subtle);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 1rem 1.15rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.expense-item-card:hover {
+  border-color: rgba(255, 255, 255, 0.15);
+  box-shadow: var(--shadow-sm);
+}
+
+.expense-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.expense-name-input {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 0.95rem;
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--text-main);
+  outline: none;
+  padding: 0.2rem 0.4rem;
+  border-radius: var(--radius-sm);
+}
+
+.expense-name-input:focus {
+  background: var(--bg-input);
+  border-color: var(--border-focus);
+}
+
+.expense-card-badges {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.category-pill {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-color);
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.2rem 0.6rem;
+  border-radius: var(--radius-full);
+}
+
+.assignment-pill {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.2rem 0.6rem;
+  border-radius: var(--radius-full);
+  border: 1px solid transparent;
+  cursor: pointer;
+  outline: none;
+}
+
+.badge-shared {
+  background: rgba(99, 102, 241, 0.12);
+  border-color: rgba(99, 102, 241, 0.3);
+  color: #A5B4FC;
+}
+
+.badge-p1 {
+  background: rgba(16, 185, 129, 0.12);
+  border-color: rgba(16, 185, 129, 0.3);
+  color: #6EE7B7;
+}
+
+.badge-p2 {
+  background: rgba(245, 158, 11, 0.12);
+  border-color: rgba(245, 158, 11, 0.3);
+  color: #FDE68A;
+}
+
+.expense-card-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  padding-top: 0.65rem;
+  flex-wrap: wrap;
+}
+
+.expense-input-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.compact-prefix {
+  width: 110px;
+}
+
+.input-compact {
+  font-size: 0.85rem;
+  padding: 0.25rem 0.3rem;
+}
+
+.select-compact {
+  padding: 0.35rem 0.5rem;
+  font-size: 0.8rem;
+}
+
+.expense-monthly-result {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.monthly-val-highlight {
+  font-size: 1.05rem;
+  font-weight: 800;
+}
+
+.monthly-val-unit {
+  font-size: 0.8rem;
+  color: var(--text-dim);
+}
+
+.btn-icon-danger {
+  background: transparent;
+  border: none;
+  color: var(--text-dim);
+  cursor: pointer;
+  padding: 0.3rem;
+  border-radius: var(--radius-sm);
+  transition: color 0.2s ease, background 0.2s ease;
+}
+
+.btn-icon-danger:hover {
+  color: var(--color-deficit);
+  background: rgba(244, 63, 94, 0.1);
+}
+
+/* Super Pill Toggle & Summary Cards */
+.super-config-box {
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 0.85rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.super-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.super-pill-toggle {
+  display: inline-flex;
+  background: var(--bg-input);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-full);
+  padding: 2px;
+}
+
+.pill-option {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 0.725rem;
+  font-weight: 600;
+  padding: 0.2rem 0.6rem;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.pill-option.active {
+  background: var(--primary);
+  color: #FFFFFF;
+}
+
+.super-rate-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.super-calc-badge {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--info);
+}
+
+.total-outgoings-badge {
+  background: rgba(245, 158, 11, 0.1);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  padding: 0.4rem 0.85rem;
+  border-radius: var(--radius-full);
+  font-size: 0.85rem;
+}
+
+.no-expenses-placeholder {
+  text-align: center;
+  padding: 2rem 1.5rem;
+  color: var(--text-dim);
+  font-size: 0.85rem;
+  font-style: italic;
+  border: 1px dashed var(--border-color);
+  border-radius: var(--radius-md);
+}
+
+/* Extra Incomes Section */
+.extra-incomes-section {
+  border-top: 1px solid var(--border-color);
+  padding-top: 0.75rem;
+}
+
+.extra-incomes-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.extra-incomes-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.extra-income-row {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.extra-label-input { flex: 1.5; }
+.extra-amount-input { width: 90px; }
+.extra-freq-select { width: 95px; }
+
+.no-extra-incomes {
+  font-size: 0.775rem;
+  color: var(--text-dim);
+  font-style: italic;
+}
+
+/* Partner Calc Summary */
+.partner-calc-summary {
+  background: rgba(99, 102, 241, 0.06);
+  border: 1px solid rgba(99, 102, 241, 0.2);
+  border-radius: var(--radius-md);
+  padding: 0.85rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.85rem;
+}
+
+.summary-label {
+  color: var(--text-muted);
+}
+
+.summary-value {
+  font-weight: 600;
+}
+
+.summary-usable-row {
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 0.5rem;
+  margin-top: 0.25rem;
+}
+
+.summary-label-highlight {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.summary-value-highlight {
+  font-size: 1.1rem;
+  font-weight: 800;
+}
+
+.summary-annual-sub {
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  text-align: right;
+}
+
 /* Responsive Media Queries for Mobile & Tablet */
 @media (max-width: 768px) {
   .header-container {

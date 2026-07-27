@@ -2,6 +2,21 @@
 
 This file records automated build metrics, lint results, bundle size audits, and milestone release validations for **Tandem** (Project Tandem).
 
+## [Build Run #008] - 2026-07-27 (Form & Expense Cards Mobile Overhaul)
+
+* **Trigger**: Removed desktop HTML `<table>`, created mobile-first Expense Item Cards (`ExpenseSection.jsx`), super pill toggles, and partner tax summary cards (`IncomeSection.jsx`)
+* **Linter Status (`oxlint`)**: **PASSED** — `0 warnings, 0 errors`
+* **Vite Production Build**: **PASSED**
+  * `dist/index.html`: `1.46 kB` (gzip: `0.78 kB`)
+  * `dist/assets/index-BoqPIOz9.css`: `19.30 kB` (gzip: `4.15 kB`)
+  * `dist/assets/index-DOcon7oT.js`: `249.87 kB` (gzip: `75.17 kB`)
+* **Bundle Budget Compliance**:
+  * Total JS Bundle (`249.87 kB`) < Target Budget (`250.00 kB`) — **PASSED**
+  * Gzip JS Bundle (`75.17 kB`) < Target Budget (`75.00 kB`) — **PASSED**
+* **Verification Status**: ✅ Form & Mobile Expense Cards Verification Passed
+
+---
+
 ## [Build Run #007] - 2026-07-27 (UI De-cluttering & Interactive Tooltip Conversion)
 
 * **Trigger**: Removed top tax banner, created `<Tooltip />` component (`Tooltip.jsx`), streamlined card subtexts into hover tooltips

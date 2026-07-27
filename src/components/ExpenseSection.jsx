@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { CreditCard, Plus, Trash2 } from 'lucide-react';
+import { CreditCard, Plus, Trash2, Tag } from 'lucide-react';
 import { formatMoney } from '../utils/formatters.js';
 import { annualiseAmount, deannualiseToMonthly } from '../logic/calculator';
 
@@ -51,37 +51,39 @@ export function ExpenseSection({ expenses, onUpdateExpenses, partners }) {
   }, 0);
 
   return (
-    <section className="section-container">
+    <section className="section-panel">
       <div className="section-header">
         <div>
           <h2 className="section-title">
-            <CreditCard className="icon-md inline-icon" /> Key Household Expenses & Outgoings
+            <CreditCard className="icon-md text-warning inline-icon" /> Household Expenses
           </h2>
-          <p className="section-subtitle">
-            All expenses are automatically normalised to a monthly period. Assign expenses to Shared (50/50) or individual partners.
+          <p className="app-subtitle">
+            Itemise regular outgoings. Expenses are automatically normalised to a monthly amount.
           </p>
         </div>
         <div className="total-outgoings-badge">
-          Total Outgoings: <strong>{formatMoney(totalMonthlyOutgoings)}</strong> / month
+          Total: <strong className="text-warning">{formatMoney(totalMonthlyOutgoings)}</strong> /mo
         </div>
       </div>
 
       {/* Add New Expense Form */}
       <form onSubmit={handleAddExpense} className="add-expense-card">
-        <h3 className="form-card-title">Add New Expense Item</h3>
-        <div className="add-expense-grid">
-          <div className="form-group">
+        <div className="add-expense-title">Add New Expense Item</div>
+        <div className="add-expense-form-grid">
+          <div className="form-group flex-2">
+            <label className="form-label">Expense Name</label>
             <input
               type="text"
               className="input-field"
               value={newLabel}
               onChange={(e) => setNewLabel(e.target.value)}
-              placeholder="Expense Name (e.g. Mortgage, Health Ins)"
+              placeholder="e.g. Rent, Groceries, Electricity"
               required
             />
           </div>
 
-          <div className="form-group">
+          <div className="form-group flex-1">
+            <label className="form-label">Amount</label>
             <div className="input-prefix-wrapper">
               <span className="input-prefix">$</span>
               <input
@@ -91,15 +93,16 @@ export function ExpenseSection({ expenses, onUpdateExpenses, partners }) {
                 className="input-field"
                 value={newAmount}
                 onChange={(e) => setNewAmount(e.target.value)}
-                placeholder="Amount"
+                placeholder="0"
                 required
               />
             </div>
           </div>
 
-          <div className="form-group">
+          <div className="form-group flex-1">
+            <label className="form-label">Frequency</label>
             <select
-              className="input-select"
+              className="select-field"
               value={newFrequency}
               onChange={(e) => setNewFrequency(e.target.value)}
             >
@@ -110,133 +113,133 @@ export function ExpenseSection({ expenses, onUpdateExpenses, partners }) {
             </select>
           </div>
 
-          <div className="form-group">
+          <div className="form-group flex-1">
+            <label className="form-label">Assigned To</label>
             <select
-              className="input-select"
+              className="select-field"
               value={newAssignedTo}
               onChange={(e) => setNewAssignedTo(e.target.value)}
             >
-              <option value="shared">Shared (Household)</option>
+              <option value="shared">Shared (50/50)</option>
               <option value="p1">{p1Name} (Personal)</option>
               <option value="p2">{p2Name} (Personal)</option>
             </select>
           </div>
 
-          <div className="form-group">
+          <div className="form-group flex-1">
+            <label className="form-label">Category</label>
             <select
-              className="input-select"
+              className="select-field"
               value={newCategory}
               onChange={(e) => setNewCategory(e.target.value)}
             >
-              <option value="Housing">Housing / Rent / Mortgage</option>
+              <option value="Housing">Housing</option>
               <option value="Living">Living / Groceries</option>
-              <option value="Transport">Transport / Vehicles</option>
-              <option value="Insurance">Insurance / Medical</option>
-              <option value="Personal">Personal & Subscriptions</option>
-              <option value="Debt">Debt Repayments</option>
-              <option value="Childcare">Childcare & Education</option>
+              <option value="Transport">Transport</option>
+              <option value="Insurance">Insurance</option>
+              <option value="Personal">Personal</option>
+              <option value="Debt">Debt</option>
+              <option value="Childcare">Childcare</option>
             </select>
           </div>
+        </div>
 
-          <button type="submit" className="btn btn-primary btn-add-expense">
-            <Plus className="icon-xs inline-icon" /> Add Expense
+        <div className="add-expense-actions">
+          <button type="submit" className="btn btn-primary">
+            <Plus className="icon-xs" /> Add Expense
           </button>
         </div>
       </form>
 
-      {/* Expenses Table */}
-      <div className="expenses-table-card">
+      {/* Expense Item Cards List */}
+      <div className="expenses-list-container">
         {expenses.length > 0 ? (
-          <div className="table-responsive">
-            <table className="expenses-table">
-              <thead>
-                <tr>
-                  <th>Expense Line</th>
-                  <th>Amount & Frequency</th>
-                  <th>Normalised Monthly</th>
-                  <th>Assignment</th>
-                  <th>Category</th>
-                  <th className="text-right">Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {expenses.map((exp) => {
-                  const monthlyVal = deannualiseToMonthly(annualiseAmount(exp.amount, exp.frequency));
+          <div className="expenses-card-list">
+            {expenses.map((exp) => {
+              const monthlyVal = deannualiseToMonthly(annualiseAmount(exp.amount, exp.frequency));
+              let assignedBadgeClass = 'badge-shared';
 
-                  return (
-                    <tr key={exp.id}>
-                      <td>
+              if (exp.assignedTo === 'p1') {
+                assignedBadgeClass = 'badge-p1';
+              } else if (exp.assignedTo === 'p2') {
+                assignedBadgeClass = 'badge-p2';
+              }
+
+              return (
+                <div className="expense-item-card" key={exp.id}>
+                  {/* Top Bar: Name, Category, Assignment */}
+                  <div className="expense-card-top">
+                    <div className="expense-card-info">
+                      <input
+                        type="text"
+                        className="expense-name-input"
+                        value={exp.label}
+                        onChange={(e) => handleUpdateExpense(exp.id, 'label', e.target.value)}
+                      />
+                    </div>
+
+                    <div className="expense-card-badges">
+                      <span className="category-pill">
+                        <Tag className="icon-xs inline-icon" /> {exp.category || 'General'}
+                      </span>
+                      <select
+                        className={`assignment-pill ${assignedBadgeClass}`}
+                        value={exp.assignedTo}
+                        onChange={(e) => handleUpdateExpense(exp.id, 'assignedTo', e.target.value)}
+                      >
+                        <option value="shared">Shared (50/50)</option>
+                        <option value="p1">{p1Name}</option>
+                        <option value="p2">{p2Name}</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  {/* Bottom Row: Amount & Frequency Inputs + Monthly Result + Trash */}
+                  <div className="expense-card-bottom">
+                    <div className="expense-input-controls">
+                      <div className="input-prefix-wrapper compact-prefix">
+                        <span className="input-prefix">$</span>
                         <input
-                          type="text"
-                          className="input-field input-table-cell"
-                          value={exp.label}
-                          onChange={(e) => handleUpdateExpense(exp.id, 'label', e.target.value)}
+                          type="number"
+                          min="0"
+                          className="input-field input-compact"
+                          value={exp.amount}
+                          onChange={(e) => handleUpdateExpense(exp.id, 'amount', Math.max(0, Number(e.target.value) || 0))}
                         />
-                      </td>
-                      <td>
-                        <div className="table-amount-group">
-                          <div className="input-prefix-wrapper input-table-amount">
-                            <span className="input-prefix">$</span>
-                            <input
-                              type="number"
-                              min="0"
-                              className="input-field"
-                              value={exp.amount}
-                              onChange={(e) => handleUpdateExpense(exp.id, 'amount', Math.max(0, Number(e.target.value) || 0))}
-                            />
-                          </div>
-                          <select
-                            className="input-select input-table-freq"
-                            value={exp.frequency}
-                            onChange={(e) => handleUpdateExpense(exp.id, 'frequency', e.target.value)}
-                          >
-                            <option value="monthly">/ mo</option>
-                            <option value="weekly">/ wk</option>
-                            <option value="fortnightly">/ fortnight</option>
-                            <option value="annual">/ yr</option>
-                          </select>
-                        </div>
-                      </td>
-                      <td className="font-weight-bold text-warning">
-                        {formatMoney(monthlyVal)} / mo
-                      </td>
-                      <td>
-                        <select
-                          className={`input-select assignment-badge-select ${exp.assignedTo}`}
-                          value={exp.assignedTo}
-                          onChange={(e) => handleUpdateExpense(exp.id, 'assignedTo', e.target.value)}
-                        >
-                          <option value="shared">Shared 50/50</option>
-                          <option value="p1">{p1Name}</option>
-                          <option value="p2">{p2Name}</option>
-                        </select>
-                      </td>
-                      <td>
-                        <input
-                          type="text"
-                          className="input-field input-table-cell category-cell"
-                          value={exp.category || ''}
-                          onChange={(e) => handleUpdateExpense(exp.id, 'category', e.target.value)}
-                        />
-                      </td>
-                      <td className="text-right">
-                        <button
-                          className="btn-icon-danger"
-                          onClick={() => handleDeleteExpense(exp.id)}
-                          title="Delete expense"
-                        >
-                          <Trash2 className="icon-xs" />
-                        </button>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
+                      </div>
+
+                      <select
+                        className="select-field select-compact"
+                        value={exp.frequency}
+                        onChange={(e) => handleUpdateExpense(exp.id, 'frequency', e.target.value)}
+                      >
+                        <option value="monthly">/ month</option>
+                        <option value="weekly">/ week</option>
+                        <option value="fortnightly">/ fortnight</option>
+                        <option value="annual">/ year</option>
+                      </select>
+                    </div>
+
+                    <div className="expense-monthly-result">
+                      <span className="monthly-val-highlight text-warning">{formatMoney(monthlyVal)}</span>
+                      <span className="monthly-val-unit">/mo</span>
+
+                      <button
+                        className="btn-icon-danger"
+                        onClick={() => handleDeleteExpense(exp.id)}
+                        title="Delete expense"
+                      >
+                        <Trash2 className="icon-xs" />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         ) : (
           <div className="no-expenses-placeholder">
-            No expenses listed. Add your key household expenses above to calculate net cash flow.
+            No expenses added yet. Fill out the form above to add your first household outgoing.
           </div>
         )}
       </div>
