@@ -314,9 +314,20 @@ export function ExpenseSection({ expenses, onUpdateExpenses, partners }) {
           </div>
         ) : (
           <div className="no-expenses-placeholder">
-            {activeCategoryFilter === 'all'
-              ? 'No expenses added yet. Fill out the form above to add your first household outgoing.'
-              : `No expenses found in category "${activeCategoryFilter}".`}
+            <p>
+              {activeCategoryFilter === 'all'
+                ? 'No expenses added yet. Fill out the form above to add your first household outgoing.'
+                : `No expenses found in category "${activeCategoryFilter}".`}
+            </p>
+            {activeCategoryFilter !== 'all' && (
+              <button
+                type="button"
+                className="btn btn-secondary btn-sm mt-2"
+                onClick={() => setActiveCategoryFilter('all')}
+              >
+                Show All Outgoings
+              </button>
+            )}
           </div>
         )}
       </div>

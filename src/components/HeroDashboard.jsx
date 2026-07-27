@@ -16,11 +16,11 @@ export function HeroDashboard({ data, scenarioMode, savingsTargetMonthly, onSavi
   const retainedRatio = Math.max(0, 100 - expenseRatio);
 
   // Compute partner split percentages
-  const p1Usable = Math.max(0, current.p1?.spendableMonthly || 0);
-  const p2Usable = Math.max(0, current.p2?.spendableMonthly || 0);
-  const combinedPartners = (p1Usable + p2Usable) || 1;
-  const p1Pct = Math.round((p1Usable / combinedPartners) * 100);
-  const p2Pct = 100 - p1Pct;
+  const p1Usable = Math.max(0, current.p1?.spendableIncomeMonthly || 0);
+  const p2Usable = Math.max(0, current.p2?.spendableIncomeMonthly || 0);
+  const combinedPartners = p1Usable + p2Usable;
+  const p1Pct = combinedPartners > 0 ? Math.round((p1Usable / combinedPartners) * 100) : 50;
+  const p2Pct = combinedPartners > 0 ? 100 - p1Pct : 50;
 
   return (
     <section className="hero-dashboard-section">

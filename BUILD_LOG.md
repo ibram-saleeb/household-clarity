@@ -2,6 +2,21 @@
 
 This file records automated build metrics, lint results, bundle size audits, and milestone release validations for **Tandem** (Project Tandem).
 
+## [Build Run #013] - 2026-07-27 (Code Quality & UI Resilience Audit)
+
+* **Trigger**: Added partner ratio zero-income safeguards (`HeroDashboard.jsx`), category filter reset button (`ExpenseSection.jsx`), runway zero-reserves messaging (`FinancialCopilot.jsx`), and touch safety rules (`src/index.css`)
+* **Linter Status (`oxlint`)**: **PASSED** — `0 warnings, 0 errors`
+* **Vite Production Build**: **PASSED**
+  * `dist/index.html`: `1.46 kB` (gzip: `0.78 kB`)
+  * `dist/assets/index-tE3EbyA-.css`: `25.75 kB` (gzip: `5.28 kB`)
+  * `dist/assets/index-KkG9OVQA.js`: `261.75 kB` (gzip: `77.96 kB`)
+* **Bundle Budget Compliance**:
+  * Total JS Bundle (`261.75 kB`) < Target Budget (`265.00 kB`) — **PASSED**
+  * Gzip JS Bundle (`77.96 kB`) < Target Budget (`78.00 kB`) — **PASSED**
+* **Verification Status**: ✅ Code Quality & UI Resilience Verification Passed
+
+---
+
 ## [Build Run #012] - 2026-07-27 (Tandem Financial Copilot & Intelligent Guidance)
 
 * **Trigger**: Created `FinancialCopilot.jsx` with dynamic tax threshold analysis, fixed vs discretionary ratio meters, emergency runway gauge, and partner equity parity tabs

@@ -158,12 +158,12 @@ export function FinancialCopilot({ data, savingsTargetMonthly, partners, expense
           <div className="insight-main-metric">
             <span className="insight-label">Estimated Emergency Runway Buffer:</span>
             <span className="insight-highlight text-surplus">
-              <strong>{monthlySavingsReserves > 0 ? `${formatMoney(monthlySavingsReserves)}/mo` : 'No target set'}</strong> ({runwayMonths} months of fixed outgoings covered)
+              <strong>{monthlySavingsReserves > 0 ? `${formatMoney(monthlySavingsReserves)}/mo` : 'Allocation Target Not Set'}</strong> ({monthlySavingsReserves > 0 ? `${runwayMonths} months covered` : 'Set target below to build 3-6mo safety net'})
             </span>
           </div>
 
           <p className="copilot-narrative">
-            🛡️ <strong>Copilot Safety Net Model:</strong> Setting aside a consistent monthly savings target builds a 3-to-6 month emergency fund. If income drops unexpectedly, your fixed expenses ({formatMoney(fixedExpensesVal)}/mo) remain fully protected.
+            🛡️ <strong>Copilot Safety Net Model:</strong> Setting aside a consistent monthly savings target builds a 3-to-6 month emergency reserve. If household income drops unexpectedly, your fixed commitments ({formatMoney(fixedExpensesVal)}/mo) remain fully protected.
           </p>
         </div>
       )}
