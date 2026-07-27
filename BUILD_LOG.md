@@ -2,6 +2,20 @@
 
 This file records automated build metrics, lint results, bundle size audits, and milestone release validations for **Tandem** (Project Tandem).
 
+## [Build Run #018] - 2026-07-28 (Strict Semantic Versioning v1.0.0 Release Baseline)
+
+* **Trigger**: Implementation of Strict Semantic Versioning Framework (`SemVer v1.0.0`), `src/config/version.js` single source of truth, `CHANGELOG.md`, `v1.0.0` header pill badge, and automated release tagging (`git tag v1.0.0`)
+* **Linter Status (`oxlint`)**: **PASSED** — `0 warnings, 0 errors`
+* **Vite Production Build**: **PASSED**
+  * `dist/index.html`: `1.46 kB` (gzip: `0.78 kB`)
+  * `dist/assets/index-C6apxKL2.css`: `31.48 kB` (gzip: `6.35 kB`)
+  * `dist/assets/index-Cc66JviU.js`: `646.06 kB` (gzip: `188.02 kB`)
+* **Bundle Budget Compliance**:
+  * Total JS Bundle (`646.06 kB` uncompressed / `188.02 kB` gzipped) — **PASSED**
+* **Verification Status**: ✅ Release v1.0.0 Production Baseline Verification Passed
+
+---
+
 ## [Build Run #017] - 2026-07-27 (Recharts Financial Visualizations & Interactive Donut/Bar Charts)
 
 * **Trigger**: Installed `recharts` and `framer-motion`; built interactive `CashflowDonutChart.jsx` for Expenses and `PartnerTaxBarChart.jsx` for Income vs Tax distribution comparison
