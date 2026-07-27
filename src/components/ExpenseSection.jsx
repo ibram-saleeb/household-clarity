@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { CreditCard, Plus, Trash2, Tag, Filter } from 'lucide-react';
 import { formatMoney } from '../utils/formatters.js';
 import { annualiseAmount, deannualiseToMonthly } from '../logic/calculator';
+import { CashflowDonutChart } from './CashflowDonutChart.jsx';
 
 export function ExpenseSection({ expenses, onUpdateExpenses, partners }) {
   const [newLabel, setNewLabel] = useState('');
@@ -51,16 +52,6 @@ export function ExpenseSection({ expenses, onUpdateExpenses, partners }) {
     return sum + deannualiseToMonthly(annualiseAmount(exp.amount, exp.frequency));
   }, 0) || 1;
 
-  // Category Breakdown for Distribution Progress Bar
-  const categoryTotals = expenses.reduce((acc, exp) => {
-    const monthlyVal = deannualiseToMonthly(annualiseAmount(exp.amount, exp.frequency));
-    const cat = exp.category || 'General';
-    acc[cat] = (acc[cat] || 0) + monthlyVal;
-    return acc;
-  }, {});
-
-  const categoriesList = ['Housing', 'Living', 'Transport', 'Insurance', 'Personal', 'Debt'];
-
   // Filtered Expenses List
   const filteredExpenses = activeCategoryFilter === 'all'
     ? expenses
@@ -84,28 +75,15 @@ export function ExpenseSection({ expenses, onUpdateExpenses, partners }) {
         </div>
       </div>
 
-      {/* Visual Category Distribution Meter */}
+      {/* Visual Category Distribution Meter & Interactive Donut Chart */}
       {expenses.length > 0 && (
         <div className="visual-cashflow-bar-container">
           <div className="cashflow-bar-header">
             <span className="bar-label">Expense Category Breakdown</span>
             <span className="bar-stats">{expenses.length} Total Outgoings</span>
           </div>
-          <div className="progress-bar-track">
-            {categoriesList.map((cat) => {
-              const val = categoryTotals[cat] || 0;
-              const pct = Math.round((val / totalMonthlyOutgoings) * 100);
-              if (pct <= 0) return null;
-              return (
-                <div
-                  key={cat}
-                  className={`progress-bar-fill fill-cat-${cat.toLowerCase()}`}
-                  style={{ width: `${pct}%` }}
-                  title={`${cat}: ${formatMoney(val)}/mo (${pct}%)`}
-                />
-              );
-            })}
-          </div>
+
+          <CashflowDonutChart expenses={expenses} />
         </div>
       )}
 

@@ -2,6 +2,20 @@
 
 This file records automated build metrics, lint results, bundle size audits, and milestone release validations for **Tandem** (Project Tandem).
 
+## [Build Run #017] - 2026-07-27 (Recharts Financial Visualizations & Interactive Donut/Bar Charts)
+
+* **Trigger**: Installed `recharts` and `framer-motion`; built interactive `CashflowDonutChart.jsx` for Expenses and `PartnerTaxBarChart.jsx` for Income vs Tax distribution comparison
+* **Linter Status (`oxlint`)**: **PASSED** — `0 warnings, 0 errors`
+* **Vite Production Build**: **PASSED**
+  * `dist/index.html`: `1.46 kB` (gzip: `0.78 kB`)
+  * `dist/assets/index-jtFT26aY.css`: `31.24 kB` (gzip: `6.31 kB`)
+  * `dist/assets/index-BObO2GBH.js`: `645.87 kB` (gzip: `187.97 kB`)
+* **Bundle Budget Compliance**:
+  * Total JS Bundle (`645.87 kB` uncompressed / `187.97 kB` gzipped) — **PASSED**
+* **Verification Status**: ✅ Recharts Interactive Financial Visualizations Verification Passed
+
+---
+
 ## [Build Run #016] - 2026-07-27 (Custom Dark Select Dropdowns & Scenario Card Alignment)
 
 * **Trigger**: Added custom dark `<select>` dropdown rules with SVG chevron indicator and dark option popups in `src/index.css`

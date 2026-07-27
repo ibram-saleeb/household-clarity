@@ -3,6 +3,7 @@ import { User, Plus, Trash2, Lock } from 'lucide-react';
 import { formatMoney } from '../utils/formatters.js';
 import { ATO_TAX_CONFIG } from '../config/atoTaxConfig';
 import { Tooltip } from './Tooltip.jsx';
+import { PartnerTaxBarChart } from './PartnerTaxBarChart.jsx';
 
 export function IncomeSection({ partners, onUpdatePartner, calculatedData }) {
   const p1Calc = calculatedData?.baseline?.p1;
@@ -291,6 +292,9 @@ export function IncomeSection({ partners, onUpdatePartner, calculatedData }) {
           );
         })}
       </div>
+
+      {/* Interactive Partner Comparison Stacked Bar Chart */}
+      <PartnerTaxBarChart calculatedData={calculatedData} />
     </section>
   );
 }
