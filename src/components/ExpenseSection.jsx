@@ -77,8 +77,10 @@ export function ExpenseSection({ expenses, onUpdateExpenses, partners }) {
             Itemise regular outgoings. Expenses are automatically normalised to a monthly amount.
           </p>
         </div>
-        <div className="total-outgoings-badge">
-          Total: <strong className="text-warning">{formatMoney(totalMonthlyOutgoings)}</strong> /mo
+        <div className="total-outgoings-pill">
+          <span className="pill-title">Total Outgoings:</span>
+          <strong className="pill-amount text-warning">{formatMoney(totalMonthlyOutgoings)}</strong>
+          <span className="pill-sub">/mo</span>
         </div>
       </div>
 

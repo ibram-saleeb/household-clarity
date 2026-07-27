@@ -1741,6 +1741,39 @@ h1, h2, h3, h4, h5, h6 {
   .main-content {
     padding: 1rem 0.75rem 5rem 0.75rem; /* Extra bottom padding for mobile bottom bar */
   }
+
+  .app-footer {
+    padding-bottom: 6.5rem; /* Ensure disclaimer text clears floating mobile bottom bar */
+  }
+}
+
+/* Total Outgoings Pill Badge */
+.total-outgoings-pill {
+  background: rgba(245, 158, 11, 0.1);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  border-radius: var(--radius-sm);
+  padding: 0.45rem 0.85rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.85rem;
+  color: var(--text-main);
+  white-space: nowrap;
+}
+
+.total-outgoings-pill .pill-title {
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.total-outgoings-pill .pill-amount {
+  font-weight: 800;
+  font-size: 1rem;
+}
+
+.total-outgoings-pill .pill-sub {
+  font-size: 0.75rem;
+  color: var(--text-dim);
 }
 
 /* Mobile-First Scenario Impact Comparison Cards */

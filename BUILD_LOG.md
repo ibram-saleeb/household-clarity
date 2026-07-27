@@ -2,6 +2,21 @@
 
 This file records automated build metrics, lint results, bundle size audits, and milestone release validations for **Tandem** (Project Tandem).
 
+## [Build Run #015] - 2026-07-27 (Mobile Footer Overlap Fix & Expense Total Badge Polish)
+
+* **Trigger**: Added `padding-bottom: 6.5rem` to `.app-footer` under `@media (max-width: 768px)` so disclaimer text clears the mobile bottom bar; redesigned `.total-outgoings-pill` in `ExpenseSection.jsx`
+* **Linter Status (`oxlint`)**: **PASSED** — `0 warnings, 0 errors`
+* **Vite Production Build**: **PASSED**
+  * `dist/index.html`: `1.46 kB` (gzip: `0.78 kB`)
+  * `dist/assets/index-Cvf3RNpx.css`: `29.14 kB` (gzip: `5.75 kB`)
+  * `dist/assets/index-DzVdMvDs.js`: `261.98 kB` (gzip: `78.17 kB`)
+* **Bundle Budget Compliance**:
+  * Total JS Bundle (`261.98 kB`) < Target Budget (`265.00 kB`) — **PASSED**
+  * Gzip JS Bundle (`78.17 kB`) < Target Budget (`79.00 kB`) — **PASSED**
+* **Verification Status**: ✅ Mobile Footer Overlap & Badge Polish Verification Passed
+
+---
+
 ## [Build Run #014] - 2026-07-27 (All-Page Mobile-First UI/UX Overhaul)
 
 * **Trigger**: Eradicated 3-column squeezed table in `ScenarioEngine.jsx`, created `Scenario Impact Comparison Cards`, custom percent slider chips, partner glow cards in `IncomeSection.jsx`, and extra income item cards
