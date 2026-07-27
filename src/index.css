@@ -3,12 +3,12 @@
   --font-heading: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 
-  /* Color Palette */
-  --bg-main: #0B0F17;
-  --bg-card: #151D2A;
-  --bg-card-subtle: #1C2638;
-  --bg-card-hover: #222E43;
-  --bg-input: #0F1623;
+  /* Strict 3-Tone Obsidian FinTech Palette */
+  --bg-main: #090D16;
+  --bg-card: #111726;
+  --bg-card-subtle: #161F33;
+  --bg-card-hover: #1E283F;
+  --bg-input: #0C121E;
   
   --border-color: rgba(255, 255, 255, 0.08);
   --border-focus: rgba(99, 102, 241, 0.5);
@@ -17,10 +17,13 @@
   --text-muted: #94A3B8;
   --text-dim: #64748B;
 
+  /* Primary Brand Accent: Electric Indigo */
   --primary: #6366F1;
   --primary-hover: #4F46E5;
   --primary-light: rgba(99, 102, 241, 0.12);
+  --primary-glow: 0 0 20px rgba(99, 102, 241, 0.25);
 
+  /* Semantic Intent Colors */
   --color-surplus: #10B981;
   --color-surplus-bg: rgba(16, 185, 129, 0.12);
   --color-surplus-border: rgba(16, 185, 129, 0.3);
@@ -31,8 +34,16 @@
 
   --warning: #F59E0B;
   --warning-bg: rgba(245, 158, 11, 0.12);
-  --info: #3B82F6;
-  --info-bg: rgba(59, 130, 246, 0.12);
+  --info: #6366F1;
+  --info-bg: rgba(99, 102, 241, 0.12);
+
+  /* Category Palette Tokens (Harmonized Dark Pastels) */
+  --cat-housing: #6366F1;
+  --cat-living: #3B82F6;
+  --cat-transport: #06B6D4;
+  --cat-insurance: #10B981;
+  --cat-personal: #EC4899;
+  --cat-debt: #F59E0B;
 
   /* Radius & Shadows */
   --radius-sm: 8px;
@@ -555,20 +566,32 @@ h1, h2, h3, h4, h5, h6 {
   gap: 0.5rem;
 }
 
-.select-field {
-  background: var(--bg-input);
-  border: 1px solid var(--border-color);
+select, .select-field, .input-select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-color: var(--bg-input) !important;
+  color: var(--text-main) !important;
+  border: 1px solid var(--border-color) !important;
   border-radius: var(--radius-sm);
-  color: var(--text-main);
-  padding: 0.5rem 0.75rem;
+  padding: 0.45rem 2.2rem 0.45rem 0.65rem !important;
   font-family: var(--font-body);
   font-size: 0.85rem;
   outline: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%3C94A3B8' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E") !important;
+  background-repeat: no-repeat !important;
+  background-position: right 0.65rem center !important;
   cursor: pointer;
 }
 
-.select-field:focus {
-  border-color: var(--primary);
+select:focus, .select-field:focus, .input-select:focus {
+  border-color: var(--primary) !important;
+}
+
+select option {
+  background-color: #111726 !important;
+  color: #F8FAFC !important;
+  padding: 0.5rem;
 }
 
 /* Button Component Styles */
@@ -1351,12 +1374,12 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* Category Colors for Visual Progress Meters */
-.fill-cat-housing { background: linear-gradient(90deg, #818CF8, #6366F1); }
-.fill-cat-living { background: linear-gradient(90deg, #60A5FA, #3B82F6); }
-.fill-cat-transport { background: linear-gradient(90deg, #FBBF24, #F59E0B); }
-.fill-cat-insurance { background: linear-gradient(90deg, #34D399, #10B981); }
-.fill-cat-personal { background: linear-gradient(90deg, #F472B6, #EC4899); }
-.fill-cat-debt { background: linear-gradient(90deg, #F87171, #EF4444); }
+.fill-cat-housing { background: linear-gradient(90deg, #818CF8, var(--cat-housing)); }
+.fill-cat-living { background: linear-gradient(90deg, #60A5FA, var(--cat-living)); }
+.fill-cat-transport { background: linear-gradient(90deg, #22D3EE, var(--cat-transport)); }
+.fill-cat-insurance { background: linear-gradient(90deg, #34D399, var(--cat-insurance)); }
+.fill-cat-personal { background: linear-gradient(90deg, #F472B6, var(--cat-personal)); }
+.fill-cat-debt { background: linear-gradient(90deg, #FBBF24, var(--cat-debt)); }
 
 /* Category Filter Bar */
 .category-filter-bar {
