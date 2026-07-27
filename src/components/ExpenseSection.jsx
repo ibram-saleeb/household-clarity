@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { CreditCard, Plus, Trash2, Tag } from 'lucide-react';
+import { CreditCard, Plus, Trash2, Tag, Filter } from 'lucide-react';
 import { formatMoney } from '../utils/formatters.js';
 import { annualiseAmount, deannualiseToMonthly } from '../logic/calculator';
 
@@ -9,6 +9,7 @@ export function ExpenseSection({ expenses, onUpdateExpenses, partners }) {
   const [newFrequency, setNewFrequency] = useState('monthly');
   const [newAssignedTo, setNewAssignedTo] = useState('shared');
   const [newCategory, setNewCategory] = useState('Living');
+  const [activeCategoryFilter, setActiveCategoryFilter] = useState('all');
 
   const p1Name = partners?.[0]?.name || 'Partner 1';
   const p2Name = partners?.[1]?.name || 'Partner 2';
@@ -48,7 +49,22 @@ export function ExpenseSection({ expenses, onUpdateExpenses, partners }) {
   // Compute total normalised monthly outgoings
   const totalMonthlyOutgoings = expenses.reduce((sum, exp) => {
     return sum + deannualiseToMonthly(annualiseAmount(exp.amount, exp.frequency));
-  }, 0);
+  }, 0) || 1;
+
+  // Category Breakdown for Distribution Progress Bar
+  const categoryTotals = expenses.reduce((acc, exp) => {
+    const monthlyVal = deannualiseToMonthly(annualiseAmount(exp.amount, exp.frequency));
+    const cat = exp.category || 'General';
+    acc[cat] = (acc[cat] || 0) + monthlyVal;
+    return acc;
+  }, {});
+
+  const categoriesList = ['Housing', 'Living', 'Transport', 'Insurance', 'Personal', 'Debt'];
+
+  // Filtered Expenses List
+  const filteredExpenses = activeCategoryFilter === 'all'
+    ? expenses
+    : expenses.filter(exp => (exp.category || 'General').toLowerCase() === activeCategoryFilter.toLowerCase());
 
   return (
     <section className="section-panel">
@@ -65,6 +81,31 @@ export function ExpenseSection({ expenses, onUpdateExpenses, partners }) {
           Total: <strong className="text-warning">{formatMoney(totalMonthlyOutgoings)}</strong> /mo
         </div>
       </div>
+
+      {/* Visual Category Distribution Meter */}
+      {expenses.length > 0 && (
+        <div className="visual-cashflow-bar-container">
+          <div className="cashflow-bar-header">
+            <span className="bar-label">Expense Category Breakdown</span>
+            <span className="bar-stats">{expenses.length} Total Outgoings</span>
+          </div>
+          <div className="progress-bar-track">
+            {categoriesList.map((cat) => {
+              const val = categoryTotals[cat] || 0;
+              const pct = Math.round((val / totalMonthlyOutgoings) * 100);
+              if (pct <= 0) return null;
+              return (
+                <div
+                  key={cat}
+                  className={`progress-bar-fill fill-cat-${cat.toLowerCase()}`}
+                  style={{ width: `${pct}%` }}
+                  title={`${cat}: ${formatMoney(val)}/mo (${pct}%)`}
+                />
+              );
+            })}
+          </div>
+        </div>
+      )}
 
       {/* Add New Expense Form */}
       <form onSubmit={handleAddExpense} className="add-expense-card">
@@ -151,12 +192,42 @@ export function ExpenseSection({ expenses, onUpdateExpenses, partners }) {
         </div>
       </form>
 
+      {/* Category Filter Pills */}
+      <div className="category-filter-bar">
+        <span className="filter-bar-label">
+          <Filter className="icon-xs inline-icon" /> Filter by Category:
+        </span>
+        <button
+          type="button"
+          className={`category-filter-pill ${activeCategoryFilter === 'all' ? 'active' : ''}`}
+          onClick={() => setActiveCategoryFilter('all')}
+        >
+          All ({expenses.length})
+        </button>
+        {categoriesList.map((cat) => {
+          const count = expenses.filter(e => (e.category || 'General').toLowerCase() === cat.toLowerCase()).length;
+          if (count === 0) return null;
+          return (
+            <button
+              key={cat}
+              type="button"
+              className={`category-filter-pill ${activeCategoryFilter.toLowerCase() === cat.toLowerCase() ? 'active' : ''}`}
+              onClick={() => setActiveCategoryFilter(cat)}
+            >
+              {cat} ({count})
+            </button>
+          );
+        })}
+      </div>
+
       {/* Expense Item Cards List */}
       <div className="expenses-list-container">
-        {expenses.length > 0 ? (
+        {filteredExpenses.length > 0 ? (
           <div className="expenses-card-list">
-            {expenses.map((exp) => {
+            {filteredExpenses.map((exp) => {
               const monthlyVal = deannualiseToMonthly(annualiseAmount(exp.amount, exp.frequency));
+              const itemPct = ((monthlyVal / totalMonthlyOutgoings) * 100).toFixed(1);
+
               let assignedBadgeClass = 'badge-shared';
 
               if (exp.assignedTo === 'p1') {
@@ -167,7 +238,7 @@ export function ExpenseSection({ expenses, onUpdateExpenses, partners }) {
 
               return (
                 <div className="expense-item-card" key={exp.id}>
-                  {/* Top Bar: Name, Category, Assignment */}
+                  {/* Top Bar: Name, Category, Weight, Assignment */}
                   <div className="expense-card-top">
                     <div className="expense-card-info">
                       <input
@@ -179,6 +250,9 @@ export function ExpenseSection({ expenses, onUpdateExpenses, partners }) {
                     </div>
 
                     <div className="expense-card-badges">
+                      <span className="item-weight-badge" title={`${itemPct}% of total outgoings`}>
+                        {itemPct}% of budget
+                      </span>
                       <span className="category-pill">
                         <Tag className="icon-xs inline-icon" /> {exp.category || 'General'}
                       </span>
@@ -225,6 +299,7 @@ export function ExpenseSection({ expenses, onUpdateExpenses, partners }) {
                       <span className="monthly-val-unit">/mo</span>
 
                       <button
+                        type="button"
                         className="btn-icon-danger"
                         onClick={() => handleDeleteExpense(exp.id)}
                         title="Delete expense"
@@ -239,7 +314,9 @@ export function ExpenseSection({ expenses, onUpdateExpenses, partners }) {
           </div>
         ) : (
           <div className="no-expenses-placeholder">
-            No expenses added yet. Fill out the form above to add your first household outgoing.
+            {activeCategoryFilter === 'all'
+              ? 'No expenses added yet. Fill out the form above to add your first household outgoing.'
+              : `No expenses found in category "${activeCategoryFilter}".`}
           </div>
         )}
       </div>

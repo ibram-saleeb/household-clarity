@@ -165,19 +165,23 @@ export function ScenarioEngine({
       {/* Quick Presets Bar */}
       <div className="presets-bar">
         <span className="presets-title">Quick Stress-Test Presets:</span>
-        <div className="preset-buttons-group">
-          <button className="btn btn-chip" onClick={() => applyPreset('p2_parental_leave')}>
-            👶 {p2Name} Parental Leave (-50% Salary)
-          </button>
-          <button className="btn btn-chip" onClick={() => applyPreset('p2_zero_income')}>
-            💼 {p2Name} Career Transition ($0 Salary)
-          </button>
-          <button className="btn btn-chip" onClick={() => applyPreset('new_mortgage')}>
-            🏠 Add New Mortgage (+$4,200/mo)
-          </button>
-          <button className="btn btn-chip text-muted" onClick={() => applyPreset('clear')}>
-            <RotateCcw className="icon-xs inline-icon" /> Reset Overrides
-          </button>
+        <div className="preset-cards-grid">
+          <div className="preset-card" onClick={() => applyPreset('p2_parental_leave')}>
+            <div className="preset-card-title">👶 {p2Name} Parental Leave</div>
+            <div className="preset-card-desc">-50% Salary reduction stress test</div>
+          </div>
+          <div className="preset-card" onClick={() => applyPreset('p2_zero_income')}>
+            <div className="preset-card-title">💼 Single Income Test</div>
+            <div className="preset-card-desc">{p2Name} $0 income scenario</div>
+          </div>
+          <div className="preset-card" onClick={() => applyPreset('new_mortgage')}>
+            <div className="preset-card-title">🏠 New Mortgage / Surge</div>
+            <div className="preset-card-desc">+$4,200/mo extra outgoings</div>
+          </div>
+          <div className="preset-card preset-reset" onClick={() => applyPreset('clear')}>
+            <div className="preset-card-title"><RotateCcw className="icon-xs inline-icon" /> Reset Overrides</div>
+            <div className="preset-card-desc">Restore baseline data</div>
+          </div>
         </div>
       </div>
 

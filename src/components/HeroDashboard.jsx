@@ -126,7 +126,7 @@ export function HeroDashboard({ data, scenarioMode, savingsTargetMonthly, onSavi
 
       {/* Summary Metrics Bar */}
       <div className="dashboard-metrics-grid">
-        <div className="metric-card">
+        <div className="metric-card metric-card-primary">
           <div className="metric-label">
             Take-Home Pay Together{' '}
             <Tooltip text="Combined post-tax & post-Medicare spendable cash for both partners" />
@@ -139,7 +139,7 @@ export function HeroDashboard({ data, scenarioMode, savingsTargetMonthly, onSavi
           </div>
         </div>
 
-        <div className="metric-card">
+        <div className="metric-card metric-card-warning">
           <div className="metric-label">
             Household Expenses{' '}
             <Tooltip text="Sum of all shared & personal expenses normalized to a monthly figure" />
@@ -152,7 +152,7 @@ export function HeroDashboard({ data, scenarioMode, savingsTargetMonthly, onSavi
           </div>
         </div>
 
-        <div className="metric-card">
+        <div className="metric-card metric-card-info">
           <div className="metric-label">
             <Shield className="icon-xs inline-icon" /> Super Guarantee (Wealth){' '}
             <Tooltip text="Employer Super Guarantee (12%) is protected for retirement and strictly excluded from spendable cashflow" />
@@ -165,7 +165,7 @@ export function HeroDashboard({ data, scenarioMode, savingsTargetMonthly, onSavi
           </div>
         </div>
 
-        <div className="metric-card">
+        <div className="metric-card metric-card-split">
           <div className="metric-label">
             Partner Contribution Ratio{' '}
             <Tooltip text="Proportional spendable income ratio between Partner 1 and Partner 2" />

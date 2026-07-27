@@ -238,28 +238,47 @@ export function IncomeSection({ partners, onUpdatePartner, calculatedData }) {
               </div>
 
               {/* Partner Take-Home Pay Breakdown Card */}
-              {calc && (
-                <div className="partner-calc-summary">
-                  <div className="summary-row">
-                    <span className="summary-label">Gross Income:</span>
-                    <span className="summary-value">{formatMoney(calc.taxableIncomeMonthly)} /mo</span>
+              {calc && (() => {
+                const grossVal = calc.taxableIncomeMonthly || 1;
+                const taxPct = Math.min(100, Math.max(0, Math.round((calc.totalTaxMonthly / grossVal) * 100)));
+                const takeHomePct = Math.max(0, 100 - taxPct);
+
+                return (
+                  <div className="partner-calc-summary">
+                    <div className="summary-row">
+                      <span className="summary-label">Gross Income:</span>
+                      <span className="summary-value">{formatMoney(calc.taxableIncomeMonthly)} /mo</span>
+                    </div>
+
+                    {/* Visual Ratio Progress Bar */}
+                    <div className="partner-tax-bar">
+                      <div className="tax-bar-labels">
+                        <span className="text-warning">Tax & Levy ({taxPct}%)</span>
+                        <span className="text-surplus">Take-Home ({takeHomePct}%)</span>
+                      </div>
+                      <div className="progress-bar-track compact-track">
+                        <div className="progress-bar-fill fill-expenses" style={{ width: `${taxPct}%` }} title={`Tax & Medicare Levy: ${taxPct}%`} />
+                        <div className="progress-bar-fill fill-retained" style={{ width: `${takeHomePct}%` }} title={`Take-Home Cash: ${takeHomePct}%`} />
+                      </div>
+                    </div>
+
+                    <div className="summary-row text-muted-row">
+                      <span className="summary-label">
+                        Estimated ATO Tax & Medicare:{' '}
+                        <Tooltip text={`Stage 3 Tax & 2% Medicare Levy based on $${Math.round(calc.taxableIncomeAnnual).toLocaleString()}/yr taxable income`} />
+                      </span>
+                      <span className="summary-value text-warning">-{formatMoney(calc.totalTaxMonthly)} /mo</span>
+                    </div>
+                    <div className="summary-row summary-usable-row">
+                      <span className="summary-label-highlight">Take-Home Pay:</span>
+                      <span className="summary-value-highlight text-surplus">{formatMoney(calc.spendableIncomeMonthly)} /mo</span>
+                    </div>
+                    <div className="summary-annual-sub">
+                      ({formatMoney(calc.spendableIncomeAnnual)} / year spendable post-tax)
+                    </div>
                   </div>
-                  <div className="summary-row text-muted-row">
-                    <span className="summary-label">
-                      Estimated ATO Tax & Medicare:{' '}
-                      <Tooltip text={`Stage 3 Tax & 2% Medicare Levy based on $${Math.round(calc.taxableIncomeAnnual).toLocaleString()}/yr taxable income`} />
-                    </span>
-                    <span className="summary-value text-warning">-{formatMoney(calc.totalTaxMonthly)} /mo</span>
-                  </div>
-                  <div className="summary-row summary-usable-row">
-                    <span className="summary-label-highlight">Take-Home Pay:</span>
-                    <span className="summary-value-highlight text-surplus">{formatMoney(calc.spendableIncomeMonthly)} /mo</span>
-                  </div>
-                  <div className="summary-annual-sub">
-                    ({formatMoney(calc.spendableIncomeAnnual)} / year spendable post-tax)
-                  </div>
-                </div>
-              )}
+                );
+              })()}
             </div>
           );
         })}

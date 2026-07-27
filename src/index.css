@@ -1346,8 +1346,206 @@ h1, h2, h3, h4, h5, h6 {
   text-align: right;
 }
 
+/* Category Colors for Visual Progress Meters */
+.fill-cat-housing { background: linear-gradient(90deg, #818CF8, #6366F1); }
+.fill-cat-living { background: linear-gradient(90deg, #60A5FA, #3B82F6); }
+.fill-cat-transport { background: linear-gradient(90deg, #FBBF24, #F59E0B); }
+.fill-cat-insurance { background: linear-gradient(90deg, #34D399, #10B981); }
+.fill-cat-personal { background: linear-gradient(90deg, #F472B6, #EC4899); }
+.fill-cat-debt { background: linear-gradient(90deg, #F87171, #EF4444); }
+
+/* Category Filter Bar */
+.category-filter-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.15rem;
+  padding: 0.5rem 0.75rem;
+  background: var(--bg-card-subtle);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-full);
+}
+
+.filter-bar-label {
+  font-size: 0.775rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-right: 0.2rem;
+}
+
+.category-filter-pill {
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.2rem 0.65rem;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.category-filter-pill:hover {
+  color: var(--text-main);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.category-filter-pill.active {
+  background: var(--primary);
+  color: #FFFFFF;
+}
+
+/* Item Weight Badge */
+.item-weight-badge {
+  background: rgba(245, 158, 11, 0.1);
+  border: 1px solid rgba(245, 158, 11, 0.25);
+  color: #FBBF24;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.15rem 0.5rem;
+  border-radius: var(--radius-full);
+}
+
+/* Partner Tax Progress Bar */
+.partner-tax-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin: 0.35rem 0;
+  background: rgba(0, 0, 0, 0.2);
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.tax-bar-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+/* Preset Cards Grid */
+.preset-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.preset-card {
+  background: var(--bg-card-subtle);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 0.85rem 1rem;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.preset-card:hover {
+  border-color: var(--primary);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+  background: rgba(99, 102, 241, 0.08);
+}
+
+.preset-card-title {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 0.25rem;
+}
+
+.preset-card-desc {
+  font-size: 0.75rem;
+  color: var(--text-dim);
+}
+
+.preset-reset:hover {
+  border-color: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+/* Copilot Money Top Border Accent Glows */
+.metric-card-primary {
+  border-top: 2px solid #6366F1;
+}
+
+.metric-card-warning {
+  border-top: 2px solid #F59E0B;
+}
+
+.metric-card-info {
+  border-top: 2px solid #3B82F6;
+}
+
+.metric-card-split {
+  border-top: 2px solid #10B981;
+}
+
+/* Mobile Bottom Navigation Bar (Monzo / Copilot Style) */
+.mobile-bottom-nav {
+  display: none;
+}
+
 /* Responsive Media Queries for Mobile & Tablet */
 @media (max-width: 768px) {
+  .desktop-nav-tabs {
+    display: none;
+  }
+
+  .mobile-bottom-nav {
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 64px;
+    background: rgba(11, 15, 23, 0.92);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    z-index: 999;
+    justify-content: space-around;
+    align-items: center;
+    padding: 0 0.5rem;
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.5);
+  }
+
+  .mobile-nav-item {
+    background: transparent;
+    border: none;
+    color: var(--text-dim);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+    flex: 1;
+    padding: 0.4rem 0;
+    cursor: pointer;
+    transition: color 0.2s ease;
+  }
+
+  .mobile-nav-item:hover,
+  .mobile-nav-item.active {
+    color: var(--primary);
+  }
+
+  .mobile-nav-item.scenario-active {
+    color: #F59E0B;
+  }
+
+  .mobile-nav-icon {
+    width: 20px;
+    height: 20px;
+  }
+
+  .mobile-nav-label {
+    font-size: 0.7rem;
+    font-weight: 600;
+  }
+
   .header-container {
     padding: 0.75rem 1rem;
     flex-wrap: wrap;
@@ -1359,14 +1557,6 @@ h1, h2, h3, h4, h5, h6 {
 
   .header-actions {
     gap: 0.35rem;
-  }
-
-  .tax-banner {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.25rem;
-    padding: 0.5rem 1rem;
-    font-size: 0.7rem;
   }
 
   .hero-hero-number {
@@ -1393,16 +1583,7 @@ h1, h2, h3, h4, h5, h6 {
   }
 
   .main-content {
-    padding: 1rem 0.75rem 2rem 0.75rem;
-  }
-
-  .nav-tabs-wrapper {
-    padding: 0.5rem 0.75rem 0 0.75rem;
-  }
-
-  .nav-tab-button {
-    padding: 0.5rem 0.85rem;
-    font-size: 0.8rem;
+    padding: 1rem 0.75rem 5rem 0.75rem; /* Extra bottom padding for mobile bottom bar */
   }
 }
 
