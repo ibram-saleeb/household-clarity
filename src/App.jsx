@@ -4,6 +4,7 @@ import { DEFAULT_APP_STATE } from './storage/defaults';
 import { calculateHousehold } from './logic/calculator';
 
 import { Header } from './components/Header';
+import { NavTabs } from './components/NavTabs';
 import { HeroDashboard } from './components/HeroDashboard';
 import { IncomeSection } from './components/IncomeSection';
 import { ExpenseSection } from './components/ExpenseSection';
@@ -13,6 +14,7 @@ import { ExportModal } from './components/ExportModal';
 
 export default function App() {
   const [appState, setAppState] = useLocalStorage('household_clarity_app_v1', DEFAULT_APP_STATE);
+  const [activeTab, setActiveTab] = useState('overview'); // 'overview' | 'income' | 'expenses' | 'scenario'
   const [isAssumptionsModalOpen, setIsAssumptionsModalOpen] = useState(false);
   const [isExportModalOpen, setIsExportModalOpen] = useState(false);
 
@@ -44,10 +46,16 @@ export default function App() {
   };
 
   const handleToggleScenario = () => {
-    setAppState((prev) => ({
-      ...prev,
-      scenarioMode: !prev.scenarioMode
-    }));
+    setAppState((prev) => {
+      const nextScenarioMode = !prev.scenarioMode;
+      if (nextScenarioMode) {
+        setActiveTab('scenario'); // Automatically switch to scenario tab when activated
+      }
+      return {
+        ...prev,
+        scenarioMode: nextScenarioMode
+      };
+    });
   };
 
   const handleUpdateScenario = (newScenario) => {
@@ -94,44 +102,59 @@ export default function App() {
         onClearAll={handleClearAll}
       />
 
-      {/* Main Content Area */}
+      {/* Segmented View Navigation Tabs */}
+      <NavTabs
+        activeTab={activeTab}
+        onTabChange={setActiveTab}
+        scenarioMode={appState.scenarioMode}
+      />
+
+      {/* Main Focused Content Area */}
       <main className="main-content">
-        {/* Top Hero Dashboard Banner (Leading with True Net Position) */}
-        <HeroDashboard
-          data={calculatedData}
-          scenarioMode={appState.scenarioMode}
-          savingsTargetMonthly={appState.savingsTargetMonthly}
-          onSavingsChange={handleSavingsChange}
-        />
+        {/* Overview / Dashboard Tab */}
+        {activeTab === 'overview' && (
+          <HeroDashboard
+            data={calculatedData}
+            scenarioMode={appState.scenarioMode}
+            savingsTargetMonthly={appState.savingsTargetMonthly}
+            onSavingsChange={handleSavingsChange}
+          />
+        )}
 
-        {/* What-If Live Scenario Engine Controller & Comparison */}
-        <ScenarioEngine
-          scenarioMode={appState.scenarioMode}
-          onToggleScenario={handleToggleScenario}
-          scenarioData={{
-            ...appState.scenario,
-            baseline: calculatedData.baseline,
-            scenario: calculatedData.scenario,
-            deltas: calculatedData.deltas
-          }}
-          onUpdateScenario={handleUpdateScenario}
-          partners={appState.partners}
-          baselineExpenses={appState.expenses}
-        />
+        {/* Income & Salaries Tab */}
+        {activeTab === 'income' && (
+          <IncomeSection
+            partners={appState.partners}
+            onUpdatePartner={handleUpdatePartner}
+            calculatedData={calculatedData}
+          />
+        )}
 
-        {/* Core Inputs: Income Section */}
-        <IncomeSection
-          partners={appState.partners}
-          onUpdatePartner={handleUpdatePartner}
-          calculatedData={calculatedData}
-        />
+        {/* Expenses Tab */}
+        {activeTab === 'expenses' && (
+          <ExpenseSection
+            expenses={appState.expenses}
+            onUpdateExpenses={handleUpdateExpenses}
+            partners={appState.partners}
+          />
+        )}
 
-        {/* Core Inputs: Expenses Section */}
-        <ExpenseSection
-          expenses={appState.expenses}
-          onUpdateExpenses={handleUpdateExpenses}
-          partners={appState.partners}
-        />
+        {/* What-If Scenario Tab */}
+        {activeTab === 'scenario' && (
+          <ScenarioEngine
+            scenarioMode={appState.scenarioMode}
+            onToggleScenario={handleToggleScenario}
+            scenarioData={{
+              ...appState.scenario,
+              baseline: calculatedData.baseline,
+              scenario: calculatedData.scenario,
+              deltas: calculatedData.deltas
+            }}
+            onUpdateScenario={handleUpdateScenario}
+            partners={appState.partners}
+            baselineExpenses={appState.expenses}
+          />
+        )}
       </main>
 
       {/* Footer Disclaimer */}

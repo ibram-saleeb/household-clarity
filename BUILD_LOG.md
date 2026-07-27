@@ -2,6 +2,21 @@
 
 This file records automated build metrics, lint results, bundle size audits, and milestone release validations for **Tandem** (Project Tandem).
 
+## [Build Run #004] - 2026-07-27 (UI/UX Redesign & Segmented Navigation Overhaul)
+
+* **Trigger**: UI/UX redesign, tabbed navigation architecture (`NavTabs`), Google Fonts (`Plus Jakarta Sans`), and glassmorphism styling
+* **Linter Status (`oxlint`)**: **PASSED** — `0 warnings, 0 errors`
+* **Vite Production Build**: **PASSED**
+  * `dist/index.html`: `1.16 kB` (gzip: `0.65 kB`)
+  * `dist/assets/index-B2nztA3t.css`: `12.79 kB` (gzip: `2.99 kB`)
+  * `dist/assets/index-BdLxVzS_.js`: `248.12 kB` (gzip: `74.52 kB`)
+* **Bundle Budget Compliance**:
+  * Total JS Bundle (`248.12 kB`) < Target Budget (`250.00 kB`) — **PASSED**
+  * Gzip JS Bundle (`74.52 kB`) < Target Budget (`75.00 kB`) — **PASSED**
+* **Verification Status**: ✅ Visual & Layout Verification Passed
+
+---
+
 ## [Build Run #003] - 2026-07-27 (Data Portability CSV/JSON Engine)
 
 * **Trigger**: Added CSV & JSON Backup, Export, and Restore Engine
