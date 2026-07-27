@@ -11,19 +11,13 @@ import { ExpenseSection } from './components/ExpenseSection';
 import { ScenarioEngine } from './components/ScenarioEngine';
 import { AssumptionsModal } from './components/AssumptionsModal';
 import { ExportModal } from './components/ExportModal';
-import { SetupWizard } from './components/SetupWizard';
-import { HarmonyCoachCard } from './components/HarmonyCoachCard';
+import { FinancialCopilot } from './components/FinancialCopilot';
 
 export default function App() {
   const [appState, setAppState] = useLocalStorage('household_clarity_app_v1', DEFAULT_APP_STATE);
   const [activeTab, setActiveTab] = useState('overview'); // 'overview' | 'income' | 'expenses' | 'scenario'
   const [isAssumptionsModalOpen, setIsAssumptionsModalOpen] = useState(false);
   const [isExportModalOpen, setIsExportModalOpen] = useState(false);
-  const [showSetupWizard, setShowSetupWizard] = useState(true);
-
-  // Compute helper flags for setup steps
-  const hasIncomes = appState.partners.some(p => (p.salary || 0) > 0);
-  const hasExpenses = appState.expenses.length > 0;
 
   // Recalculate household calculations live on every state change
   const calculatedData = useMemo(() => {
@@ -118,24 +112,14 @@ export default function App() {
 
       {/* Main Focused Content Area */}
       <main className="main-content">
-        {/* Guided Setup Assistant Banner */}
-        {showSetupWizard && (
-          <SetupWizard
-            activeTab={activeTab}
-            onTabChange={setActiveTab}
-            hasIncomes={hasIncomes}
-            hasExpenses={hasExpenses}
-            onDismiss={() => setShowSetupWizard(false)}
-          />
-        )}
-
         {/* Overview / Dashboard Tab */}
         {activeTab === 'overview' && (
           <>
-            <HarmonyCoachCard
+            <FinancialCopilot
               data={calculatedData}
               savingsTargetMonthly={appState.savingsTargetMonthly}
               partners={appState.partners}
+              expenses={appState.expenses}
             />
 
             <HeroDashboard
