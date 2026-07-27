@@ -2,6 +2,21 @@
 
 This file records automated build metrics, lint results, bundle size audits, and milestone release validations for **Tandem** (Project Tandem).
 
+## [Build Run #006] - 2026-07-27 (Mobile Responsiveness & Layout Polish)
+
+* **Trigger**: Mobile responsiveness fix (`@media (max-width: 768px)`), mobile icon toolbar (`.btn-label-desktop`), stacked tax banner, and mobile hero number typography
+* **Linter Status (`oxlint`)**: **PASSED** — `0 warnings, 0 errors`
+* **Vite Production Build**: **PASSED**
+  * `dist/index.html`: `1.46 kB` (gzip: `0.78 kB`)
+  * `dist/assets/index-Cgjey1-o.css`: `13.55 kB` (gzip: `3.15 kB`)
+  * `dist/assets/index-Dk_5HASX.js`: `249.62 kB` (gzip: `75.03 kB`)
+* **Bundle Budget Compliance**:
+  * Total JS Bundle (`249.62 kB`) < Target Budget (`250.00 kB`) — **PASSED**
+  * Gzip JS Bundle (`75.03 kB`) < Target Budget (`75.00 kB`) — **PASSED**
+* **Verification Status**: ✅ Mobile Responsiveness Verification Passed
+
+---
+
 ## [Build Run #005] - 2026-07-27 (Brand Strategy, Custom Logo & Conversational Copy)
 
 * **Trigger**: Implementation of Brand Strategy ("Financial harmony in tandem."), custom SVG logo (`TandemLogo.jsx`), SVG favicon, and conversational copywriting

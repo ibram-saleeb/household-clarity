@@ -856,3 +856,77 @@ h1, h2, h3, h4, h5, h6 {
 .inline-icon { vertical-align: middle; }
 .text-right { text-align: right; }
 .font-weight-bold { font-weight: 700; }
+
+/* Responsive Media Queries for Mobile & Tablet */
+@media (max-width: 768px) {
+  .header-container {
+    padding: 0.75rem 1rem;
+    flex-wrap: wrap;
+  }
+
+  .btn-label-desktop {
+    display: none;
+  }
+
+  .header-actions {
+    gap: 0.35rem;
+  }
+
+  .tax-banner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+    padding: 0.5rem 1rem;
+    font-size: 0.7rem;
+  }
+
+  .hero-hero-number {
+    font-size: 2.1rem;
+  }
+
+  .hero-card {
+    padding: 1.25rem;
+  }
+
+  .hero-savings-bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .savings-input-group {
+    justify-content: space-between;
+  }
+
+  .net-after-savings-result {
+    justify-content: space-between;
+    border-top: 1px dashed rgba(255, 255, 255, 0.1);
+    padding-top: 0.5rem;
+  }
+
+  .main-content {
+    padding: 1rem 0.75rem 2rem 0.75rem;
+  }
+
+  .nav-tabs-wrapper {
+    padding: 0.5rem 0.75rem 0 0.75rem;
+  }
+
+  .nav-tab-button {
+    padding: 0.5rem 0.85rem;
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-hero-number {
+    font-size: 1.8rem;
+  }
+
+  .app-title {
+    font-size: 1.1rem;
+  }
+
+  .app-subtitle {
+    font-size: 0.7rem;
+  }
+}

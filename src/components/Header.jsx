@@ -29,7 +29,7 @@ export function Header({
             title="Backup, export, or restore your household data snapshot"
           >
             <Download className="icon-sm" />
-            <span>Backup & Export</span>
+            <span className="btn-label-desktop">Backup & Export</span>
           </button>
 
           <button 
@@ -38,7 +38,7 @@ export function Header({
             title="View ATO tax rates, superannuation rules and math assumptions"
           >
             <ShieldCheck className="icon-sm" />
-            <span>ATO Rates & Math</span>
+            <span className="btn-label-desktop">ATO Rates & Math</span>
           </button>
 
           <button 
@@ -47,7 +47,7 @@ export function Header({
             title="Toggle Live What-If Scenario Mode"
           >
             <Zap className="icon-sm" />
-            <span>{scenarioMode ? 'What-If Mode ACTIVE' : 'Test What-If Scenario'}</span>
+            <span className="btn-label-desktop">{scenarioMode ? 'What-If Active' : 'Test What-If'}</span>
           </button>
 
           <button 
@@ -56,7 +56,7 @@ export function Header({
             title="Reset inputs to realistic dual-income sample data"
           >
             <RefreshCw className="icon-sm" />
-            <span>Reset Sample Data</span>
+            <span className="btn-label-desktop">Reset</span>
           </button>
 
           <button 
