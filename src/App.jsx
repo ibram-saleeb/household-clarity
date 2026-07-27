@@ -9,10 +9,12 @@ import { IncomeSection } from './components/IncomeSection';
 import { ExpenseSection } from './components/ExpenseSection';
 import { ScenarioEngine } from './components/ScenarioEngine';
 import { AssumptionsModal } from './components/AssumptionsModal';
+import { ExportModal } from './components/ExportModal';
 
 export default function App() {
   const [appState, setAppState] = useLocalStorage('household_clarity_app_v1', DEFAULT_APP_STATE);
   const [isAssumptionsModalOpen, setIsAssumptionsModalOpen] = useState(false);
+  const [isExportModalOpen, setIsExportModalOpen] = useState(false);
 
   // Recalculate household calculations live on every state change
   const calculatedData = useMemo(() => {
@@ -55,6 +57,10 @@ export default function App() {
     }));
   };
 
+  const handleImportState = (importedState) => {
+    setAppState(importedState);
+  };
+
   const handleResetDefaults = () => {
     if (window.confirm("Reset all inputs to sample dual-income data?")) {
       setAppState(DEFAULT_APP_STATE);
@@ -83,6 +89,7 @@ export default function App() {
         scenarioMode={appState.scenarioMode}
         onToggleScenario={handleToggleScenario}
         onOpenAssumptions={() => setIsAssumptionsModalOpen(true)}
+        onOpenExport={() => setIsExportModalOpen(true)}
         onResetDefaults={handleResetDefaults}
         onClearAll={handleClearAll}
       />
@@ -143,6 +150,15 @@ export default function App() {
       <AssumptionsModal
         isOpen={isAssumptionsModalOpen}
         onClose={() => setIsAssumptionsModalOpen(false)}
+      />
+
+      {/* Export, Backup & Restore Modal */}
+      <ExportModal
+        isOpen={isExportModalOpen}
+        onClose={() => setIsExportModalOpen(false)}
+        appState={appState}
+        calculatedData={calculatedData}
+        onImportState={handleImportState}
       />
     </div>
   );

@@ -1,11 +1,12 @@
 import React from 'react';
-import { ShieldCheck, RefreshCw, Info, Zap, Trash2 } from 'lucide-react';
+import { ShieldCheck, RefreshCw, Info, Zap, Trash2, Download } from 'lucide-react';
 import { ATO_TAX_CONFIG } from '../config/atoTaxConfig';
 
 export function Header({ 
   scenarioMode, 
   onToggleScenario, 
   onOpenAssumptions, 
+  onOpenExport,
   onResetDefaults, 
   onClearAll 
 }) {
@@ -25,6 +26,15 @@ export function Header({
         </div>
 
         <div className="header-actions">
+          <button 
+            className="btn btn-secondary btn-sm"
+            onClick={onOpenExport}
+            title="Backup, export, or restore your household data snapshot"
+          >
+            <Download className="icon-sm" />
+            <span>Backup & Export</span>
+          </button>
+
           <button 
             className="btn btn-secondary btn-sm"
             onClick={onOpenAssumptions}
