@@ -1,5 +1,5 @@
 import React from 'react';
-import { Zap, RotateCcw, Plus, Trash2, Sliders, ArrowRight } from 'lucide-react';
+import { Zap, RotateCcw, Plus, Trash2, Sliders, ArrowRight, Layers, Award } from 'lucide-react';
 import { formatMoney } from '../utils/formatters.js';
 
 export function ScenarioEngine({
@@ -7,26 +7,36 @@ export function ScenarioEngine({
   onToggleScenario,
   scenarioData,
   onUpdateScenario,
+  onAddScenario,
+  onDeleteScenario,
+  onSelectScenario,
   partners,
   baselineExpenses
 }) {
   const p1Name = partners?.[0]?.name || 'Partner 1';
   const p2Name = partners?.[1]?.name || 'Partner 2';
 
-  const currentOverrides = scenarioData?.incomeOverrides || {
+  const multiScenarios = scenarioData?.multiScenarios || [];
+  const activeScenarioId = scenarioData?.activeScenarioId;
+
+  // Active scenario raw configuration
+  const activeCalc = multiScenarios.find(s => s.id === activeScenarioId) || multiScenarios[0] || null;
+  const activeRaw = activeCalc?.rawConfig || scenarioData;
+
+  const currentOverrides = activeRaw?.incomeOverrides || {
     p1: { salary: null, salaryPercent: 100 },
     p2: { salary: null, salaryPercent: 100 }
   };
 
-  const scenarioExpenseList = scenarioData?.expensesOverride !== null && scenarioData?.expensesOverride !== undefined
-    ? scenarioData.expensesOverride
+  const scenarioExpenseList = activeRaw?.expensesOverride !== null && activeRaw?.expensesOverride !== undefined
+    ? activeRaw.expensesOverride
     : baselineExpenses;
 
-  // Handlers for Partner Salary Overrides
+  // Handlers for Partner Salary Overrides on Active Scenario
   const handlePartnerSalaryChange = (partnerKey, val) => {
     const num = val === '' ? null : Math.max(0, Number(val));
     onUpdateScenario({
-      ...scenarioData,
+      ...activeRaw,
       incomeOverrides: {
         ...currentOverrides,
         [partnerKey]: {
@@ -40,7 +50,7 @@ export function ScenarioEngine({
   const handlePartnerPercentChange = (partnerKey, percent) => {
     const numPercent = Math.max(0, Math.min(200, Number(percent)));
     onUpdateScenario({
-      ...scenarioData,
+      ...activeRaw,
       incomeOverrides: {
         ...currentOverrides,
         [partnerKey]: {
@@ -61,6 +71,9 @@ export function ScenarioEngine({
     if (type === 'p2_parental_leave') {
       const p2BaseSalary = partners[1]?.salary || 85000;
       onUpdateScenario({
+        ...activeRaw,
+        name: `${p2Name} Parental Leave (50%)`,
+        presetKey: 'p2_parental_leave',
         incomeOverrides: {
           p1: { salary: null, salaryPercent: 100 },
           p2: { salary: p2BaseSalary * 0.5, salaryPercent: 50 }
@@ -69,6 +82,9 @@ export function ScenarioEngine({
       });
     } else if (type === 'p2_zero_income') {
       onUpdateScenario({
+        ...activeRaw,
+        name: `Single Income (${p1Name} only)`,
+        presetKey: 'p2_zero_income',
         incomeOverrides: {
           p1: { salary: null, salaryPercent: 100 },
           p2: { salary: 0, salaryPercent: 0 }
@@ -85,6 +101,9 @@ export function ScenarioEngine({
         category: 'Housing'
       };
       onUpdateScenario({
+        ...activeRaw,
+        name: 'Mortgage Surge Scenario',
+        presetKey: 'new_mortgage',
         incomeOverrides: {
           p1: { salary: null, salaryPercent: 100 },
           p2: { salary: null, salaryPercent: 100 }
@@ -93,6 +112,7 @@ export function ScenarioEngine({
       });
     } else if (type === 'clear') {
       onUpdateScenario({
+        ...activeRaw,
         incomeOverrides: {
           p1: { salary: null, salaryPercent: 100 },
           p2: { salary: null, salaryPercent: 100 }
@@ -113,7 +133,7 @@ export function ScenarioEngine({
       category: 'Test'
     };
     onUpdateScenario({
-      ...scenarioData,
+      ...activeRaw,
       expensesOverride: [...scenarioExpenseList, newExp]
     });
   };
@@ -126,7 +146,7 @@ export function ScenarioEngine({
       return exp;
     });
     onUpdateScenario({
-      ...scenarioData,
+      ...activeRaw,
       expensesOverride: updated
     });
   };
@@ -134,15 +154,26 @@ export function ScenarioEngine({
   const handleDeleteScenarioExpense = (id) => {
     const updated = scenarioExpenseList.filter((exp) => exp.id !== id);
     onUpdateScenario({
-      ...scenarioData,
+      ...activeRaw,
       expensesOverride: updated
     });
   };
 
-  // Comparison Metrics Config
+  // Comparison Metrics Config for Active Scenario
   const baseline = scenarioData?.baseline;
-  const scenario = scenarioData?.scenario;
-  const deltas = scenarioData?.deltas;
+  const scenario = activeCalc?.result || scenarioData?.scenario;
+  const deltas = activeCalc?.deltas || scenarioData?.deltas;
+
+  // Best Cashflow Scenario Finder among all multi-scenarios
+  let maxNetCashflow = -Infinity;
+  let bestScenarioId = null;
+  multiScenarios.forEach((scen) => {
+    const net = scen.result?.netCashflowMonthly || -Infinity;
+    if (net > maxNetCashflow) {
+      maxNetCashflow = net;
+      bestScenarioId = scen.id;
+    }
+  });
 
   const comparisonMetrics = [
     {
@@ -208,10 +239,10 @@ export function ScenarioEngine({
       <div className="section-header">
         <div>
           <h2 className="section-title">
-            <Zap className="icon-md inline-icon text-zap" /> What-If Live Scenario Engine
+            <Zap className="icon-md inline-icon text-zap" /> What-If Live Multi-Scenario Engine
           </h2>
           <p className="section-subtitle">
-            Simulate life events—job changes, parental leave, mortgage surge—and instantly compare your Baseline vs Scenario position.
+            Simulate and compare multiple life events—job changes, parental leave, mortgage surge—side-by-side with your Baseline.
           </p>
         </div>
 
@@ -225,6 +256,49 @@ export function ScenarioEngine({
           </button>
         </div>
       </div>
+
+      {/* Multi-Scenario Tabs Bar */}
+      {scenarioMode && (
+        <div className="multi-scenario-nav-bar">
+          {multiScenarios.map((scen, idx) => {
+            const isActive = scen.id === activeScenarioId;
+            const isBest = scen.id === bestScenarioId && multiScenarios.length > 1;
+
+            return (
+              <button
+                key={scen.id}
+                className={`scen-tab-btn ${isActive ? 'active' : ''}`}
+                onClick={() => { if (onSelectScenario) onSelectScenario(scen.id); }}
+              >
+                <Layers className="icon-xs" />
+                <span>{scen.name || `Scenario ${idx + 1}`}</span>
+                {isBest && <span className="scen-best-badge"><Award className="icon-xs inline-icon" /> Best</span>}
+                {multiScenarios.length > 1 && (
+                  <span
+                    className="scen-tab-delete"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      if (onDeleteScenario) onDeleteScenario(scen.id);
+                    }}
+                    title="Delete scenario"
+                  >
+                    ×
+                  </span>
+                )}
+
+              </button>
+            );
+          })}
+
+          <button
+            className="btn-add-scen"
+            onClick={() => { if (onAddScenario) onAddScenario(`Scenario ${multiScenarios.length + 1}`); }}
+          >
+
+            <Plus className="icon-xs" /> New Scenario
+          </button>
+        </div>
+      )}
 
       {/* Quick Presets Grid */}
       <div className="presets-bar">
@@ -255,7 +329,7 @@ export function ScenarioEngine({
           {/* Income Overrides Card */}
           <div className="scenario-card">
             <h3 className="card-subtitle">
-              <Sliders className="icon-xs inline-icon" /> Adjust Partner Incomes
+              <Sliders className="icon-xs inline-icon" /> Adjust Incomes ({activeRaw?.name || 'Active Scenario'})
             </h3>
             
             {/* P1 Controls */}
@@ -358,7 +432,7 @@ export function ScenarioEngine({
           {/* Scenario Expenses Overrides Card */}
           <div className="scenario-card">
             <div className="scenario-card-header">
-              <h3 className="card-subtitle">Scenario Outgoings Overrides</h3>
+              <h3 className="card-subtitle">Outgoings Overrides ({activeRaw?.name || 'Active Scenario'})</h3>
               <button className="btn btn-ghost-sm" onClick={handleAddScenarioExpense}>
                 <Plus className="icon-xs inline-icon" /> Add Test Expense
               </button>
@@ -411,11 +485,11 @@ export function ScenarioEngine({
         </div>
       )}
 
-      {/* Mobile-First Scenario Impact Comparison Cards */}
+      {/* Active Scenario Impact Cards */}
       {scenarioMode && baseline && scenario && (
         <div className="comparison-section-wrapper">
           <h3 className="comparison-section-title">
-            <Zap className="icon-xs inline-icon text-zap" /> Baseline vs Scenario Position Impact
+            <Zap className="icon-xs inline-icon text-zap" /> Baseline vs Active Scenario Impact ({activeRaw?.name})
           </h3>
 
           <div className="scenario-impact-cards-grid">
@@ -452,6 +526,71 @@ export function ScenarioEngine({
               );
             })}
           </div>
+        </div>
+      )}
+
+      {/* Multi-Scenario Comparison Matrix */}
+      {scenarioMode && multiScenarios.length > 0 && baseline && (
+        <div className="matrix-container">
+          <h3 className="comparison-section-title" style={{ marginBottom: '1rem' }}>
+            <Layers className="icon-xs inline-icon text-zap" /> Multi-Scenario Side-by-Side Comparison Matrix
+          </h3>
+          <table className="matrix-table">
+            <thead>
+              <tr>
+                <th>Financial Metric</th>
+                <th className="col-baseline">Baseline Position</th>
+                {multiScenarios.map((s) => (
+                  <th key={s.id} className="col-scenario">
+                    {s.name}
+                    {s.id === bestScenarioId && multiScenarios.length > 1 && (
+                      <span className="scen-best-badge">Best</span>
+                    )}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              <tr className="matrix-row-hero">
+                <td>Net Monthly Cash Flow</td>
+                <td>{formatMoney(baseline.netCashflowMonthly, true)} / mo</td>
+                {multiScenarios.map((s) => {
+                  const val = s.result?.netCashflowMonthly || 0;
+                  const delta = s.deltas?.netCashflowMonthly || 0;
+                  const isPositive = delta >= 0;
+                  return (
+                    <td key={s.id}>
+                      {formatMoney(val, true)}
+                      <div className={`text-xs ${isPositive ? 'text-success' : 'text-danger'}`}>
+                        ({delta >= 0 ? '+' : ''}{formatMoney(delta, true)})
+                      </div>
+                    </td>
+                  );
+                })}
+              </tr>
+              <tr>
+                <td>Usable Spendable Income</td>
+                <td>{formatMoney(baseline.combinedUsableMonthly, true)} / mo</td>
+                {multiScenarios.map((s) => (
+                  <td key={s.id}>{formatMoney(s.result?.combinedUsableMonthly, true)} / mo</td>
+                ))}
+              </tr>
+              <tr>
+                <td>Total Monthly Outgoings</td>
+                <td>{formatMoney(baseline.totalExpensesMonthly, true)} / mo</td>
+                {multiScenarios.map((s) => (
+                  <td key={s.id}>{formatMoney(s.result?.totalExpensesMonthly, true)} / mo</td>
+                ))}
+              </tr>
+              <tr>
+                <td>Superannuation Accumulation</td>
+                <td>{formatMoney(baseline.totalSuperMonthly, true)} / mo</td>
+                {multiScenarios.map((s) => (
+                  <td key={s.id}>{formatMoney(s.result?.totalSuperMonthly, true)} / mo</td>
+                ))}
+              </tr>
+            </tbody>
+          </table>
         </div>
       )}
     </section>

@@ -1,7 +1,7 @@
 import React from 'react';
 import { ShieldCheck, RefreshCw, Zap, Trash2, Download } from 'lucide-react';
 import { TandemLogo } from './TandemLogo';
-import { APP_VERSION } from '../config/version.js';
+import { APP_VERSION, APP_NAME } from '../config/version.js';
 
 export function Header({ 
   scenarioMode, 
@@ -18,7 +18,7 @@ export function Header({
           <TandemLogo size="md" />
           <div>
             <div className="brand-title-row">
-              <h1 className="app-title">Tandem</h1>
+              <h1 className="app-title">{APP_NAME}</h1>
               <span className="version-pill" title={`Strict Release Version v${APP_VERSION}`}>v{APP_VERSION}</span>
             </div>
             <p className="app-subtitle">Financial harmony in tandem.</p>

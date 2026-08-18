@@ -64,6 +64,28 @@ export function calculateTaxAndLevy(taxableIncomeAnnual) {
 }
 
 /**
+ * Calculates ATO HECS/HELP Compulsory Repayment based on total repayment income.
+ */
+export function calculateHecsHelpRepayment(repaymentIncomeAnnual) {
+  const income = Math.max(0, Number(repaymentIncomeAnnual) || 0);
+  if (!ATO_TAX_CONFIG.hecsHelpBrackets || income < ATO_TAX_CONFIG.hecsHelpBrackets[1]?.min) {
+    return { repaymentAnnual: 0, ratePercent: 0 };
+  }
+
+  const bracket = ATO_TAX_CONFIG.hecsHelpBrackets.find(
+    b => income >= b.min && income <= b.max
+  ) || ATO_TAX_CONFIG.hecsHelpBrackets[ATO_TAX_CONFIG.hecsHelpBrackets.length - 1];
+
+  const rate = bracket?.rate || 0;
+  const repaymentAnnual = income * rate;
+
+  return {
+    repaymentAnnual,
+    ratePercent: rate * 100
+  };
+}
+
+/**
  * Calculates complete financial breakdown for an individual partner.
  */
 export function calculatePartnerPosition(partner, salaryOverride = null, salaryPercentOverride = 100) {
@@ -81,16 +103,6 @@ export function calculatePartnerPosition(partner, salaryOverride = null, salaryP
 
   primarySalaryAnnual = Math.max(0, primarySalaryAnnual);
 
-  // Superannuation Calculation (money NOT spendable, goes to wealth fund)
-  let superAnnual = 0;
-  if (partner.superMode === 'fixed') {
-    superAnnual = annualiseAmount(partner.superFixedAmount || 0, partner.superFixedFrequency || 'annual');
-  } else {
-    // Rate mode (% of salary)
-    const rate = Number(partner.superRate) || ATO_TAX_CONFIG.defaultSuperGuaranteeRate;
-    superAnnual = primarySalaryAnnual * (rate / 100);
-  }
-
   // Extra Incomes (Rental, Dividends, Side Income, etc.)
   let extraIncomesAnnual = 0;
   const extraIncomesList = partner.extraIncomes || [];
@@ -98,14 +110,38 @@ export function calculatePartnerPosition(partner, salaryOverride = null, salaryP
     extraIncomesAnnual += annualiseAmount(item.amount, item.frequency);
   });
 
-  // Gross Taxable Income (Salary + Extra Incomes)
-  const taxableIncomeAnnual = primarySalaryAnnual + extraIncomesAnnual;
+  // Salary Sacrifice & Deductions
+  const salarySacrificeAnnual = Math.max(0, annualiseAmount(partner.salarySacrificeAmount || 0, partner.salarySacrificeFrequency || 'monthly'));
+  const taxDeductionsAnnual = Math.max(0, Number(partner.taxDeductionsAnnual) || 0);
+  const hasHecsHelpDebt = Boolean(partner.hasHecsHelpDebt);
 
-  // Calculate Tax & Medicare Levy
+  // Employer Superannuation Guarantee (12%)
+  let superGuaranteeAnnual = 0;
+  if (partner.superMode === 'fixed') {
+    superGuaranteeAnnual = annualiseAmount(partner.superFixedAmount || 0, partner.superFixedFrequency || 'annual');
+  } else {
+    const rate = Number(partner.superRate) || ATO_TAX_CONFIG.defaultSuperGuaranteeRate;
+    superGuaranteeAnnual = primarySalaryAnnual * (rate / 100);
+  }
+
+  // Net Superannuation Wealth Accumulation (SG + Net Salary Sacrifice after 15% fund tax)
+  const superSacrificeNetAnnual = salarySacrificeAnnual * (1 - (ATO_TAX_CONFIG.superConcessionalTaxRate || 0.15));
+  const totalSuperAnnual = superGuaranteeAnnual + superSacrificeNetAnnual;
+
+  // Gross Taxable Income after Pre-Tax Salary Sacrifice & Deductions
+  const grossIncomeAnnual = primarySalaryAnnual + extraIncomesAnnual;
+  const taxableIncomeAnnual = Math.max(0, grossIncomeAnnual - salarySacrificeAnnual - taxDeductionsAnnual);
+
+  // Calculate Income Tax & Medicare Levy
   const taxDetails = calculateTaxAndLevy(taxableIncomeAnnual);
 
-  // Usable Spendable Income (Taxable Income - Tax - Medicare Levy)
-  const spendableIncomeAnnual = Math.max(0, taxableIncomeAnnual - taxDetails.totalTaxAndLevy);
+  // HECS/HELP Repayment Income (ATO includes reportable salary sacrifice)
+  const hecsRepaymentIncomeAnnual = grossIncomeAnnual;
+  const hecsDetails = hasHecsHelpDebt ? calculateHecsHelpRepayment(hecsRepaymentIncomeAnnual) : { repaymentAnnual: 0, ratePercent: 0 };
+
+  // Usable Spendable Cash Income (Gross Cash Income minus Tax, Medicare Levy, HECS/HELP, & Salary Sacrifice Outflow)
+  const totalDeductedOutflowsAnnual = taxDetails.totalTaxAndLevy + hecsDetails.repaymentAnnual + salarySacrificeAnnual;
+  const spendableIncomeAnnual = Math.max(0, grossIncomeAnnual - totalDeductedOutflowsAnnual);
 
   return {
     id: partner.id,
@@ -113,8 +149,18 @@ export function calculatePartnerPosition(partner, salaryOverride = null, salaryP
     initials: partner.initials || 'P',
     primarySalaryAnnual,
     primarySalaryMonthly: deannualiseToMonthly(primarySalaryAnnual),
-    superAnnual,
-    superMonthly: deannualiseToMonthly(superAnnual),
+    superAnnual: totalSuperAnnual,
+    superMonthly: deannualiseToMonthly(totalSuperAnnual),
+    superGuaranteeAnnual,
+    superGuaranteeMonthly: deannualiseToMonthly(superGuaranteeAnnual),
+    salarySacrificeAnnual,
+    salarySacrificeMonthly: deannualiseToMonthly(salarySacrificeAnnual),
+    taxDeductionsAnnual,
+    taxDeductionsMonthly: deannualiseToMonthly(taxDeductionsAnnual),
+    hasHecsHelpDebt,
+    hecsRepaymentAnnual: hecsDetails.repaymentAnnual,
+    hecsRepaymentMonthly: deannualiseToMonthly(hecsDetails.repaymentAnnual),
+    hecsRatePercent: hecsDetails.ratePercent,
     extraIncomesAnnual,
     extraIncomesMonthly: deannualiseToMonthly(extraIncomesAnnual),
     taxableIncomeAnnual,
@@ -128,6 +174,7 @@ export function calculatePartnerPosition(partner, salaryOverride = null, salaryP
     spendableIncomeMonthly: deannualiseToMonthly(spendableIncomeAnnual)
   };
 }
+
 
 /**
  * Calculates complete Household position (Baseline and optional Scenario).
@@ -186,95 +233,126 @@ export function calculateHousehold(state) {
     p2NetMonthly: baselineP2NetMonthly
   };
 
+  const scenariosList = state.scenarios && state.scenarios.length > 0
+    ? state.scenarios
+    : (scenario ? [{ id: 'legacy-scen', name: 'Scenario 1', ...scenario }] : []);
+
+  const activeScenarioId = state.activeScenarioId || (scenariosList[0]?.id || null);
+
+  // Helper to compute a single scenario result
+  const computeScenarioData = (scen) => {
+    if (!scen) return null;
+    const scenarioIncomeOverrides = scen.incomeOverrides || {};
+    
+    const p1Scenario = calculatePartnerPosition(
+      partners[0],
+      scenarioIncomeOverrides.p1?.salary,
+      scenarioIncomeOverrides.p1?.salaryPercent
+    );
+
+    const p2Scenario = calculatePartnerPosition(
+      partners[1],
+      scenarioIncomeOverrides.p2?.salary,
+      scenarioIncomeOverrides.p2?.salaryPercent
+    );
+
+    const scenarioCombinedUsableMonthly = (p1Scenario?.spendableIncomeMonthly || 0) + (p2Scenario?.spendableIncomeMonthly || 0);
+    const scenarioCombinedUsableAnnual = scenarioCombinedUsableMonthly * 12;
+    const scenarioTotalSuperMonthly = (p1Scenario?.superMonthly || 0) + (p2Scenario?.superMonthly || 0);
+
+    const scenarioExpenseList = scen.expensesOverride ? scen.expensesOverride : expenses;
+
+    let scenarioExpensesMonthly = 0;
+    let p1ScenarioExpensesMonthly = 0;
+    let p2ScenarioExpensesMonthly = 0;
+    let sharedScenarioExpensesMonthly = 0;
+
+    scenarioExpenseList.forEach(exp => {
+      const monthlyAmt = deannualiseToMonthly(annualiseAmount(exp.amount, exp.frequency));
+      scenarioExpensesMonthly += monthlyAmt;
+
+      if (exp.assignedTo === 'p1') {
+        p1ScenarioExpensesMonthly += monthlyAmt;
+      } else if (exp.assignedTo === 'p2') {
+        p2ScenarioExpensesMonthly += monthlyAmt;
+      } else {
+        sharedScenarioExpensesMonthly += monthlyAmt;
+      }
+    });
+
+    const scenarioSavingsTargetMonthly = scen.savingsTargetMonthly !== undefined
+      ? Number(scen.savingsTargetMonthly) || 0
+      : Number(savingsTargetMonthly) || 0;
+
+    const scenarioNetCashflowMonthly = scenarioCombinedUsableMonthly - scenarioExpensesMonthly;
+    const scenarioNetAfterSavingsMonthly = scenarioNetCashflowMonthly - scenarioSavingsTargetMonthly;
+
+    const scenarioP1NetMonthly = (p1Scenario?.spendableIncomeMonthly || 0) - p1ScenarioExpensesMonthly - (sharedScenarioExpensesMonthly / 2);
+    const scenarioP2NetMonthly = (p2Scenario?.spendableIncomeMonthly || 0) - p2ScenarioExpensesMonthly - (sharedScenarioExpensesMonthly / 2);
+
+    const result = {
+      id: scen.id,
+      name: scen.name || 'Scenario',
+      presetKey: scen.presetKey || 'custom',
+      p1: p1Scenario,
+      p2: p2Scenario,
+      combinedUsableMonthly: scenarioCombinedUsableMonthly,
+      combinedUsableAnnual: scenarioCombinedUsableAnnual,
+      totalSuperMonthly: scenarioTotalSuperMonthly,
+      totalExpensesMonthly: scenarioExpensesMonthly,
+      p1ExpensesMonthly: p1ScenarioExpensesMonthly,
+      p2ExpensesMonthly: p2ScenarioExpensesMonthly,
+      sharedExpensesMonthly: sharedScenarioExpensesMonthly,
+      netCashflowMonthly: scenarioNetCashflowMonthly,
+      netAfterSavingsMonthly: scenarioNetAfterSavingsMonthly,
+      p1NetMonthly: scenarioP1NetMonthly,
+      p2NetMonthly: scenarioP2NetMonthly,
+      savingsTargetMonthly: scenarioSavingsTargetMonthly
+    };
+
+    const deltas = {
+      combinedUsableMonthly: scenarioCombinedUsableMonthly - baselineCombinedUsableMonthly,
+      totalExpensesMonthly: scenarioExpensesMonthly - baselineExpensesMonthly,
+      netCashflowMonthly: scenarioNetCashflowMonthly - baselineNetCashflowMonthly,
+      netAfterSavingsMonthly: scenarioNetAfterSavingsMonthly - baselineNetAfterSavingsMonthly,
+      p1NetMonthly: scenarioP1NetMonthly - baselineP1NetMonthly,
+      p2NetMonthly: scenarioP2NetMonthly - baselineP2NetMonthly,
+      totalSuperMonthly: scenarioTotalSuperMonthly - baselineTotalSuperMonthly
+    };
+
+    return { result, deltas };
+  };
+
+  const calculatedScenarios = scenariosList.map(scen => {
+    const { result, deltas } = computeScenarioData(scen);
+    return {
+      id: scen.id,
+      name: scen.name,
+      presetKey: scen.presetKey,
+      rawConfig: scen,
+      result,
+      deltas
+    };
+  });
+
+  const activeScenarioCalc = calculatedScenarios.find(s => s.id === activeScenarioId) || calculatedScenarios[0] || null;
+
   if (!scenarioMode) {
     return {
       baseline: baselineResult,
-      scenario: null,
-      deltas: null
+      scenario: activeScenarioCalc?.result || null,
+      deltas: activeScenarioCalc?.deltas || null,
+      multiScenarios: calculatedScenarios,
+      activeScenarioId
     };
   }
 
-  // 2. Calculate Live What-If Scenario
-  const scenarioIncomeOverrides = scenario?.incomeOverrides || {};
-  
-  const p1Scenario = calculatePartnerPosition(
-    partners[0],
-    scenarioIncomeOverrides.p1?.salary,
-    scenarioIncomeOverrides.p1?.salaryPercent
-  );
-
-  const p2Scenario = calculatePartnerPosition(
-    partners[1],
-    scenarioIncomeOverrides.p2?.salary,
-    scenarioIncomeOverrides.p2?.salaryPercent
-  );
-
-  const scenarioCombinedUsableMonthly = (p1Scenario?.spendableIncomeMonthly || 0) + (p2Scenario?.spendableIncomeMonthly || 0);
-  const scenarioCombinedUsableAnnual = scenarioCombinedUsableMonthly * 12;
-  const scenarioTotalSuperMonthly = (p1Scenario?.superMonthly || 0) + (p2Scenario?.superMonthly || 0);
-
-  // Process Scenario Expenses (baseline expenses + additions/modifications/deletions)
-  const scenarioExpenseList = scenario?.expensesOverride ? scenario.expensesOverride : expenses;
-
-  let scenarioExpensesMonthly = 0;
-  let p1ScenarioExpensesMonthly = 0;
-  let p2ScenarioExpensesMonthly = 0;
-  let sharedScenarioExpensesMonthly = 0;
-
-  scenarioExpenseList.forEach(exp => {
-    const monthlyAmt = deannualiseToMonthly(annualiseAmount(exp.amount, exp.frequency));
-    scenarioExpensesMonthly += monthlyAmt;
-
-    if (exp.assignedTo === 'p1') {
-      p1ScenarioExpensesMonthly += monthlyAmt;
-    } else if (exp.assignedTo === 'p2') {
-      p2ScenarioExpensesMonthly += monthlyAmt;
-    } else {
-      sharedScenarioExpensesMonthly += monthlyAmt;
-    }
-  });
-
-  const scenarioSavingsTargetMonthly = scenario?.savingsTargetMonthly !== undefined
-    ? Number(scenario.savingsTargetMonthly) || 0
-    : Number(savingsTargetMonthly) || 0;
-
-  const scenarioNetCashflowMonthly = scenarioCombinedUsableMonthly - scenarioExpensesMonthly;
-  const scenarioNetAfterSavingsMonthly = scenarioNetCashflowMonthly - scenarioSavingsTargetMonthly;
-
-  const scenarioP1NetMonthly = (p1Scenario?.spendableIncomeMonthly || 0) - p1ScenarioExpensesMonthly - (sharedScenarioExpensesMonthly / 2);
-  const scenarioP2NetMonthly = (p2Scenario?.spendableIncomeMonthly || 0) - p2ScenarioExpensesMonthly - (sharedScenarioExpensesMonthly / 2);
-
-  const scenarioResult = {
-    p1: p1Scenario,
-    p2: p2Scenario,
-    combinedUsableMonthly: scenarioCombinedUsableMonthly,
-    combinedUsableAnnual: scenarioCombinedUsableAnnual,
-    totalSuperMonthly: scenarioTotalSuperMonthly,
-    totalExpensesMonthly: scenarioExpensesMonthly,
-    p1ExpensesMonthly: p1ScenarioExpensesMonthly,
-    p2ExpensesMonthly: p2ScenarioExpensesMonthly,
-    sharedExpensesMonthly: sharedScenarioExpensesMonthly,
-    netCashflowMonthly: scenarioNetCashflowMonthly,
-    netAfterSavingsMonthly: scenarioNetAfterSavingsMonthly,
-    p1NetMonthly: scenarioP1NetMonthly,
-    p2NetMonthly: scenarioP2NetMonthly,
-    savingsTargetMonthly: scenarioSavingsTargetMonthly
-  };
-
-  // 3. Deltas (Scenario - Baseline)
-  const deltas = {
-    combinedUsableMonthly: scenarioCombinedUsableMonthly - baselineCombinedUsableMonthly,
-    totalExpensesMonthly: scenarioExpensesMonthly - baselineExpensesMonthly,
-    netCashflowMonthly: scenarioNetCashflowMonthly - baselineNetCashflowMonthly,
-    netAfterSavingsMonthly: scenarioNetAfterSavingsMonthly - baselineNetAfterSavingsMonthly,
-    p1NetMonthly: scenarioP1NetMonthly - baselineP1NetMonthly,
-    p2NetMonthly: scenarioP2NetMonthly - baselineP2NetMonthly,
-    totalSuperMonthly: scenarioTotalSuperMonthly - baselineTotalSuperMonthly
-  };
-
   return {
     baseline: baselineResult,
-    scenario: scenarioResult,
-    deltas
+    scenario: activeScenarioCalc?.result || null,
+    deltas: activeScenarioCalc?.deltas || null,
+    multiScenarios: calculatedScenarios,
+    activeScenarioId
   };
 }
+

@@ -69,18 +69,64 @@ export function AssumptionsModal({ isOpen, onClose }) {
             </table>
           </div>
 
-          <h3 className="modal-section-title">2. Medicare Levy & Super Guarantee</h3>
+          <h3 className="modal-section-title">2. ATO HECS / HELP Student Loan Compulsory Repayments</h3>
+          <p className="text-xs text-muted" style={{ marginBottom: '0.5rem' }}>
+            Compulsory repayments apply to total repayment income when exceeding the minimum threshold ($54,435). Repayments range from 1.0% to 10.0%:
+          </p>
+          <div className="table-responsive">
+            <table className="modal-table">
+              <thead>
+                <tr>
+                  <th>Repayment Income Threshold</th>
+                  <th>Repayment Rate</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Below $54,435</td>
+                  <td>Nil (0.0%)</td>
+                </tr>
+                <tr>
+                  <td>$54,435 – $62,850</td>
+                  <td>1.0%</td>
+                </tr>
+                <tr>
+                  <td>$62,851 – $70,618</td>
+                  <td>2.0% – 2.5%</td>
+                </tr>
+                <tr>
+                  <td>$70,619 – $84,107</td>
+                  <td>3.0% – 4.0%</td>
+                </tr>
+                <tr>
+                  <td>$84,108 – $112,556</td>
+                  <td>4.5% – 6.5%</td>
+                </tr>
+                <tr>
+                  <td>$112,557 – $159,663</td>
+                  <td>7.0% – 9.5%</td>
+                </tr>
+                <tr>
+                  <td>$159,664 and above</td>
+                  <td>10.0%</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3 className="modal-section-title">3. Medicare Levy, Salary Sacrifice & Super Guarantee</h3>
           <ul className="modal-list">
             <li>
-              <strong>Medicare Levy:</strong> Standard rate of <code>2.0%</code> applied to gross taxable income.
+              <strong>Medicare Levy:</strong> Standard rate of <code>2.0%</code> applied to taxable income.
             </li>
             <li>
-              <strong>Superannuation Guarantee (SG):</strong> Default rate of <code>12.0%</code>. Super is treated as money transferred directly to your superannuation fund, so it is excluded from usable spendable cash.
+              <strong>Superannuation Guarantee (SG):</strong> Standard employer rate of <code>12.0%</code>. Tracked as locked retirement wealth and excluded from cashflow.
             </li>
             <li>
-              <strong>HECS/HELP & Tax Offsets:</strong> This MVP provides an baseline estimate of primary income tax and Medicare levy. Custom tax offsets (LITO), HECS repayments, or private health rebate adjustments are excluded.
+              <strong>Salary Sacrifice to Super:</strong> Pre-tax contributions reduce gross taxable income while entering your super fund net of 15% fund concessional tax.
             </li>
           </ul>
+
 
           <h3 className="modal-section-title">3. Frequency Normalisation Formulae</h3>
           <ul className="modal-list">

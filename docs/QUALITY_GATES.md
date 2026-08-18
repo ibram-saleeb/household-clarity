@@ -1,30 +1,43 @@
 # Quality Gates & Verification Standards
 
-**Project**: Project Tandem (App: Tandem)  
-**Author**: CTO  
-**Last Updated**: 2026-07-27  
+**Project**: Project Tandem  
+**Author**: CTO & Quality Engineering  
+**Last Updated**: 2026-08-18  
 
 ---
 
 ## 1. Quality Gate Matrix
 
-| Quality Criteria | Target Metric | Tool / Command | Enforcement Level |
+| Quality Criteria | Target Metric | Tool / Command | Automated Hook Enforcement |
 | :--- | :--- | :--- | :--- |
-| **Linter Errors** | 0 errors | `npm run lint` (`oxlint`) | Strict / Blocker |
-| **Linter Warnings** | 0 warnings | `npm run lint` (`oxlint`) | Strict / Blocker |
-| **Production Build** | Successful build | `npm run build` (`vite build`) | Strict / Blocker |
+| **Linter Errors** | 0 errors | `npm run lint` (`oxlint`) | `pre-commit` & `pre-push` Blocker |
+| **Linter Warnings** | 0 warnings | `npm run lint` (`oxlint`) | `pre-commit` & `pre-push` Blocker |
+| **Production Build** | Successful build | `npm run build` (`vite build`) | `pre-commit` & `pre-push` Blocker |
+| **E2E Integration Tests** | 100% Pass Rate | `npm run test:e2e` (`playwright`) | `pre-push` Blocker |
+| **Commit Message Governance** | Conventional Commits | `verify-governance.js` | Commit Enforcement |
 | **Bundle Size Budget** | $< 250\text{kB}$ JS bundle | `vite build` output check | Warning / Review |
 | **Gzip Size Budget** | $< 75\text{kB}$ gzipped JS | `vite build` output check | Warning / Review |
 | **Calculation Latency** | $< 16\text{ms}$ per recalculation | Runtime Profiling / DevTools | Warning / Optimization |
 
 ---
 
-## 2. Release & PR Verification Checklist
+## 2. Automated Git Hooks Governance Policy
+
+For full details, see [`GIT_GOVERNANCE.md`](file:///c:/Users/ibram/OneDrive/Desktop/project-tandem/docs/GIT_GOVERNANCE.md).
+
+All code contributions undergo automated two-stage Git hook verification:
+1. **Pre-Commit Hook (`.githooks/pre-commit`)**: Blocks commits if `oxlint` returns any errors/warnings or if `vite build` fails.
+2. **Pre-Push Hook (`.githooks/pre-push`)**: Blocks remote branch pushes if Playwright E2E test suite fails or if lint/build checks fail.
+
+---
+
+## 3. Release & PR Verification Checklist
 
 Before any feature or code change is merged or released:
 
-1. [ ] **Lint Verification**: Run `cmd /c npm run lint` and confirm zero errors and zero warnings.
-2. [ ] **Production Build Check**: Run `cmd /c npm run build` and ensure output bundles compile under size budgets.
-3. [ ] **Local Storage Fallback Test**: Verify app clears cleanly when `localStorage` is wiped and falls back to default sample state.
-4. [ ] **Scenario Calculations Audit**: Verify that toggling scenario mode displays accurate delta ($\Delta$) values without mutating baseline values.
+1. [ ] **Git Hook Setup**: Run `npm run setup:hooks` to activate local `.githooks`.
+2. [ ] **Lint Verification**: Confirm zero errors and zero warnings via `npm run pre-commit`.
+3. [ ] **E2E Suite Verification**: Confirm 100% test suite pass rate via `npm run check:governance`.
+4. [ ] **Conventional Commit Formatting**: Use standard prefixes e.g. `feat:`, `fix:`, `docs:`, `chore:`.
 5. [ ] **Build Log Entry**: Record build metrics in `BUILD_LOG.md`.
+

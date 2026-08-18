@@ -1,0 +1,5 @@
+#!/bin/sh
+# Git Pre-Push Hook — Project Tandem Governance
+# Enforces full quality gate & E2E suite pass prior to pushing to remote.
+
+node scripts/verify-governance.js --stage pre-push

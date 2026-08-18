@@ -48,6 +48,8 @@ export function ExpenseSection({ expenses, onUpdateExpenses, partners }) {
   };
 
   // Compute total normalised monthly outgoings
+  const categoriesList = ['Housing', 'Living', 'Transport', 'Personal', 'Insurance', 'Utilities', 'Debt', 'General'];
+
   const totalMonthlyOutgoings = expenses.reduce((sum, exp) => {
     return sum + deannualiseToMonthly(annualiseAmount(exp.amount, exp.frequency));
   }, 0) || 1;

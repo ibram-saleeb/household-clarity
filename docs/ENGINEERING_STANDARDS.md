@@ -1,8 +1,8 @@
 # Engineering & Architecture Standards
 
-**Project**: Project Tandem (App: Tandem)  
+**Project**: Project Tandem  
 **Author**: CTO  
-**Last Updated**: 2026-07-27  
+**Last Updated**: 2026-08-16  
 
 ---
 
@@ -22,7 +22,7 @@ The calculation engine (`src/logic/calculator.js`) must remain pure:
 ## 2. Directory & Module Structure Conventions
 
 ```
-household-clarity/
+project-tandem/
 ├── docs/                        # Scoping, architectural, and quality standards
 ├── public/                      # Static web assets
 ├── src/

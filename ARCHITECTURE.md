@@ -1,8 +1,8 @@
 # Technical Architecture & System Design
 
-**Project**: Project Tandem (App: Tandem)  
+**Project**: Project Tandem  
 **Author**: Engineering Team  
-**Last Updated**: 2026-07-27  
+**Last Updated**: 2026-08-16  
 
 ---
 
@@ -23,7 +23,7 @@ The application is engineered as a **client-side, local-first React web applicat
 ```mermaid
 flowchart TD
     subgraph Storage & State Layer
-        A[localStorage Key: household_clarity_app_v1] -->|Hydrate| B(React App State)
+        A[localStorage Key: project_tandem_app_v1] -->|Hydrate| B(React App State)
         C[DEFAULT_APP_STATE Defaults] -->|Fallback| B
     end
 

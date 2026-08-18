@@ -1,4 +1,5 @@
 import { formatMoney } from '../utils/formatters.js';
+import { APP_VERSION, APP_NAME } from '../config/version.js';
 
 /**
  * Downloads a string content as a client-side file.
@@ -16,15 +17,15 @@ function downloadFile(content, fileName, mimeType) {
 }
 
 /**
- * Exports complete Tandem application state to a timestamped JSON backup file.
+ * Exports complete Project Tandem application state to a timestamped JSON backup file.
  */
 export function exportStateToJson(state) {
   const dateStr = new Date().toISOString().split('T')[0];
-  const fileName = `tandem-household-backup-${dateStr}.json`;
+  const fileName = `project-tandem-backup-${dateStr}.json`;
   const exportPayload = {
-    version: '1.0.0',
+    version: APP_VERSION,
     exportedAt: new Date().toISOString(),
-    appName: 'Tandem',
+    appName: APP_NAME,
     state
   };
   const jsonContent = JSON.stringify(exportPayload, null, 2);
@@ -36,7 +37,7 @@ export function exportStateToJson(state) {
  */
 export function exportStateToCsv(state, calculatedData) {
   const dateStr = new Date().toISOString().split('T')[0];
-  const fileName = `tandem-household-summary-${dateStr}.csv`;
+  const fileName = `project-tandem-summary-${dateStr}.csv`;
   const { partners = [], expenses = [] } = state;
   const current = calculatedData?.scenarioMode && calculatedData?.scenario 
     ? calculatedData.scenario 
@@ -45,7 +46,7 @@ export function exportStateToCsv(state, calculatedData) {
   const csvRows = [];
 
   // Title & Metadata
-  csvRows.push(['TANDEM - HOUSEHOLD FINANCIAL CLARITY REPORT']);
+  csvRows.push(['PROJECT TANDEM - HOUSEHOLD FINANCIAL CLARITY REPORT']);
   csvRows.push([`Export Date`, new Date().toLocaleDateString('en-AU')]);
   csvRows.push([`Mode`, calculatedData?.scenarioMode ? 'What-If Scenario' : 'Baseline']);
   csvRows.push([]);

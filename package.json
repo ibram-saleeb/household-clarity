@@ -1,5 +1,5 @@
 {
-  "name": "tandem",
+  "name": "project-tandem",
   "private": true,
   "version": "1.0.0",
   "type": "module",
@@ -7,7 +7,12 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "oxlint",
-    "preview": "vite preview"
+    "test:e2e": "playwright test",
+    "preview": "vite preview",
+    "setup:hooks": "git config core.hooksPath .githooks",
+    "check:governance": "node scripts/verify-governance.js",
+    "pre-commit": "node scripts/verify-governance.js --stage pre-commit",
+    "pre-push": "node scripts/verify-governance.js --stage pre-push"
   },
   "dependencies": {
     "framer-motion": "^12.42.2",
@@ -17,6 +22,7 @@
     "recharts": "^3.10.1"
   },
   "devDependencies": {
+    "@playwright/test": "^1.62.1",
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^6.0.3",

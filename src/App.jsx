@@ -14,7 +14,7 @@ import { ExportModal } from './components/ExportModal';
 import { FinancialCopilot } from './components/FinancialCopilot';
 
 export default function App() {
-  const [appState, setAppState] = useLocalStorage('household_clarity_app_v1', DEFAULT_APP_STATE);
+  const [appState, setAppState] = useLocalStorage('project_tandem_app_v1', DEFAULT_APP_STATE, 'household_clarity_app_v1');
   const [activeTab, setActiveTab] = useState('overview'); // 'overview' | 'income' | 'expenses' | 'scenario'
   const [isAssumptionsModalOpen, setIsAssumptionsModalOpen] = useState(false);
   const [isExportModalOpen, setIsExportModalOpen] = useState(false);
@@ -59,12 +59,64 @@ export default function App() {
     });
   };
 
-  const handleUpdateScenario = (newScenario) => {
+  const handleUpdateScenario = (updatedScenario) => {
+    setAppState((prev) => {
+      const scenarios = prev.scenarios && prev.scenarios.length > 0 ? prev.scenarios : [DEFAULT_APP_STATE.scenarios[0]];
+      const activeId = prev.activeScenarioId || scenarios[0]?.id;
+      const updatedList = scenarios.map((s) => (s.id === activeId ? { ...s, ...updatedScenario } : s));
+      return {
+        ...prev,
+        scenarios: updatedList,
+        scenario: updatedScenario
+      };
+    });
+  };
+
+  const handleAddScenario = (name = "Custom Scenario") => {
+    setAppState((prev) => {
+      const newId = `scen-${Date.now()}`;
+      const newScen = {
+        id: newId,
+        name,
+        presetKey: 'custom',
+        incomeOverrides: {
+          p1: { salary: null, salaryPercent: 100 },
+          p2: { salary: null, salaryPercent: 100 }
+        },
+        expensesOverride: null,
+        savingsTargetMonthly: prev.savingsTargetMonthly || 1500
+      };
+      const existing = prev.scenarios || [];
+      return {
+        ...prev,
+        scenarios: [...existing, newScen],
+        activeScenarioId: newId,
+        scenarioMode: true
+      };
+    });
+  };
+
+  const handleDeleteScenario = (idToDelete) => {
+    setAppState((prev) => {
+      const existing = prev.scenarios || [];
+      if (existing.length <= 1) return prev;
+      const filtered = existing.filter((s) => s.id !== idToDelete);
+      const nextActiveId = prev.activeScenarioId === idToDelete ? filtered[0].id : prev.activeScenarioId;
+      return {
+        ...prev,
+        scenarios: filtered,
+        activeScenarioId: nextActiveId
+      };
+    });
+  };
+
+  const handleSelectActiveScenario = (id) => {
     setAppState((prev) => ({
       ...prev,
-      scenario: newScenario
+      activeScenarioId: id
     }));
   };
+
 
   const handleImportState = (importedState) => {
     setAppState(importedState);
@@ -158,20 +210,26 @@ export default function App() {
               ...appState.scenario,
               baseline: calculatedData.baseline,
               scenario: calculatedData.scenario,
-              deltas: calculatedData.deltas
+              deltas: calculatedData.deltas,
+              multiScenarios: calculatedData.multiScenarios,
+              activeScenarioId: appState.activeScenarioId || calculatedData.activeScenarioId
             }}
             onUpdateScenario={handleUpdateScenario}
+            onAddScenario={handleAddScenario}
+            onDeleteScenario={handleDeleteScenario}
+            onSelectScenario={handleSelectActiveScenario}
             partners={appState.partners}
             baselineExpenses={appState.expenses}
           />
         )}
+
       </main>
 
       {/* Footer Disclaimer */}
       <footer className="app-footer">
         <div className="footer-content">
           <p>
-            <strong>Tandem</strong> — Built for dual-income couples seeking shared household financial clarity.
+            <strong>Project Tandem</strong> — Built for dual-income couples seeking shared household financial clarity.
           </p>
           <p className="footer-disclaimer">
             Calculations strictly show mathematical cash flow models based on user inputs and ATO resident tax rates. This application does NOT recommend financial products, loans, or financial advice.

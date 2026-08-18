@@ -1,0 +1,5 @@
+#!/bin/sh
+# Git Pre-Commit Hook — Project Tandem Governance
+# Enforces oxlint and vite build prior to committing.
+
+node scripts/verify-governance.js --stage pre-commit

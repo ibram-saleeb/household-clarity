@@ -1,13 +1,18 @@
 import { useState, useEffect } from 'react';
 
-export function useLocalStorage(key, initialValue) {
+export function useLocalStorage(key, initialValue, legacyKey = null) {
   const [storedValue, setStoredValue] = useState(() => {
     try {
       const item = window.localStorage.getItem(key);
-      return item ? JSON.parse(item) : initialValue;
+      if (item) return JSON.parse(item);
+      if (legacyKey) {
+        const legacyItem = window.localStorage.getItem(legacyKey);
+        if (legacyItem) return JSON.parse(legacyItem);
+      }
+      return typeof initialValue === 'function' ? initialValue() : initialValue;
     } catch (error) {
       console.warn(`Error reading localStorage key "${key}":`, error);
-      return initialValue;
+      return typeof initialValue === 'function' ? initialValue() : initialValue;
     }
   });
 

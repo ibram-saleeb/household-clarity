@@ -30,8 +30,35 @@ export const ATO_TAX_CONFIG = {
     { min: 18200, max: 45000, rate: 0.16, baseTax: 0 },
     { min: 45000, max: 135000, rate: 0.30, baseTax: 4288 },
     { min: 135000, max: 190000, rate: 0.37, baseTax: 31288 },
-    { min: 190000, max: Infinity, rate: 0.45, baseTax: 51638 }
   ],
 
-  disclaimer: "Tax calculations are estimates based on standard ATO individual resident tax rates and the 2% Medicare levy. Does not account for HECS/HELP debt, tax offsets (e.g. LITO), private health insurance rebate, or fringe benefits. This tool provides financial clarity and live stress-testing; it does NOT constitute financial advice."
+  // Superannuation Concessional Tax Rate (15% fund tax on salary sacrifice)
+  superConcessionalTaxRate: 0.15,
+
+
+  // ATO HECS/HELP Compulsory Repayment Thresholds & Rates (FY 2024-25 / FY 2025-26)
+  hecsHelpBrackets: [
+    { min: 0, max: 54434, rate: 0.00 },
+    { min: 54435, max: 62850, rate: 0.010 },
+    { min: 62851, max: 66620, rate: 0.020 },
+    { min: 66621, max: 70618, rate: 0.025 },
+    { min: 70619, max: 74855, rate: 0.030 },
+    { min: 74856, max: 79346, rate: 0.035 },
+    { min: 79347, max: 84107, rate: 0.040 },
+    { min: 84108, max: 89154, rate: 0.045 },
+    { min: 89155, max: 94503, rate: 0.050 },
+    { min: 94504, max: 100174, rate: 0.055 },
+    { min: 100175, max: 106185, rate: 0.060 },
+    { min: 106186, max: 112556, rate: 0.065 },
+    { min: 112557, max: 119309, rate: 0.070 },
+    { min: 119310, max: 126467, rate: 0.075 },
+    { min: 126468, max: 134056, rate: 0.080 },
+    { min: 134057, max: 142100, rate: 0.085 },
+    { min: 142101, max: 150626, rate: 0.090 },
+    { min: 150627, max: 159663, rate: 0.095 },
+    { min: 159664, max: Infinity, rate: 0.100 }
+  ],
+
+  disclaimer: "Tax calculations show mathematical cash flow models based on standard ATO individual resident tax rates, 2% Medicare levy, official HECS/HELP repayment thresholds, and concessional super contributions. Does not account for tax offsets (e.g. LITO) or private health insurance rebate. This tool provides financial clarity and live stress-testing; it does NOT constitute financial advice."
 };
+

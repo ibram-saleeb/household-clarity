@@ -1,6 +1,6 @@
 # Product Scoping & Vision Document
 
-**Project**: Project Tandem (App: Tandem)  
+**Project**: Project Tandem  
 **Author**: CTO & Engineering Team  
 **Status**: Active / Production Baseline  
 **Version**: 1.0.0  
@@ -44,7 +44,7 @@ Australian dual-earner households managing combined or split expenses, planning 
 * **Side-by-Side Comparison**: Table view with delta ($\Delta$) highlighting monthly impact.
 
 ### 2.5 Privacy & Persistence
-* **Local-First Data Storage**: Complete data privacy; all state resides in `localStorage` (`household_clarity_app_v1`).
+* **Local-First Data Storage**: Complete data privacy; all state resides in `localStorage` (`project_tandem_app_v1`).
 * **Fail-Safe Defaults**: Built-in sample data fallback if local storage is uninitialized or corrupted.
 
 ---

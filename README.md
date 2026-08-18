@@ -1,4 +1,4 @@
-# Tandem (Project Tandem)
+# Project Tandem
 
 [![React](https://img.shields.io/badge/React-19.0-61DAFB?logo=react&logoColor=black)](https://react.dev/)
 [![Vite](https://img.shields.io/badge/Vite-6.0-646CFF?logo=vite&logoColor=white)](https://vitejs.dev/)
@@ -7,7 +7,7 @@
 [![Build Status](https://img.shields.io/badge/Build-Passing-brightgreen)]()
 
 > **Shared Clarity. Less Money Stress.**  
-> **Tandem** is a mobile-first household financial clarity web application designed for dual-income couples to establish their true spendable position and live stress-test "what-if" financial scenarios.
+> **Project Tandem** is a mobile-first household financial clarity web application designed for dual-income couples to establish their true spendable position and live stress-test "what-if" financial scenarios.
 
 ---
 
@@ -48,7 +48,7 @@ Net Cashflow (Hero)  = Combined Spendable Cashflow - Total Outgoings (Normalised
 ## 🏗️ Architecture & Project Structure
 
 ```
-household-clarity/
+project-tandem/
 ├── docs/                        # Scoping, architectural, and quality standards
 │   ├── SCOPING.md              # Product vision, scope, and v1.1 roadmap
 │   ├── ENGINEERING_STANDARDS.md# Architecture, coding rules, and module standards
@@ -91,8 +91,8 @@ household-clarity/
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/ibram-saleeb/household-clarity.git
-cd household-clarity
+git clone https://github.com/ibram-saleeb/project-tandem.git
+cd project-tandem
 
 # 2. Install dependencies
 npm install
