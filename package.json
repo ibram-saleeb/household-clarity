@@ -13,7 +13,8 @@
     "check:governance": "node scripts/verify-governance.js",
     "pre-commit": "node scripts/verify-governance.js --stage pre-commit",
     "pre-push": "node scripts/verify-governance.js --stage pre-push",
-    "deploy:cloudflare": "npm run build && npx wrangler pages deploy dist --project-name=project-tandem"
+    "deploy:cloudflare": "npm run build && npx wrangler pages deploy dist --project-name=project-tandem",
+    "build:twa": "npx -y @bubblewrap/cli build --manifest=twa-manifest.json"
   },
   "dependencies": {
     "framer-motion": "^12.42.2",

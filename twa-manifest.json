@@ -1,0 +1,37 @@
+{
+  "packageId": "app.pages.project_tandem.twa",
+  "name": "Project Tandem — Household Financial Clarity",
+  "launcherName": "Tandem",
+  "display": "standalone",
+  "themeColor": "#0B0F19",
+  "themeColorDark": "#0B0F19",
+  "navigationColor": "#0B0F19",
+  "navigationColorDark": "#0B0F19",
+  "backgroundColor": "#0B0F19",
+  "enableNotifications": true,
+  "startUrl": "/",
+  "iconUrl": "https://project-tandem.pages.dev/icons/icon-512x512.png",
+  "maskableIconUrl": "https://project-tandem.pages.dev/icons/icon-512x512.png",
+  "splashScreenFadeOutDuration": 300,
+  "signingKey": {
+    "path": "./android-release-key.keystore",
+    "alias": "tandem-key-alias"
+  },
+  "appVersionName": "1.0.0",
+  "appVersionCode": 1,
+  "shortcuts": [],
+  "generatorApp": "bubblewrap-cli",
+  "webManifestUrl": "https://project-tandem.pages.dev/manifest.json",
+  "fallbackType": "customtabs",
+  "features": {
+    "locationDelegation": {
+      "enabled": false
+    },
+    "playBilling": {
+      "enabled": false
+    }
+  },
+  "alphaDependencies": {
+    "enabled": false
+  }
+}

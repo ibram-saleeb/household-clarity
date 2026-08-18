@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="192" height="192" viewBox="0 0 192 192">
+    <rect width="192" height="192" rx="42.24" fill="#0b0f19"/>
+    <circle cx="96" cy="96" r="72.96000000000001" fill="#1e293b"/>
+    <path fill="#10b981" d="M 57.599999999999994 124.80000000000001 L 86.4 67.19999999999999 L 105.60000000000001 96 L 134.39999999999998 53.760000000000005 L 144 63.36 L 105.60000000000001 119.03999999999999 L 86.4 90.24 Z" />
+    <circle cx="134.39999999999998" cy="53.760000000000005" r="9.600000000000001" fill="#38bdf8"/>
+    <text x="50%" y="161.28%" dominant-baseline="middle" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-weight="bold" font-size="23.04">TANDEM</text>
+  </svg>
