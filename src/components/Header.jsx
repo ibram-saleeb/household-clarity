@@ -1,5 +1,5 @@
 import React from 'react';
-import { ShieldCheck, RefreshCw, Zap, Trash2, Download } from 'lucide-react';
+import { ShieldCheck, RefreshCw, Zap, Trash2, Download, MessageSquarePlus } from 'lucide-react';
 import { TandemLogo } from './TandemLogo';
 import { APP_VERSION, APP_NAME } from '../config/version.js';
 
@@ -8,6 +8,7 @@ export function Header({
   onToggleScenario, 
   onOpenAssumptions, 
   onOpenExport,
+  onOpenFeedback,
   onResetDefaults, 
   onClearAll 
 }) {
@@ -26,6 +27,16 @@ export function Header({
         </div>
 
         <div className="header-actions">
+          <button 
+            className="btn btn-secondary btn-sm"
+            onClick={onOpenFeedback}
+            title="Request features and share feedback"
+            style={{ border: '1px solid rgba(168, 85, 247, 0.4)', color: '#c084fc' }}
+          >
+            <MessageSquarePlus className="icon-sm" />
+            <span className="btn-label-desktop">Feedback & Ideas</span>
+          </button>
+
           <button 
             className="btn btn-secondary btn-sm"
             onClick={onOpenExport}

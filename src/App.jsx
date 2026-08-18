@@ -11,6 +11,7 @@ import { ExpenseSection } from './components/ExpenseSection';
 import { ScenarioEngine } from './components/ScenarioEngine';
 import { AssumptionsModal } from './components/AssumptionsModal';
 import { ExportModal } from './components/ExportModal';
+import FeedbackModal from './components/FeedbackModal';
 import { FinancialCopilot } from './components/FinancialCopilot';
 
 export default function App() {
@@ -18,6 +19,7 @@ export default function App() {
   const [activeTab, setActiveTab] = useState('overview'); // 'overview' | 'income' | 'expenses' | 'scenario'
   const [isAssumptionsModalOpen, setIsAssumptionsModalOpen] = useState(false);
   const [isExportModalOpen, setIsExportModalOpen] = useState(false);
+  const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
 
   // Recalculate household calculations live on every state change
   const calculatedData = useMemo(() => {
@@ -151,6 +153,7 @@ export default function App() {
         onToggleScenario={handleToggleScenario}
         onOpenAssumptions={() => setIsAssumptionsModalOpen(true)}
         onOpenExport={() => setIsExportModalOpen(true)}
+        onOpenFeedback={() => setIsFeedbackModalOpen(true)}
         onResetDefaults={handleResetDefaults}
         onClearAll={handleClearAll}
       />
@@ -250,6 +253,12 @@ export default function App() {
         appState={appState}
         calculatedData={calculatedData}
         onImportState={handleImportState}
+      />
+
+      {/* Feedback & Feature Requests Modal */}
+      <FeedbackModal
+        isOpen={isFeedbackModalOpen}
+        onClose={() => setIsFeedbackModalOpen(false)}
       />
     </div>
   );

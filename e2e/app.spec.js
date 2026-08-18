@@ -94,6 +94,25 @@ test.describe('Tandem — Household Financial Clarity E2E Suite', () => {
     // Verify HECS repayment indicator text appears
     await expect(page.locator('.summary-row:has-text("HECS / HELP Compulsory")').first()).toBeVisible();
   });
+
+  test('Feedback & Ideas Demand Capture Modal Flow', async ({ page }) => {
+    // Click Feedback & Ideas button in header
+    await page.click('button:has-text("Feedback & Ideas")');
+
+    // Verify modal appears
+    await expect(page.locator('.feedback-modal')).toBeVisible();
+    await expect(page.locator('.modal-title')).toContainText('Shape Project Tandem');
+
+    // Toggle a feature chip
+    const chipBtn = page.locator('button.chip-button').first();
+    await chipBtn.click();
+
+    // Submit form
+    await page.click('button[type="submit"]:has-text("Submit Feedback")');
+
+    // Verify success banner appears
+    await expect(page.locator('.feedback-success-banner')).toBeVisible();
+  });
 });
 
 
