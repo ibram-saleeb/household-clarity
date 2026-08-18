@@ -1,6 +1,3 @@
 name = "project-tandem"
 pages_build_output_dir = "dist"
 compatibility_date = "2026-08-18"
-
-[site]
-bucket = "./dist"
