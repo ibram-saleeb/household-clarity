@@ -111,6 +111,9 @@ npm run build
 
 # Preview production build locally
 npm run preview
+
+# Deploy to Cloudflare Pages (100% Free CDN Edge Hosting)
+npm run deploy:cloudflare
 ```
 
 ---
