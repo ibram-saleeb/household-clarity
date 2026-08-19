@@ -10,6 +10,7 @@
     "test:unit": "vitest run",
     "test:e2e": "playwright test",
     "test": "vitest run && playwright test",
+    "preview:capture": "node scripts/capture-preview.js",
     "preview": "vite preview",
     "setup:hooks": "git config core.hooksPath .githooks",
     "check:governance": "node scripts/verify-governance.js",

@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Sparkles, Activity } from 'lucide-react';
 import { formatMoney } from '../utils/formatters.js';
 
+import { annualiseAmount, deannualiseToMonthly } from '../logic/calculator.js';
+
 export function FinancialCopilot({ data, savingsTargetMonthly, partners, expenses }) {
   const [activeCopilotTab, setActiveCopilotTab] = useState('structure'); // 'structure' | 'tax' | 'runway' | 'equity'
 
@@ -21,9 +23,9 @@ export function FinancialCopilot({ data, savingsTargetMonthly, partners, expense
   const fixedCategories = ['Housing', 'Debt', 'Insurance', 'Childcare'];
   const fixedExpensesVal = expenses
     .filter(e => fixedCategories.includes(e.category || 'General'))
-    .reduce((sum, e) => sum + (Number(e.amount) || 0), 0);
+    .reduce((sum, e) => sum + deannualiseToMonthly(annualiseAmount(e.amount, e.frequency)), 0);
   const discretionaryExpensesVal = Math.max(0, totalExpenses - fixedExpensesVal);
-  const fixedRatio = totalExpenses > 0 ? Math.round((fixedExpensesVal / totalExpenses) * 100) : 0;
+  const fixedRatio = totalExpenses > 0 ? Math.min(100, Math.round((fixedExpensesVal / totalExpenses) * 100)) : 0;
   const discRatio = Math.max(0, 100 - fixedRatio);
 
   // 2. ATO Tax Bracket Proximity Analysis
