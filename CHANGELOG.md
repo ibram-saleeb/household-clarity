@@ -5,6 +5,14 @@ All notable changes to **Tandem** (Project Tandem) will be documented in this fi
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0] - 2026-08-19
+
+### Added
+- **14-Day Free Trial Engine (`useTrialState.js`)**: Automatic first-install tracking, elapsed day calculation, remaining days counter, and auto-expiration after 14 days.
+- **Top Header Status Pill (`Header.jsx`)**: Real-time trial days indicator (`✨ 14 days left` / `🔒 Trial Expired`) with instant preview modal trigger.
+- **"Full App Launching Soon" Paywall Modal (`PaywallModal.jsx`)**: High-converting early-access paywall screen with VIP launch list email capture (50% launch discount), premium roadmap feature highlights, data safety reassurance, and developer test overrides.
+- **Google Play Store Asset Pipeline (`generate-play-store-assets.js`)**: Playwright-driven generation of 512x512 PNG app icon, 1024x500 feature graphic, and high-resolution mobile store screenshots in `public/store-assets/`.
+
 ---
 
 ## [1.0.0] - 2026-07-28

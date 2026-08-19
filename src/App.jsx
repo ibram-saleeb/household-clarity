@@ -2,6 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { useLocalStorage } from './storage/useLocalStorage';
 import { DEFAULT_APP_STATE } from './storage/defaults';
 import { calculateHousehold } from './logic/calculator';
+import { useTrialState } from './storage/useTrialState';
 
 import { Header } from './components/Header';
 import { NavTabs } from './components/NavTabs';
@@ -13,6 +14,7 @@ import { AssumptionsModal } from './components/AssumptionsModal';
 import { ExportModal } from './components/ExportModal';
 import FeedbackModal from './components/FeedbackModal';
 import { FinancialCopilot } from './components/FinancialCopilot';
+import { PaywallModal } from './components/PaywallModal';
 
 export default function App() {
   const [appState, setAppState] = useLocalStorage('project_tandem_app_v1', DEFAULT_APP_STATE, 'household_clarity_app_v1');
@@ -20,6 +22,13 @@ export default function App() {
   const [isAssumptionsModalOpen, setIsAssumptionsModalOpen] = useState(false);
   const [isExportModalOpen, setIsExportModalOpen] = useState(false);
   const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
+  
+  // 14-Day Free Trial State
+  const trialState = useTrialState();
+  const [isPaywallExplicitlyOpen, setIsPaywallExplicitlyOpen] = useState(false);
+  const [dismissedExpiredSession, setDismissedExpiredSession] = useState(false);
+
+  const isPaywallVisible = isPaywallExplicitlyOpen || (trialState.isExpired && !dismissedExpiredSession);
 
   // Recalculate household calculations live on every state change
   const calculatedData = useMemo(() => {
@@ -119,7 +128,6 @@ export default function App() {
     }));
   };
 
-
   const handleImportState = (importedState) => {
     setAppState(importedState);
   };
@@ -156,6 +164,8 @@ export default function App() {
         onOpenFeedback={() => setIsFeedbackModalOpen(true)}
         onResetDefaults={handleResetDefaults}
         onClearAll={handleClearAll}
+        trialState={trialState}
+        onOpenPaywall={() => setIsPaywallExplicitlyOpen(true)}
       />
 
       {/* Segmented View Navigation Tabs */}
@@ -259,6 +269,17 @@ export default function App() {
       <FeedbackModal
         isOpen={isFeedbackModalOpen}
         onClose={() => setIsFeedbackModalOpen(false)}
+      />
+
+      {/* 14-Day Free Trial Paywall Gate Modal */}
+      <PaywallModal
+        isOpen={isPaywallVisible}
+        onClose={() => {
+          setIsPaywallExplicitlyOpen(false);
+          setDismissedExpiredSession(true);
+        }}
+        trialState={trialState}
+        allowDismiss={!trialState.isExpired || dismissedExpiredSession || isPaywallExplicitlyOpen}
       />
     </div>
   );

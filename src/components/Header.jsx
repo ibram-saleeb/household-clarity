@@ -1,5 +1,5 @@
 import React from 'react';
-import { ShieldCheck, RefreshCw, Zap, Trash2, Download, MessageSquarePlus } from 'lucide-react';
+import { ShieldCheck, RefreshCw, Zap, Trash2, Download, MessageSquarePlus, Sparkles, Lock } from 'lucide-react';
 import { TandemLogo } from './TandemLogo';
 import { APP_VERSION, APP_NAME } from '../config/version.js';
 
@@ -10,8 +10,13 @@ export function Header({
   onOpenExport,
   onOpenFeedback,
   onResetDefaults, 
-  onClearAll 
+  onClearAll,
+  trialState,
+  onOpenPaywall
 }) {
+  const isExpired = trialState?.isExpired;
+  const daysRemaining = trialState?.daysRemaining ?? 14;
+
   return (
     <header className="app-header">
       <div className="header-container">
@@ -21,6 +26,28 @@ export function Header({
             <div className="brand-title-row">
               <h1 className="app-title">{APP_NAME}</h1>
               <span className="version-pill" title={`Strict Release Version v${APP_VERSION}`}>v{APP_VERSION}</span>
+              
+              {/* 14-Day Free Trial Status Pill */}
+              {trialState && (
+                <button
+                  type="button"
+                  onClick={onOpenPaywall}
+                  className={`trial-status-pill ${isExpired ? 'expired' : 'active'}`}
+                  title={isExpired ? 'Your 14-day free access has concluded. Click to learn more.' : `${daysRemaining} of 14 free trial days remaining.`}
+                >
+                  {isExpired ? (
+                    <>
+                      <Lock size={12} />
+                      <span>Trial Expired</span>
+                    </>
+                  ) : (
+                    <>
+                      <Sparkles size={12} />
+                      <span>{daysRemaining} {daysRemaining === 1 ? 'day' : 'days'} left</span>
+                    </>
+                  )}
+                </button>
+              )}
             </div>
             <p className="app-subtitle">Financial harmony in tandem.</p>
           </div>
