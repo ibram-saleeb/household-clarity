@@ -17,7 +17,7 @@
     "path": "./android-release-key.keystore",
     "alias": "tandem-key-alias"
   },
-  "appVersionName": "1.0.0",
+  "appVersionName": "1.1.0",
   "appVersionCode": 1,
   "shortcuts": [],
   "generatorApp": "bubblewrap-cli",

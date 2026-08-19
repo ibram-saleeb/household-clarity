@@ -16,8 +16,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
-          cache: 'npm'
+          node-version: 22
 
       - name: Set up Java JDK 17
         uses: actions/setup-java@v4
@@ -37,7 +36,6 @@ jobs:
             "androidSdkPath": "$ANDROID_HOME"
           }
           EOF
-          cat ~/.bubblewrap/config.json
 
       - name: Install Project Dependencies
         run: npm ci
@@ -67,7 +65,8 @@ jobs:
           BUBBLEWRAP_KEYSTORE_PASSWORD: tandemPassword123!
           BUBBLEWRAP_KEY_PASSWORD: tandemPassword123!
         run: |
-          bubblewrap build --manifest=twa-manifest.json --skipPwaValidation
+          yes | bubblewrap update --skipPwaValidation || true
+          yes | bubblewrap build --manifest=twa-manifest.json --skipPwaValidation
 
       - name: Upload Android App Bundle Artifact (.aab)
         uses: actions/upload-artifact@v4
