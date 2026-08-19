@@ -82,7 +82,7 @@ jobs:
   build-android:
     name: Build Signed Android App Bundle (.aab)
     needs: quality-gate
-    if: startsWith(github.ref, 'refs/tags/v') || github.event.inputs.publish_google_play == 'true'
+    if: startsWith(github.ref, 'refs/tags/v') || inputs.publish_google_play == true
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
@@ -122,9 +122,7 @@ jobs:
   publish-google-play:
     name: Publish to Google Play Store
     needs: build-android
-    if: (startsWith(github.ref, 'refs/tags/v') || github.event.inputs.publish_google_play == 'true') && env.HAS_GOOGLE_PLAY_KEY == 'true'
-    env:
-      HAS_GOOGLE_PLAY_KEY: ${{ secrets.GOOGLE_PLAY_KEY_JSON != '' }}
+    if: (startsWith(github.ref, 'refs/tags/v') || inputs.publish_google_play == true) && secrets.GOOGLE_PLAY_KEY_JSON != ''
     runs-on: ubuntu-latest
     steps:
       - name: Download Built Android Artifacts
@@ -138,5 +136,5 @@ jobs:
           serviceAccountJsonPlainText: ${{ secrets.GOOGLE_PLAY_KEY_JSON }}
           packageName: app.pages.project_tandem.twa
           releaseFiles: Tandem.aab
-          track: ${{ github.event.inputs.track || 'internal' }}
+          track: ${{ inputs.track || 'internal' }}
           status: completed
