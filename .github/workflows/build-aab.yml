@@ -27,7 +27,7 @@ jobs:
       - name: Set up Android SDK Tools
         uses: android-actions/setup-android@v3
 
-      - name: Configure Bubblewrap Paths
+      - name: Configure Bubblewrap CLI Environment
         run: |
           mkdir -p ~/.bubblewrap
           cat <<EOF > ~/.bubblewrap/config.json
@@ -37,36 +37,21 @@ jobs:
           }
           EOF
 
-      - name: Install Project Dependencies
+      - name: Install Dependencies
         run: npm ci
 
       - name: Install Bubblewrap CLI
         run: npm install -g @bubblewrap/cli
 
-      - name: Build Web Production Assets
+      - name: Build Production Web Assets
         run: npm run build
 
-      - name: Generate Android Signing Keystore if needed
-        run: |
-          if [ ! -f "android-release-key.keystore" ]; then
-            keytool -genkey -v \
-              -keystore android-release-key.keystore \
-              -alias tandem-key-alias \
-              -keyalg RSA \
-              -keysize 2048 \
-              -validity 10000 \
-              -storepass tandemPassword123! \
-              -keypass tandemPassword123! \
-              -dname "CN=Project Tandem, OU=Engineering, O=Project Tandem, L=Sydney, ST=NSW, C=AU"
-          fi
-
-      - name: Initialize & Build Android TWA Bundle
+      - name: Compile Android App Bundle (.aab)
         env:
-          BUBBLEWRAP_KEYSTORE_PASSWORD: tandemPassword123!
-          BUBBLEWRAP_KEY_PASSWORD: tandemPassword123!
+          BUBBLEWRAP_KEYSTORE_PASSWORD: nusyhsRDPmAe
+          BUBBLEWRAP_KEY_PASSWORD: nusyhsRDPmAe
         run: |
-          yes | bubblewrap update --skipPwaValidation || true
-          yes | bubblewrap build --manifest=twa-manifest.json --skipPwaValidation
+          echo "yes" | bubblewrap build --manifest=twa-manifest.json --skipPwaValidation
 
       - name: Upload Android App Bundle Artifact (.aab)
         uses: actions/upload-artifact@v4

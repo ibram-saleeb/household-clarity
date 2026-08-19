@@ -15,7 +15,7 @@
   "splashScreenFadeOutDuration": 300,
   "signingKey": {
     "path": "./android-release-key.keystore",
-    "alias": "tandem-key-alias"
+    "alias": "my-key-alias"
   },
   "appVersionName": "1.1.0",
   "appVersionCode": 1,
