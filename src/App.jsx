@@ -177,23 +177,14 @@ export default function App() {
 
       {/* Main Focused Content Area */}
       <main className="main-content">
-        {/* Overview / Dashboard Tab */}
+        {/* Overview / Month Tab */}
         {activeTab === 'overview' && (
-          <>
-            <FinancialCopilot
-              data={calculatedData}
-              savingsTargetMonthly={appState.savingsTargetMonthly}
-              partners={appState.partners}
-              expenses={appState.expenses}
-            />
-
-            <HeroDashboard
-              data={calculatedData}
-              scenarioMode={appState.scenarioMode}
-              savingsTargetMonthly={appState.savingsTargetMonthly}
-              onSavingsChange={handleSavingsChange}
-            />
-          </>
+          <HeroDashboard
+            data={calculatedData}
+            scenarioMode={appState.scenarioMode}
+            savingsTargetMonthly={appState.savingsTargetMonthly}
+            onSavingsChange={handleSavingsChange}
+          />
         )}
 
         {/* Income & Salaries Tab */}
