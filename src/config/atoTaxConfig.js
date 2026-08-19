@@ -30,6 +30,7 @@ export const ATO_TAX_CONFIG = {
     { min: 18200, max: 45000, rate: 0.16, baseTax: 0 },
     { min: 45000, max: 135000, rate: 0.30, baseTax: 4288 },
     { min: 135000, max: 190000, rate: 0.37, baseTax: 31288 },
+    { min: 190000, max: Infinity, rate: 0.45, baseTax: 51638 }
   ],
 
   // Superannuation Concessional Tax Rate (15% fund tax on salary sacrifice)

@@ -48,6 +48,9 @@ jobs:
       - name: Run Linter (Oxlint)
         run: npm run lint
 
+      - name: Run Mathematical & Financial Unit Tests (Vitest)
+        run: npm run test:unit
+
       - name: Run Production Web Build
         run: npm run build
 
