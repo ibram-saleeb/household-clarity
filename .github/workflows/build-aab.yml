@@ -28,6 +28,17 @@ jobs:
       - name: Set up Android SDK Tools
         uses: android-actions/setup-android@v3
 
+      - name: Configure Bubblewrap Paths
+        run: |
+          mkdir -p ~/.bubblewrap
+          cat <<EOF > ~/.bubblewrap/config.json
+          {
+            "jdkPath": "$JAVA_HOME",
+            "androidSdkPath": "$ANDROID_HOME"
+          }
+          EOF
+          cat ~/.bubblewrap/config.json
+
       - name: Install Project Dependencies
         run: npm ci
 
