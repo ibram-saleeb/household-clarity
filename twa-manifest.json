@@ -17,8 +17,8 @@
     "path": "./android-release-key.keystore",
     "alias": "my-key-alias"
   },
-  "appVersionName": "1.1.0",
-  "appVersionCode": 1,
+  "appVersionName": "1.2.0",
+  "appVersionCode": 2,
   "shortcuts": [],
   "generatorApp": "bubblewrap-cli",
   "webManifestUrl": "https://project-tandem.pages.dev/manifest.json",

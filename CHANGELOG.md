@@ -5,6 +5,26 @@ All notable changes to **Tandem** (Project Tandem) will be documented in this fi
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.0] - 2026-08-19
+
+### Changed & Improved
+- **Luxury FinTech Design Overhaul**: Eradicated "AI slop" clutter, emojis, and boxy containers in favor of a sleek, Linear/Monzo/Apple Wallet aesthetic.
+- **Strict 4-Color Luxury FinTech Palette**: Unified design tokens into Obsidian Canvas (`#060913`), Slate Surfaces (`#0D1322`), Sapphire Indigo (`#6366F1`), Vibrant Emerald (`#10B981`), and Coral Crimson (`#F43F5E`).
+- **Streamlined Header Toolbar**: Replaced 6 developer icon buttons with a clean, focused action bar and a sleek `•••` Tools & Settings popover dropdown.
+- **Refined Household Intelligence**: Modernized Copilot into clean, vector-driven financial intelligence cards.
+- **Autonomous Visual Preview Pipeline (`scripts/capture-preview.js`)**: Playwright-driven autonomous visual inspection across mobile and desktop viewports.
+
+### Fixed
+- **ATO Stage 3 Tax Top Bracket ($190,000+ at 45%)**: Added missing 45% top bracket to `atoTaxConfig.js` ensuring high-earner incomes are accurately calculated.
+- **Fixed Expense Normalisation in Copilot**: Normalised frequency conversions so fixed commitment percentages are mathematically bounded.
+
+### Added
+- **Pure Unit & Property-Based Test Suite (Vitest)**: 14 sub-millisecond mathematical and tax tests (`src/logic/calculator.test.js`).
+- **Adversarial & Security Test Suite (Playwright)**: 5-vector red-team tests for $0/negative division-by-zero resilience, XSS resistance, 14-day paywall defense, and corrupt data rejection.
+- **Total Test Suite**: 26/26 automated tests passing in CI/CD quality gates.
+
+---
+
 ## [1.1.0] - 2026-08-19
 
 ### Added

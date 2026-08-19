@@ -2,6 +2,19 @@
 
 This file records automated build metrics, lint results, bundle size audits, and milestone release validations for **Tandem** (Project Tandem).
 
+## [Build Run #020] - 2026-08-19 (v1.2.0 Release: Luxury FinTech Redesign & 26-Test Automated Suite)
+
+* **Trigger**: Implementation of SemVer `v1.2.0`, luxury FinTech design overhaul (Linear/Monzo aesthetic, strict 4-color palette), Stage 3 $190k+ 45% tax bracket bug fix, autonomous visual preview pipeline (`capture-preview.js`), and 26/26 automated unit + E2E + adversarial test suite.
+* **Linter Status (`oxlint`)**: **PASSED** — `0 warnings, 0 errors`
+* **Mathematical & Tax Unit Tests (`vitest`)**: **PASSED** — `14/14 tests in 170ms`
+* **E2E & Adversarial Security Tests (`playwright`)**: **PASSED** — `12/12 tests in 5.6s`
+* **Total Quality Gate**: **26/26 TESTS PASSED**
+* **Vite Production Build**: **PASSED**
+* **Live Deployment**: `https://project-tandem.pages.dev`
+* **Verification Status**: ✅ Release v1.2.0 Production & CI/CD Gate Verified
+
+---
+
 ## [Build Run #019] - 2026-08-19 (Google Play Store Release & Cloudflare Production Pipeline)
 
 * **Trigger**: Implementation of 14-day trial engine (`useTrialState.js`), early-access paywall modal (`PaywallModal.jsx`), Play Store asset pipeline (`scripts/generate-play-store-assets.js`), PWA web manifest store compliance (`manifest.json`), Android Digital Asset Links (`.well-known/assetlinks.json`), Cloudflare Pages live production deployments, and Google Play Internal Testing release (`Tandem.aab` with package ID `app.pages.project_tandem.twa` and signing key `SHA1: 24:D6:68:B1...`).
