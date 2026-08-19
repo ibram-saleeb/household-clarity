@@ -122,15 +122,29 @@ jobs:
   publish-google-play:
     name: Publish to Google Play Store
     needs: build-android
-    if: (startsWith(github.ref, 'refs/tags/v') || inputs.publish_google_play == true) && secrets.GOOGLE_PLAY_KEY_JSON != ''
+    if: startsWith(github.ref, 'refs/tags/v') || inputs.publish_google_play == true
     runs-on: ubuntu-latest
     steps:
+      - name: Check Google Play Key Availability
+        id: check_key
+        env:
+          KEY_JSON: ${{ secrets.GOOGLE_PLAY_KEY_JSON }}
+        run: |
+          if [ -z "$KEY_JSON" ]; then
+            echo "Google Play Service Account Key secret (GOOGLE_PLAY_KEY_JSON) is not set yet. Skipping automated upload."
+            echo "has_key=false" >> $GITHUB_OUTPUT
+          else
+            echo "has_key=true" >> $GITHUB_OUTPUT
+          fi
+
       - name: Download Built Android Artifacts
+        if: steps.check_key.outputs.has_key == 'true'
         uses: actions/download-artifact@v4
         with:
           name: Tandem-Android-Release
 
       - name: Publish to Google Play
+        if: steps.check_key.outputs.has_key == 'true'
         uses: rigney/google-play-action@v1
         with:
           serviceAccountJsonPlainText: ${{ secrets.GOOGLE_PLAY_KEY_JSON }}
