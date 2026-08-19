@@ -1,31 +1,66 @@
 {
+  "id": "/",
   "name": "Project Tandem — Household Financial Clarity",
   "short_name": "Tandem",
   "description": "Mobile-first household financial clarity for Australian dual-income couples. Calculate true spendable income and run live what-if scenarios.",
   "start_url": "/",
+  "scope": "/",
   "display": "standalone",
   "orientation": "portrait-primary",
   "background_color": "#0b0f19",
   "theme_color": "#0b0f19",
   "lang": "en-AU",
+  "dir": "ltr",
   "categories": ["finance", "productivity", "utilities"],
   "icons": [
     {
       "src": "/icons/icon-192x192.png",
       "sizes": "192x192",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
     },
     {
       "src": "/icons/icon-512x512.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
     },
     {
-      "src": "/favicon.svg",
-      "sizes": "any",
-      "type": "image/svg+xml"
+      "src": "/icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/screenshots/screenshot-mobile.png",
+      "sizes": "1080x2400",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Tandem Household Net Cashflow Dashboard"
+    },
+    {
+      "src": "/screenshots/screenshot-desktop.png",
+      "sizes": "1024x500",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Project Tandem Features & Live Stress Testing"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "What-If Scenarios",
+      "short_name": "What-If",
+      "description": "Run live financial stress testing simulations",
+      "url": "/",
+      "icons": [{ "src": "/icons/icon-192x192.png", "sizes": "192x192" }]
     }
   ]
 }
