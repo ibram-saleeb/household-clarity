@@ -1,14 +1,14 @@
-/* Modern Design System - Tandem Household Financial Clarity */
+/* Strict 4-Color Monzo/Linear FinTech Palette */
 :root {
   --font-heading: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 
-  /* Strict 3-Tone Obsidian FinTech Palette */
-  --bg-main: #090D16;
-  --bg-card: #111726;
-  --bg-card-subtle: #161F33;
-  --bg-card-hover: #1E283F;
-  --bg-input: #0C121E;
+  /* 1. Base Neutrals (Obsidian Canvas & Slate Surfaces) */
+  --bg-main: #060913;
+  --bg-card: #0D1322;
+  --bg-card-subtle: #121A2D;
+  --bg-card-hover: #18223B;
+  --bg-input: #090D18;
   
   --border-color: rgba(255, 255, 255, 0.08);
   --border-focus: rgba(99, 102, 241, 0.5);
@@ -17,45 +17,44 @@
   --text-muted: #94A3B8;
   --text-dim: #64748B;
 
-  /* Primary Brand Accent: Electric Indigo */
+  /* 2. Primary Brand Accent: Sapphire Indigo */
   --primary: #6366F1;
   --primary-hover: #4F46E5;
   --primary-light: rgba(99, 102, 241, 0.12);
-  --primary-glow: 0 0 20px rgba(99, 102, 241, 0.25);
+  --primary-border: rgba(99, 102, 241, 0.3);
 
-  /* Semantic Intent Colors */
+  /* 3. Positive / Growth Accent: Vibrant Emerald */
   --color-surplus: #10B981;
   --color-surplus-bg: rgba(16, 185, 129, 0.12);
   --color-surplus-border: rgba(16, 185, 129, 0.3);
 
+  /* 4. Attention / Deficit Accent: Coral Crimson */
   --color-deficit: #F43F5E;
   --color-deficit-bg: rgba(244, 63, 94, 0.12);
   --color-deficit-border: rgba(244, 63, 94, 0.3);
 
-  --warning: #F59E0B;
-  --warning-bg: rgba(245, 158, 11, 0.12);
-  --info: #6366F1;
-  --info-bg: rgba(99, 102, 241, 0.12);
-
-  /* Category Palette Tokens (Harmonized Dark Pastels) */
+  /* Harmonized Category Tokens (Disciplined Indigo/Emerald Tints) */
   --cat-housing: #6366F1;
-  --cat-living: #3B82F6;
-  --cat-transport: #06B6D4;
+  --cat-living: #818CF8;
+  --cat-transport: #A5B4FC;
   --cat-insurance: #10B981;
-  --cat-personal: #EC4899;
-  --cat-debt: #F59E0B;
+  --cat-personal: #34D399;
+  --cat-debt: #F43F5E;
+
+  --warning: #F59E0B;
+  --info: #6366F1;
 
   /* Radius & Shadows */
   --radius-sm: 8px;
   --radius-md: 12px;
-  --radius-lg: 18px;
+  --radius-lg: 16px;
   --radius-full: 9999px;
 
-  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.2);
-  --shadow-md: 0 8px 16px rgba(0, 0, 0, 0.3);
-  --shadow-lg: 0 16px 32px rgba(0, 0, 0, 0.4);
-  --shadow-glow-surplus: 0 0 24px rgba(16, 185, 129, 0.15);
-  --shadow-glow-deficit: 0 0 24px rgba(244, 63, 94, 0.15);
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.45);
+  --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.6);
+  --shadow-glow-surplus: 0 0 24px rgba(16, 185, 129, 0.12);
+  --shadow-glow-deficit: 0 0 24px rgba(244, 63, 94, 0.12);
 }
 
 /* Reset & Global Base */

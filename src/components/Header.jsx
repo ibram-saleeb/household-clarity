@@ -92,11 +92,11 @@ export function Header({
 
           {/* Feedback & Ideas */}
           <button 
-            className="btn btn-secondary btn-sm feedback-pill-btn"
+            className="btn btn-secondary btn-sm"
             onClick={onOpenFeedback}
             title="Request features and share feedback"
           >
-            <MessageSquarePlus className="icon-sm text-purple" />
+            <MessageSquarePlus className="icon-sm text-primary" />
             <span className="btn-label-desktop">Feedback & Ideas</span>
           </button>
 
