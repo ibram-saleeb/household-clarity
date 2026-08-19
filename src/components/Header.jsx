@@ -1,5 +1,5 @@
-import React from 'react';
-import { ShieldCheck, RefreshCw, Zap, Trash2, Download, MessageSquarePlus, Sparkles, Lock } from 'lucide-react';
+import React, { useState, useRef, useEffect } from 'react';
+import { ShieldCheck, RefreshCw, Zap, Trash2, Download, MessageSquarePlus, Sparkles, Lock, MoreHorizontal, ChevronDown } from 'lucide-react';
 import { TandemLogo } from './TandemLogo';
 import { APP_VERSION, APP_NAME } from '../config/version.js';
 
@@ -14,12 +14,27 @@ export function Header({
   trialState,
   onOpenPaywall
 }) {
+  const [isToolsOpen, setIsToolsOpen] = useState(false);
+  const dropdownRef = useRef(null);
+
   const isExpired = trialState?.isExpired;
   const daysRemaining = trialState?.daysRemaining ?? 14;
+
+  // Close dropdown on outside click
+  useEffect(() => {
+    function handleClickOutside(e) {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setIsToolsOpen(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   return (
     <header className="app-header">
       <div className="header-container">
+        {/* Brand Section */}
         <div className="brand-section">
           <TandemLogo size="md" />
           <div>
@@ -53,17 +68,19 @@ export function Header({
           </div>
         </div>
 
+        {/* Streamlined Header Actions */}
         <div className="header-actions">
+          {/* What-If Live Stress Test Toggle */}
           <button 
-            className="btn btn-secondary btn-sm"
-            onClick={onOpenFeedback}
-            title="Request features and share feedback"
-            style={{ border: '1px solid rgba(168, 85, 247, 0.4)', color: '#c084fc' }}
+            className={`btn btn-sm ${scenarioMode ? 'btn-scenario-active' : 'btn-secondary'}`}
+            onClick={onToggleScenario}
+            title="Toggle Live What-If Scenario Mode"
           >
-            <MessageSquarePlus className="icon-sm" />
-            <span className="btn-label-desktop">Feedback & Ideas</span>
+            <Zap className="icon-sm" />
+            <span className="btn-label-desktop">{scenarioMode ? 'What-If Active' : 'Test What-If'}</span>
           </button>
 
+          {/* Backup & Export (Primary Utility) */}
           <button 
             className="btn btn-secondary btn-sm"
             onClick={onOpenExport}
@@ -73,40 +90,67 @@ export function Header({
             <span className="btn-label-desktop">Backup & Export</span>
           </button>
 
+          {/* Feedback & Ideas */}
           <button 
-            className="btn btn-secondary btn-sm"
-            onClick={onOpenAssumptions}
-            title="View ATO tax rates, superannuation rules and math assumptions"
+            className="btn btn-secondary btn-sm feedback-pill-btn"
+            onClick={onOpenFeedback}
+            title="Request features and share feedback"
           >
-            <ShieldCheck className="icon-sm" />
-            <span className="btn-label-desktop">ATO Rates & Math</span>
+            <MessageSquarePlus className="icon-sm text-purple" />
+            <span className="btn-label-desktop">Feedback & Ideas</span>
           </button>
 
-          <button 
-            className={`btn btn-sm ${scenarioMode ? 'btn-scenario-active' : 'btn-outline'}`}
-            onClick={onToggleScenario}
-            title="Toggle Live What-If Scenario Mode"
-          >
-            <Zap className="icon-sm" />
-            <span className="btn-label-desktop">{scenarioMode ? 'What-If Active' : 'Test What-If'}</span>
-          </button>
+          {/* Sleek Tools & Settings Popover Dropdown */}
+          <div className="header-dropdown-wrap" ref={dropdownRef}>
+            <button
+              type="button"
+              className="btn btn-ghost btn-sm btn-icon-round"
+              onClick={() => setIsToolsOpen(!isToolsOpen)}
+              title="More Actions & Tools"
+              aria-label="More tools"
+            >
+              <MoreHorizontal size={18} />
+            </button>
 
-          <button 
-            className="btn btn-ghost btn-sm"
-            onClick={onResetDefaults}
-            title="Reset inputs to realistic dual-income sample data"
-          >
-            <RefreshCw className="icon-sm" />
-            <span className="btn-label-desktop">Reset</span>
-          </button>
+            {isToolsOpen && (
+              <div className="header-dropdown-menu glass-card">
+                <button 
+                  className="dropdown-item"
+                  onClick={() => {
+                    setIsToolsOpen(false);
+                    onOpenAssumptions();
+                  }}
+                >
+                  <ShieldCheck size={16} />
+                  <span>ATO Rates & Math</span>
+                </button>
 
-          <button 
-            className="btn btn-ghost btn-sm text-danger"
-            onClick={onClearAll}
-            title="Clear all partner incomes and expenses"
-          >
-            <Trash2 className="icon-sm" />
-          </button>
+                <button 
+                  className="dropdown-item"
+                  onClick={() => {
+                    setIsToolsOpen(false);
+                    onResetDefaults();
+                  }}
+                >
+                  <RefreshCw size={16} />
+                  <span>Reset Sample Data</span>
+                </button>
+
+                <div className="dropdown-divider" />
+
+                <button 
+                  className="dropdown-item text-danger"
+                  onClick={() => {
+                    setIsToolsOpen(false);
+                    onClearAll();
+                  }}
+                >
+                  <Trash2 size={16} />
+                  <span>Clear All Inputs</span>
+                </button>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </header>

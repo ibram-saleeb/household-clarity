@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import { Sparkles, Activity } from 'lucide-react';
+import { Sparkles, PieChart, Scale, ShieldCheck, Users, ChevronRight, ArrowUpRight } from 'lucide-react';
 import { formatMoney } from '../utils/formatters.js';
-
 import { annualiseAmount, deannualiseToMonthly } from '../logic/calculator.js';
 
 export function FinancialCopilot({ data, savingsTargetMonthly, partners, expenses }) {
@@ -32,7 +31,6 @@ export function FinancialCopilot({ data, savingsTargetMonthly, partners, expense
   const p1TaxableAnnual = p1.taxableIncomeAnnual || 0;
   const p2TaxableAnnual = p2.taxableIncomeAnnual || 0;
 
-  // ATO Thresholds: $45,000 (16%), $135,000 (30%), $190,000 (37%)
   const getBracketInfo = (salary) => {
     if (salary > 190000) return { rate: '45%', nextThreshold: null, distance: 0 };
     if (salary > 135000) return { rate: '37%', nextThreshold: 190000, distance: 190000 - salary };
@@ -46,7 +44,6 @@ export function FinancialCopilot({ data, savingsTargetMonthly, partners, expense
 
   // 3. Emergency Runway Months
   const monthlySavingsReserves = savingsTargetMonthly || 0;
-  // Estimate safety net: reserves vs fixed monthly commitments
   const runwayMonths = fixedExpensesVal > 0 ? (monthlySavingsReserves * 6 / fixedExpensesVal).toFixed(1) : '6+';
 
   // 4. Partner Contribution Equity
@@ -56,48 +53,39 @@ export function FinancialCopilot({ data, savingsTargetMonthly, partners, expense
   const p1EquityPct = Math.round((p1Usable / combinedPartners) * 100);
   const p2EquityPct = 100 - p1EquityPct;
 
+  const tabs = [
+    { id: 'structure', label: 'Cashflow Structure', icon: PieChart },
+    { id: 'tax', label: 'Tax Efficiency', icon: Scale },
+    { id: 'runway', label: 'Runway & Reserves', icon: ShieldCheck },
+    { id: 'equity', label: 'Partner Parity', icon: Users }
+  ];
+
   return (
     <div className="financial-copilot-card">
       <div className="copilot-card-header">
         <div className="copilot-badge-group">
           <span className="copilot-glow-badge">
-            <Sparkles className="icon-xs inline-icon text-primary" /> Tandem Intelligence Copilot
-          </span>
-          <span className="copilot-status-indicator">
-            <Activity className="icon-xs inline-icon text-surplus" /> Live Analysis Active
+            <Sparkles size={14} className="text-primary inline-icon" /> Household Intelligence
           </span>
         </div>
 
         {/* Insight Tabs Header */}
         <div className="copilot-tabs-bar">
-          <button
-            type="button"
-            className={`copilot-tab-btn ${activeCopilotTab === 'structure' ? 'active' : ''}`}
-            onClick={() => setActiveCopilotTab('structure')}
-          >
-            📊 Cashflow Structure
-          </button>
-          <button
-            type="button"
-            className={`copilot-tab-btn ${activeCopilotTab === 'tax' ? 'active' : ''}`}
-            onClick={() => setActiveCopilotTab('tax')}
-          >
-            ⚖️ Tax Efficiency
-          </button>
-          <button
-            type="button"
-            className={`copilot-tab-btn ${activeCopilotTab === 'runway' ? 'active' : ''}`}
-            onClick={() => setActiveCopilotTab('runway')}
-          >
-            🛡️ Runway & Reserves
-          </button>
-          <button
-            type="button"
-            className={`copilot-tab-btn ${activeCopilotTab === 'equity' ? 'active' : ''}`}
-            onClick={() => setActiveCopilotTab('equity')}
-          >
-            🤝 Partner Equity
-          </button>
+          {tabs.map(tab => {
+            const Icon = tab.icon;
+            const isActive = activeCopilotTab === tab.id;
+            return (
+              <button
+                key={tab.id}
+                type="button"
+                className={`copilot-tab-btn ${isActive ? 'active' : ''}`}
+                onClick={() => setActiveCopilotTab(tab.id)}
+              >
+                <Icon size={14} />
+                <span>{tab.label}</span>
+              </button>
+            );
+          })}
         </div>
       </div>
 
@@ -105,9 +93,9 @@ export function FinancialCopilot({ data, savingsTargetMonthly, partners, expense
       {activeCopilotTab === 'structure' && (
         <div className="copilot-insight-body">
           <div className="insight-main-metric">
-            <span className="insight-label">Expense Commitment Structure:</span>
+            <span className="insight-label">Expense Commitment Structure</span>
             <span className="insight-highlight">
-              <strong>{fixedRatio}% Fixed Commitments</strong> ({formatMoney(fixedExpensesVal)}/mo) | <strong>{discRatio}% Flexible</strong> ({formatMoney(discretionaryExpensesVal)}/mo)
+              <span className="text-warning font-semibold">{fixedRatio}% Fixed Commitments</span> ({formatMoney(fixedExpensesVal)}/mo) · <span className="text-surplus font-semibold">{discRatio}% Flexible</span> ({formatMoney(discretionaryExpensesVal)}/mo)
             </span>
           </div>
 
@@ -116,12 +104,14 @@ export function FinancialCopilot({ data, savingsTargetMonthly, partners, expense
             <div className="progress-bar-fill fill-cat-personal" style={{ width: `${discRatio}%` }} title={`Flexible Outgoings: ${discRatio}%`} />
           </div>
 
-          <p className="copilot-narrative">
-            💡 <strong>Copilot Insight:</strong> {fixedRatio > 70
-              ? `${fixedRatio}% of your outgoings are locked into fixed commitments (Housing, Debt, Insurance). Reducing fixed commitments gives 3x more cashflow relief than cutting small personal items.`
-              : `Your expense structure is flexible! Only ${fixedRatio}% is locked into fixed commitments, allowing your household to adapt easily to unexpected income changes.`
-            }
-          </p>
+          <div className="copilot-narrative-card">
+            <p className="copilot-narrative">
+              {fixedRatio > 70
+                ? `${fixedRatio}% of your household expenses are locked into fixed commitments (Housing, Debt, Insurance). Reducing fixed commitments provides significantly greater buffer relief than trimming small lifestyle expenses.`
+                : `Your household structure is agile: only ${fixedRatio}% is committed to non-negotiables, allowing you to absorb unexpected life events with confidence.`
+              }
+            </p>
+          </div>
         </div>
       )}
 
@@ -130,27 +120,29 @@ export function FinancialCopilot({ data, savingsTargetMonthly, partners, expense
         <div className="copilot-insight-body">
           <div className="copilot-tax-grid">
             <div className="partner-tax-card">
-              <div className="tax-partner-name">{p1Name} (ATO Marginal Tax Rate: <strong>{p1Bracket.rate}</strong>)</div>
+              <div className="tax-partner-name">{p1Name} · Marginal Rate: <strong className="text-primary">{p1Bracket.rate}</strong></div>
               <div className="tax-threshold-text">
                 {p1Bracket.nextThreshold
-                  ? `$${Math.round(p1Bracket.distance).toLocaleString()} below the next tax bracket threshold ($${p1Bracket.nextThreshold.toLocaleString()}/yr).`
+                  ? `$${Math.round(p1Bracket.distance).toLocaleString()} buffer below the next tax bracket ($${p1Bracket.nextThreshold.toLocaleString()}/yr).`
                   : `Currently in top ATO tax bracket (45%).`}
               </div>
             </div>
 
             <div className="partner-tax-card">
-              <div className="tax-partner-name">{p2Name} (ATO Marginal Tax Rate: <strong>{p2Bracket.rate}</strong>)</div>
+              <div className="tax-partner-name">{p2Name} · Marginal Rate: <strong className="text-primary">{p2Bracket.rate}</strong></div>
               <div className="tax-threshold-text">
                 {p2Bracket.nextThreshold
-                  ? `$${Math.round(p2Bracket.distance).toLocaleString()} below the next tax bracket threshold ($${p2Bracket.nextThreshold.toLocaleString()}/yr).`
+                  ? `$${Math.round(p2Bracket.distance).toLocaleString()} buffer below the next tax bracket ($${p2Bracket.nextThreshold.toLocaleString()}/yr).`
                   : `Currently in top ATO tax bracket (45%).`}
               </div>
             </div>
           </div>
 
-          <p className="copilot-narrative">
-            🛡️ <strong>Super Guarantee & Tax Strategy:</strong> You both build <strong>{formatMoney(totalSuper * 12)}/yr</strong> in non-cash super wealth (12% employer SG). Voluntary salary sacrifice contributions are taxed at just 15% super rate instead of your marginal tax rate ({p1Bracket.rate} / {p2Bracket.rate}).
-          </p>
+          <div className="copilot-narrative-card">
+            <p className="copilot-narrative">
+              Together you build <strong>{formatMoney(totalSuper * 12)}/yr</strong> in wealth via employer super (12% SG). Voluntary pre-tax salary sacrifice is taxed at 15% instead of your top marginal rate ({p1Bracket.rate} / {p2Bracket.rate}).
+            </p>
+          </div>
         </div>
       )}
 
@@ -158,15 +150,17 @@ export function FinancialCopilot({ data, savingsTargetMonthly, partners, expense
       {activeCopilotTab === 'runway' && (
         <div className="copilot-insight-body">
           <div className="insight-main-metric">
-            <span className="insight-label">Estimated Emergency Runway Buffer:</span>
+            <span className="insight-label">Estimated Emergency Runway</span>
             <span className="insight-highlight text-surplus">
-              <strong>{monthlySavingsReserves > 0 ? `${formatMoney(monthlySavingsReserves)}/mo` : 'Allocation Target Not Set'}</strong> ({monthlySavingsReserves > 0 ? `${runwayMonths} months covered` : 'Set target below to build 3-6mo safety net'})
+              <strong>{monthlySavingsReserves > 0 ? `${formatMoney(monthlySavingsReserves)}/mo` : 'Target Not Set'}</strong> {monthlySavingsReserves > 0 ? `(est. ${runwayMonths} months of fixed costs covered)` : '— Set a monthly target below'}
             </span>
           </div>
 
-          <p className="copilot-narrative">
-            🛡️ <strong>Copilot Safety Net Model:</strong> Setting aside a consistent monthly savings target builds a 3-to-6 month emergency reserve. If household income drops unexpectedly, your fixed commitments ({formatMoney(fixedExpensesVal)}/mo) remain fully protected.
-          </p>
+          <div className="copilot-narrative-card">
+            <p className="copilot-narrative">
+              Allocating a consistent monthly savings buffer protects your fixed commitments ({formatMoney(fixedExpensesVal)}/mo) against career pivots, parental leave, or income shocks.
+            </p>
+          </div>
         </div>
       )}
 
@@ -174,9 +168,9 @@ export function FinancialCopilot({ data, savingsTargetMonthly, partners, expense
       {activeCopilotTab === 'equity' && (
         <div className="copilot-insight-body">
           <div className="insight-main-metric">
-            <span className="insight-label">Spendable Post-Tax Contribution Parity:</span>
+            <span className="insight-label">Post-Tax Spendable Contribution Parity</span>
             <span className="insight-highlight text-primary">
-              <strong>{p1Name}: {p1EquityPct}%</strong> ({formatMoney(p1Usable)}/mo) | <strong>{p2Name}: {p2EquityPct}%</strong> ({formatMoney(p2Usable)}/mo)
+              <strong>{p1Name}: {p1EquityPct}%</strong> ({formatMoney(p1Usable)}/mo) · <strong>{p2Name}: {p2EquityPct}%</strong> ({formatMoney(p2Usable)}/mo)
             </span>
           </div>
 
@@ -185,9 +179,11 @@ export function FinancialCopilot({ data, savingsTargetMonthly, partners, expense
             <div className="progress-bar-fill fill-p2" style={{ width: `${p2EquityPct}%` }} />
           </div>
 
-          <p className="copilot-narrative">
-            🤝 <strong>Financial Harmony Insight:</strong> {p1Name} contributes {p1EquityPct}% and {p2Name} contributes {p2EquityPct}% of your post-tax spendable income. Expenses assigned to <strong>Shared (50/50)</strong> are automatically split equally between both partners' net positions.
-          </p>
+          <div className="copilot-narrative-card">
+            <p className="copilot-narrative">
+              {p1Name} contributes {p1EquityPct}% and {p2Name} contributes {p2EquityPct}% of your total usable income. Shared household expenses are allocated proportionally to maintain parity.
+            </p>
+          </div>
         </div>
       )}
     </div>
