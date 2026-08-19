@@ -24,6 +24,7 @@
     "recharts": "^3.10.1"
   },
   "devDependencies": {
+    "@bubblewrap/core": "^1.25.0",
     "@playwright/test": "^1.62.1",
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",

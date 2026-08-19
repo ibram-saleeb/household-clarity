@@ -12,6 +12,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Top Header Status Pill (`Header.jsx`)**: Real-time trial days indicator (`✨ 14 days left` / `🔒 Trial Expired`) with instant preview modal trigger.
 - **"Full App Launching Soon" Paywall Modal (`PaywallModal.jsx`)**: High-converting early-access paywall screen with VIP launch list email capture (50% launch discount), premium roadmap feature highlights, data safety reassurance, and developer test overrides.
 - **Google Play Store Asset Pipeline (`generate-play-store-assets.js`)**: Playwright-driven generation of 512x512 PNG app icon, 1024x500 feature graphic, and high-resolution mobile store screenshots in `public/store-assets/`.
+- **PWA Web Manifest Store Compliance (`manifest.json`)**: 100% compliant web manifest with multi-resolution PNG icons (`192x192` & `512x512` with `any` + `maskable` tags), desktop and mobile screenshots, and shortcut intent routing.
+- **Android Digital Asset Links (`.well-known/assetlinks.json`)**: Deployed domain ownership certificate fingerprint (`BA:FC:E0:F6...`) enabling full-screen native Android Trusted Web Activity execution without browser URL chrome.
+- **Google Play Store Internal Testing Deployment**: Packaged, signed, and published Android App Bundle (`Tandem.aab`) with package ID `app.pages.project_tandem.twa` and original signing key (`SHA1: 24:D6:68:B1...`) to Google Play Internal Testing.
+- **Cloudflare Pages Production Deployment & Tooling**: Direct Cloudflare Pages production deployments via Wrangler CLI, and Cloudflare agent environment integration (13 skills & 5 MCP servers).
 
 ---
 
