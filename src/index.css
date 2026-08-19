@@ -1,25 +1,25 @@
 /* ==========================================================================
    Project Tandem — Bespoke Luxury FinTech Design System
-   Inspired by Apple Wallet, Linear, Monzo, & User Redesign Specification
+   Pixel-Accurate Port of User Redesign Specification
    ========================================================================== */
 
 :root {
   --font-body: 'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-mono: 'Geist Mono', ui-monospace, monospace;
 
-  /* 1. Nordic Obsidian & Pine Teal Palette */
+  /* Nordic Obsidian Palette */
   --bg-main: #0e100f;
+  --bg-sidebar: #121513;
   --bg-card: #161917;
   --bg-card-subtle: #191c1a;
   --bg-card-hover: #1f2321;
   --bg-input: #1f2321;
   --bg-keypad: #232725;
 
-  /* 2. Signature Brand Accents */
+  /* Brand Accents */
   --primary: #0f6e62;
   --primary-hover: #128575;
   --primary-light: rgba(61, 191, 168, 0.16);
-  --primary-glow: 0 0 24px rgba(15, 110, 98, 0.35);
 
   --mint: #7fe3cf;
   --teal-bright: #3dbfa8;
@@ -27,10 +27,7 @@
   --amber-light: #e8c9a0;
   --slate-dim: #4a534e;
 
-  --color-surplus: #edefec;
-  --color-deficit: #f43f5e;
-
-  /* 3. High-Contrast Text Hierarchy */
+  /* High-Contrast Text Hierarchy */
   --text-main: #edefec;
   --text-secondary: #8e958e;
   --text-muted: #6d746c;
@@ -38,19 +35,14 @@
   --text-mint: #7fe3cf;
   --text-slate: #c9cfc8;
 
-  /* 4. Borders & Radii */
+  /* Borders & Radii */
   --border-color: rgba(255, 255, 255, 0.08);
   --border-subtle: rgba(255, 255, 255, 0.06);
-  --border-focus: rgba(61, 191, 168, 0.5);
 
   --radius-sm: 8px;
   --radius-md: 14px;
   --radius-lg: 22px;
   --radius-pill: 28px;
-  --radius-full: 9999px;
-
-  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.12), 0 8px 24px rgba(0, 0, 0, 0.3);
-  --shadow-pill: 0 8px 32px rgba(0, 0, 0, 0.45);
 }
 
 /* Global Reset */
@@ -76,166 +68,196 @@ button, input, select, textarea {
   touch-action: manipulation;
 }
 
-/* App Shell */
+/* App Shell Structure */
 .app-shell {
   display: flex;
-  flex-direction: column;
   min-height: 100vh;
   background-color: var(--bg-main);
 }
 
-.main-content {
-  max-width: 760px;
-  width: 100%;
-  margin: 0 auto;
-  padding: 1.5rem 1.25rem 7.5rem 1.25rem;
-  flex: 1;
+/* ==========================================================================
+   Desktop Left Sidebar Rail (214px)
+   ========================================================================== */
+
+.desktop-sidebar {
+  display: none;
 }
 
-/* App Header */
-.app-header {
-  background: rgba(14, 16, 15, 0.9);
-  backdrop-filter: blur(20px);
-  border-bottom: 1px solid var(--border-color);
-  position: sticky;
-  top: 0;
-  z-index: 100;
-}
+@media (min-width: 768px) {
+  .desktop-sidebar {
+    width: 214px;
+    flex: none;
+    background: var(--bg-sidebar);
+    border-right: 1px solid var(--border-color);
+    padding: 22px 0;
+    display: flex;
+    flex-direction: column;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+  }
 
-.header-container {
-  max-width: 760px;
-  margin: 0 auto;
-  padding: 0.85rem 1.25rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 1rem;
-}
+  .sidebar-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 20px 24px;
+  }
 
-.brand-section {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-}
+  .sidebar-logo {
+    width: 26px;
+    height: 26px;
+    border-radius: 8px;
+    background: var(--primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 
-.brand-title-row {
-  display: flex;
-  align-items: center;
-  gap: 0.45rem;
-}
+  .sidebar-dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--mint);
+  }
 
-.app-title {
-  font-size: 1.15rem;
-  font-weight: 700;
-  color: var(--text-main);
-  letter-spacing: -0.02em;
-}
+  .sidebar-brand-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-main);
+    letter-spacing: -0.01em;
+  }
 
-.version-pill {
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  color: var(--text-secondary);
-  font-size: 0.65rem;
-  font-weight: 600;
-  font-family: var(--font-mono);
-  padding: 0.15rem 0.45rem;
-  border-radius: var(--radius-full);
-}
+  .sidebar-brand-sub {
+    font-size: 10.5px;
+    color: var(--text-muted);
+  }
 
-.trial-status-pill {
-  background: rgba(61, 191, 168, 0.14);
-  border: 1px solid rgba(61, 191, 168, 0.28);
-  color: var(--mint);
-  font-size: 0.7rem;
-  font-weight: 600;
-  padding: 0.15rem 0.55rem;
-  border-radius: var(--radius-full);
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
+  .sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 0 12px;
+  }
 
-.trial-status-pill.expired {
-  background: rgba(244, 63, 94, 0.15);
-  border-color: rgba(244, 63, 94, 0.3);
-  color: #f87171;
-}
+  .sidebar-nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 10px;
+    border-radius: 8px;
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 13px;
+    font-weight: 400;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: left;
+    width: 100%;
+  }
 
-.app-subtitle {
-  font-size: 0.775rem;
-  color: var(--text-muted);
-}
+  .sidebar-nav-item:hover {
+    color: var(--text-main);
+    background: rgba(255, 255, 255, 0.04);
+  }
 
-.header-actions {
-  display: flex;
-  align-items: center;
-  gap: 0.45rem;
-}
+  .sidebar-nav-item.active {
+    background: rgba(61, 191, 168, 0.12);
+    color: var(--mint);
+    font-weight: 500;
+  }
 
-.btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.4rem;
-  border-radius: var(--radius-sm);
-  font-weight: 500;
-  font-size: 0.825rem;
-  padding: 0.45rem 0.85rem;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  border: none;
-  text-decoration: none;
-}
+  .sidebar-nav-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.16);
+  }
 
-.btn-secondary {
-  background: var(--bg-card);
-  border: 1px solid var(--border-color);
-  color: var(--text-slate);
-}
+  .sidebar-nav-item.active .sidebar-nav-dot {
+    background: var(--teal-bright);
+  }
 
-.btn-secondary:hover {
-  background: var(--bg-card-hover);
-  color: var(--text-main);
-  border-color: rgba(255, 255, 255, 0.16);
-}
+  .sidebar-footer {
+    margin-top: auto;
+    padding: 0 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    border-top: 1px solid var(--border-color);
+    padding-top: 16px;
+  }
 
-.btn-ghost {
-  background: transparent;
-  color: var(--text-muted);
-}
+  .sidebar-trial-label {
+    font-size: 11px;
+    color: var(--text-muted);
+  }
 
-.btn-ghost:hover {
-  color: var(--text-main);
-  background: rgba(255, 255, 255, 0.05);
-}
+  .sidebar-trial-track {
+    height: 3px;
+    border-radius: 2px;
+    background: rgba(255, 255, 255, 0.09);
+    overflow: hidden;
+  }
 
-.btn-sm {
-  padding: 0.35rem 0.65rem;
-  font-size: 0.775rem;
-}
+  .sidebar-trial-progress {
+    height: 100%;
+    border-radius: 2px;
+    background: var(--primary);
+  }
 
-.btn-scenario-active {
-  background: rgba(201, 135, 63, 0.15);
-  border: 1px solid rgba(201, 135, 63, 0.4);
-  color: var(--amber-light);
+  .sidebar-meta-btn {
+    font-size: 11px;
+    color: var(--text-muted);
+    background: transparent;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    text-align: left;
+  }
+
+  .sidebar-meta-btn:hover {
+    color: var(--text-main);
+  }
 }
 
 /* ==========================================================================
-   Hero Dashboard — Circular Progress Ring & Cashflow Breakdown
+   Main Content Layout
+   ========================================================================== */
+
+.main-content-layout {
+  flex: 1;
+  max-width: 760px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 24px 22px 130px;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+@media (min-width: 768px) {
+  .main-content-layout {
+    max-width: 900px;
+    padding: 34px 40px 40px;
+    margin: 0;
+  }
+}
+
+/* ==========================================================================
+   Hero Dashboard (Month View)
    ========================================================================== */
 
 .hero-dashboard-section {
   display: flex;
   flex-direction: column;
-  gap: 1.35rem;
-  margin-top: 0.5rem;
-  animation: fadeIn 0.35s ease-out;
+  gap: 22px;
+  animation: fadeIn 0.3s ease-out;
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(6px); }
+  from { opacity: 0; transform: translateY(4px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
@@ -247,9 +269,9 @@ button, input, select, textarea {
 
 .month-pill-label {
   font-family: var(--font-mono);
-  font-size: 0.75rem;
-  font-weight: 600;
-  letter-spacing: 0.14em;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--text-muted);
 }
@@ -268,8 +290,8 @@ button, input, select, textarea {
   align-items: center;
   justify-content: center;
   font-family: var(--font-mono);
-  font-size: 0.65rem;
-  font-weight: 700;
+  font-size: 10px;
+  font-weight: 600;
 }
 
 .avatar-primary {
@@ -281,7 +303,7 @@ button, input, select, textarea {
 .avatar-secondary {
   background: #2a312e;
   color: var(--text-slate);
-  margin-left: -8px;
+  margin-left: -9px;
   z-index: 1;
 }
 
@@ -289,7 +311,7 @@ button, input, select, textarea {
 .hero-main-banner {
   display: flex;
   align-items: center;
-  gap: 1.5rem;
+  gap: 22px;
 }
 
 .ring-container {
@@ -324,48 +346,54 @@ button, input, select, textarea {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 1px;
+  gap: 2px;
 }
 
 .ring-pct-number {
   font-family: var(--font-mono);
-  font-size: 1.35rem;
+  font-size: 22px;
   font-weight: 600;
   color: var(--text-main);
 }
 
 .ring-pct-label {
-  font-size: 0.65rem;
+  font-size: 10.5px;
   color: var(--text-muted);
 }
 
 .hero-number-col {
   display: flex;
   flex-direction: column;
-  gap: 0.4rem;
+  gap: 7px;
 }
 
 .hero-hero-number {
   font-family: var(--font-mono);
-  font-size: 2.75rem;
+  font-size: 40px;
   font-weight: 600;
-  letter-spacing: -0.035em;
+  letter-spacing: -0.03em;
   line-height: 1;
   color: var(--text-main);
 }
 
+@media (min-width: 768px) {
+  .hero-hero-number {
+    font-size: 56px;
+  }
+}
+
 .hero-free-subtext {
-  font-size: 0.85rem;
+  font-size: 13.5px;
   color: var(--text-secondary);
-  line-height: 1.4;
-  max-width: 220px;
+  line-height: 1.5;
+  max-width: 180px;
 }
 
 /* Segmented Cashflow Proportion Bar */
 .segmented-bar-container {
   display: flex;
   flex-direction: column;
-  gap: 0.55rem;
+  gap: 9px;
 }
 
 .segmented-flow-bar {
@@ -374,12 +402,10 @@ button, input, select, textarea {
   border-radius: 7px;
   overflow: hidden;
   gap: 2px;
-  background: rgba(255, 255, 255, 0.03);
 }
 
 .flow-segment {
   height: 100%;
-  transition: width 0.4s ease;
 }
 
 .segment-fixed { background: var(--amber); }
@@ -390,7 +416,7 @@ button, input, select, textarea {
 .segmented-bar-labels {
   display: flex;
   justify-content: space-between;
-  font-size: 0.725rem;
+  font-size: 11.5px;
   color: var(--text-muted);
 }
 
@@ -404,7 +430,7 @@ button, input, select, textarea {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0.95rem 0;
+  padding: 15px 0;
   border-top: 1px solid var(--border-color);
 }
 
@@ -419,29 +445,29 @@ button, input, select, textarea {
 }
 
 .flow-row-title {
-  font-size: 0.925rem;
+  font-size: 15px;
   color: var(--text-main);
 }
 
 .flow-row-sub {
-  font-size: 0.75rem;
+  font-size: 12px;
   color: var(--text-muted);
 }
 
 .flow-row-amount {
   font-family: var(--font-mono);
-  font-size: 1rem;
+  font-size: 16px;
   font-weight: 500;
 }
 
 /* Contextual Intelligence Banner */
 .context-intel-card {
   display: flex;
-  gap: 0.75rem;
-  padding: 1rem;
+  gap: 12px;
+  padding: 16px;
   border-radius: var(--radius-md);
   background: var(--bg-card);
-  border: 1px solid var(--border-color);
+  border: 1px solid rgba(255, 255, 255, 0.07);
 }
 
 .intel-accent-bar {
@@ -454,17 +480,17 @@ button, input, select, textarea {
 .intel-content {
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
+  gap: 4px;
 }
 
 .intel-text {
-  font-size: 0.825rem;
+  font-size: 13.5px;
   color: #a8afa7;
-  line-height: 1.45;
+  line-height: 1.5;
 }
 
 .intel-link {
-  font-size: 0.775rem;
+  font-size: 12.5px;
   font-weight: 500;
   color: var(--mint);
   cursor: pointer;
@@ -472,12 +498,11 @@ button, input, select, textarea {
 
 /* Close Out Month Button */
 .btn-close-month {
-  width: 100%;
   height: 54px;
-  border-radius: var(--radius-pill);
+  border-radius: 27px;
   background: var(--primary);
   color: #eafaf6;
-  font-size: 0.95rem;
+  font-size: 15px;
   font-weight: 500;
   border: none;
   cursor: pointer;
@@ -497,23 +522,21 @@ button, input, select, textarea {
   inset: 0;
   z-index: 200;
   background: rgba(8, 10, 9, 0.85);
-  backdrop-filter: blur(16px);
+  backdrop-filter: blur(14px);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 1.5rem;
+  padding: 40px;
 }
 
 .month-closed-card {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1.5rem;
-  max-width: 360px;
-  width: 100%;
+  gap: 26px;
+  max-width: 340px;
   text-align: center;
-  animation: fadeIn 0.4s cubic-bezier(0.32, 0.72, 0, 1);
 }
 
 .celebrate-ring-wrapper {
@@ -547,7 +570,7 @@ button, input, select, textarea {
   align-items: center;
   justify-content: center;
   font-family: var(--font-mono);
-  font-size: 1.85rem;
+  font-size: 30px;
   font-weight: 600;
   color: var(--mint);
 }
@@ -555,43 +578,43 @@ button, input, select, textarea {
 .celebrate-text-group {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 10px;
 }
 
 .celebrate-title {
-  font-size: 1.45rem;
+  font-size: 24px;
   font-weight: 600;
   color: var(--text-main);
-  letter-spacing: -0.02em;
+  letter-spacing: -0.01em;
 }
 
 .celebrate-desc {
-  font-size: 0.875rem;
-  color: var(--text-secondary);
-  line-height: 1.55;
+  font-size: 14.5px;
+  color: #9aa19a;
+  line-height: 1.6;
 }
 
 .celebrate-stats-row {
   display: flex;
   align-items: center;
-  gap: 1.5rem;
+  gap: 26px;
 }
 
 .celebrate-stat {
   display: flex;
   flex-direction: column;
-  gap: 0.2rem;
+  gap: 5px;
 }
 
 .stat-number {
   font-family: var(--font-mono);
-  font-size: 1.35rem;
+  font-size: 22px;
   font-weight: 600;
   color: var(--text-main);
 }
 
 .stat-label {
-  font-size: 0.7rem;
+  font-size: 11.5px;
   color: var(--text-muted);
 }
 
@@ -602,12 +625,12 @@ button, input, select, textarea {
 }
 
 .btn-start-next {
-  padding: 0.75rem 1.5rem;
-  border-radius: var(--radius-pill);
+  padding: 12px 24px;
+  border-radius: 24px;
   border: 1px solid rgba(255, 255, 255, 0.16);
   background: transparent;
   color: var(--text-slate);
-  font-size: 0.875rem;
+  font-size: 14px;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -619,58 +642,23 @@ button, input, select, textarea {
 }
 
 /* ==========================================================================
-   Navigation Tabs & Floating Mobile 56px Pill Bar
+   Mobile Floating 56px Pill Bar
    ========================================================================== */
 
-.desktop-nav-tabs {
-  margin-bottom: 1.5rem;
-}
-
-.desktop-nav-container {
-  display: flex;
-  gap: 0.5rem;
-  background: var(--bg-card);
-  padding: 4px;
-  border-radius: var(--radius-pill);
-  border: 1px solid var(--border-color);
-  max-width: 480px;
-}
-
-.nav-tab-button {
-  flex: 1;
-  height: 38px;
-  border-radius: 20px;
-  border: none;
-  background: transparent;
-  color: var(--text-muted);
-  font-size: 0.825rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.nav-tab-button:hover {
-  color: var(--text-main);
-}
-
-.nav-tab-button.active {
-  background: rgba(61, 191, 168, 0.16);
-  color: var(--mint);
-  font-weight: 600;
-}
-
-/* Mobile Floating Bottom Bar */
 .mobile-bottom-nav {
   position: fixed;
   left: 0;
   right: 0;
   bottom: 0;
-  padding: 0.75rem 1.25rem 1.75rem 1.25rem;
-  background: linear-gradient(to top, #0e100f 65%, transparent);
+  padding: 14px 22px 30px;
+  background: linear-gradient(to top, #0e100f 62%, transparent);
   z-index: 100;
+}
+
+@media (min-width: 768px) {
+  .mobile-bottom-nav {
+    display: none;
+  }
 }
 
 .mobile-nav-pill-container {
@@ -678,17 +666,17 @@ button, input, select, textarea {
   display: flex;
   align-items: center;
   height: 56px;
-  border-radius: var(--radius-pill);
-  background: rgba(27, 31, 29, 0.85);
+  border-radius: 28px;
+  background: #1b1f1dcc;
   border: 1px solid rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(20px);
-  padding: 0 4px;
+  padding: 0 6px;
 }
 
 .mobile-nav-sliding-pill {
   position: absolute;
   top: 6px;
-  left: 4px;
+  left: 6px;
   height: 44px;
   border-radius: 22px;
   background: rgba(61, 191, 168, 0.16);
@@ -706,7 +694,7 @@ button, input, select, textarea {
   background: transparent;
   border: none;
   color: var(--text-muted);
-  font-size: 0.825rem;
+  font-size: 13px;
   font-weight: 500;
   cursor: pointer;
   transition: color 0.25s ease;
@@ -715,28 +703,31 @@ button, input, select, textarea {
 
 .mobile-nav-item.active {
   color: var(--mint);
-  font-weight: 600;
+}
+
+.desktop-nav-tabs {
+  display: none;
 }
 
 /* ==========================================================================
-   Expenses Section (Ranked List & Cards)
+   Expenses Section (Spending View)
    ========================================================================== */
 
 .section-panel {
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
+  gap: 18px;
   animation: fadeIn 0.3s ease-out;
 }
 
 .expenses-title-row {
   display: flex;
   flex-direction: column;
-  gap: 0.35rem;
+  gap: 8px;
 }
 
 .expenses-main-title {
-  font-size: 1.75rem;
+  font-size: 30px;
   font-weight: 600;
   color: var(--text-main);
   letter-spacing: -0.02em;
@@ -745,36 +736,36 @@ button, input, select, textarea {
 .expenses-sub-row {
   display: flex;
   align-items: baseline;
-  gap: 0.5rem;
+  gap: 8px;
 }
 
 .expenses-total-amt {
   font-family: var(--font-mono);
-  font-size: 0.95rem;
+  font-size: 15px;
   font-weight: 500;
   color: var(--text-secondary);
 }
 
 .expenses-count-tag {
-  font-size: 0.8rem;
+  font-size: 13px;
   color: var(--text-muted);
 }
 
 /* Category Filter Pills */
 .category-filter-row {
   display: flex;
-  gap: 0.5rem;
+  gap: 8px;
   overflow-x: auto;
   padding-bottom: 2px;
 }
 
 .cat-filter-btn {
-  padding: 0.45rem 0.85rem;
+  padding: 8px 14px;
   border-radius: 18px;
   background: var(--bg-card-subtle);
-  border: 1px solid var(--border-color);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   color: #9aa19a;
-  font-size: 0.775rem;
+  font-size: 12.5px;
   font-weight: 500;
   cursor: pointer;
   white-space: nowrap;
@@ -787,59 +778,54 @@ button, input, select, textarea {
   color: #eafaf6;
 }
 
-/* Expense Items List */
+/* Expense Cards */
 .expenses-cards-list {
   display: flex;
   flex-direction: column;
-  gap: 0.65rem;
+  gap: 10px;
 }
 
 .expense-card-item {
   display: flex;
   align-items: center;
-  gap: 0.85rem;
-  padding: 1rem;
+  gap: 14px;
+  padding: 16px;
   border-radius: var(--radius-md);
   background: var(--bg-card);
-  border: 1px solid var(--border-color);
-  transition: border-color 0.2s ease;
-}
-
-.expense-card-item:hover {
-  border-color: rgba(255, 255, 255, 0.16);
+  border: 1px solid rgba(255, 255, 255, 0.07);
 }
 
 .expense-card-main {
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 0.35rem;
+  gap: 6px;
 }
 
 .expense-label-row {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 8px;
 }
 
 .expense-card-name {
-  font-size: 0.95rem;
+  font-size: 15.5px;
   color: var(--text-main);
 }
 
 .expense-assignee-tag {
-  padding: 2px 6px;
-  border-radius: 4px;
+  padding: 2px 7px;
+  border-radius: 5px;
   background: rgba(255, 255, 255, 0.07);
   font-family: var(--font-mono);
-  font-size: 0.65rem;
-  font-weight: 600;
+  font-size: 10.5px;
+  font-weight: 500;
   color: #9aa19a;
   text-transform: uppercase;
 }
 
 .expense-card-meta {
-  font-size: 0.75rem;
+  font-size: 12px;
   color: var(--text-muted);
 }
 
@@ -861,19 +847,19 @@ button, input, select, textarea {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  gap: 0.2rem;
+  gap: 4px;
 }
 
 .expense-card-amount {
   font-family: var(--font-mono);
-  font-size: 1.05rem;
+  font-size: 17px;
   font-weight: 500;
   color: var(--text-main);
 }
 
 .expense-card-pct {
   font-family: var(--font-mono);
-  font-size: 0.725rem;
+  font-size: 11.5px;
   color: var(--text-muted);
 }
 

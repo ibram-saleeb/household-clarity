@@ -4,7 +4,7 @@ import { DEFAULT_APP_STATE } from './storage/defaults';
 import { calculateHousehold } from './logic/calculator';
 import { useTrialState } from './storage/useTrialState';
 
-import { Header } from './components/Header';
+import { DesktopSidebar } from './components/DesktopSidebar';
 import { NavTabs } from './components/NavTabs';
 import { HeroDashboard } from './components/HeroDashboard';
 import { IncomeSection } from './components/IncomeSection';
@@ -13,7 +13,6 @@ import { ScenarioEngine } from './components/ScenarioEngine';
 import { AssumptionsModal } from './components/AssumptionsModal';
 import { ExportModal } from './components/ExportModal';
 import FeedbackModal from './components/FeedbackModal';
-import { FinancialCopilot } from './components/FinancialCopilot';
 import { PaywallModal } from './components/PaywallModal';
 
 export default function App() {
@@ -61,7 +60,7 @@ export default function App() {
     setAppState((prev) => {
       const nextScenarioMode = !prev.scenarioMode;
       if (nextScenarioMode) {
-        setActiveTab('scenario'); // Automatically switch to scenario tab when activated
+        setActiveTab('scenario');
       }
       return {
         ...prev,
@@ -102,81 +101,54 @@ export default function App() {
         ...prev,
         scenarios: [...existing, newScen],
         activeScenarioId: newId,
+        scenario: newScen,
         scenarioMode: true
       };
     });
+    setActiveTab('scenario');
   };
 
-  const handleDeleteScenario = (idToDelete) => {
+  const handleDeleteScenario = (id) => {
     setAppState((prev) => {
       const existing = prev.scenarios || [];
-      if (existing.length <= 1) return prev;
-      const filtered = existing.filter((s) => s.id !== idToDelete);
-      const nextActiveId = prev.activeScenarioId === idToDelete ? filtered[0].id : prev.activeScenarioId;
+      const filtered = existing.filter((s) => s.id !== id);
+      const nextActive = filtered[0] || DEFAULT_APP_STATE.scenarios[0];
       return {
         ...prev,
-        scenarios: filtered,
-        activeScenarioId: nextActiveId
+        scenarios: filtered.length > 0 ? filtered : [DEFAULT_APP_STATE.scenarios[0]],
+        activeScenarioId: nextActive.id,
+        scenario: nextActive
       };
     });
   };
 
   const handleSelectActiveScenario = (id) => {
-    setAppState((prev) => ({
-      ...prev,
-      activeScenarioId: id
-    }));
-  };
-
-  const handleImportState = (importedState) => {
-    setAppState(importedState);
-  };
-
-  const handleResetDefaults = () => {
-    if (window.confirm("Reset all inputs to sample dual-income data?")) {
-      setAppState(DEFAULT_APP_STATE);
-    }
-  };
-
-  const handleClearAll = () => {
-    if (window.confirm("Clear all partner incomes and expenses?")) {
-      setAppState({
-        ...DEFAULT_APP_STATE,
-        partners: [
-          { id: "p1", name: "Partner 1", initials: "P1", salary: 0, salaryFrequency: "annual", superMode: "rate", superRate: 12, extraIncomes: [] },
-          { id: "p2", name: "Partner 2", initials: "P2", salary: 0, salaryFrequency: "annual", superMode: "rate", superRate: 12, extraIncomes: [] }
-        ],
-        expenses: [],
-        savingsTargetMonthly: 0,
-        scenarioMode: false
-      });
-    }
+    setAppState((prev) => {
+      const existing = prev.scenarios || [];
+      const found = existing.find((s) => s.id === id);
+      if (!found) return prev;
+      return {
+        ...prev,
+        activeScenarioId: id,
+        scenario: found,
+        scenarioMode: true
+      };
+    });
   };
 
   return (
     <div className="app-shell">
-      {/* Top Header */}
-      <Header
-        scenarioMode={appState.scenarioMode}
-        onToggleScenario={handleToggleScenario}
-        onOpenAssumptions={() => setIsAssumptionsModalOpen(true)}
-        onOpenExport={() => setIsExportModalOpen(true)}
-        onOpenFeedback={() => setIsFeedbackModalOpen(true)}
-        onResetDefaults={handleResetDefaults}
-        onClearAll={handleClearAll}
-        trialState={trialState}
-        onOpenPaywall={() => setIsPaywallExplicitlyOpen(true)}
-      />
-
-      {/* Segmented View Navigation Tabs */}
-      <NavTabs
+      {/* Desktop Left Sidebar Rail */}
+      <DesktopSidebar
         activeTab={activeTab}
         onTabChange={setActiveTab}
-        scenarioMode={appState.scenarioMode}
+        partners={appState.partners}
+        trialDaysLeft={trialState.daysRemaining}
+        onOpenExport={() => setIsExportModalOpen(true)}
       />
 
-      {/* Main Focused Content Area */}
-      <main className="main-content">
+      {/* Main App Content Area */}
+      <main className="main-content-layout">
         {/* Overview / Month Tab */}
         {activeTab === 'overview' && (
           <HeroDashboard
@@ -187,21 +159,21 @@ export default function App() {
           />
         )}
 
-        {/* Income & Salaries Tab */}
-        {activeTab === 'income' && (
-          <IncomeSection
-            partners={appState.partners}
-            onUpdatePartner={handleUpdatePartner}
-            calculatedData={calculatedData}
-          />
-        )}
-
-        {/* Expenses Tab */}
+        {/* Expenses / Spending Tab */}
         {activeTab === 'expenses' && (
           <ExpenseSection
             expenses={appState.expenses}
             onUpdateExpenses={handleUpdateExpenses}
             partners={appState.partners}
+          />
+        )}
+
+        {/* Income Tab */}
+        {activeTab === 'income' && (
+          <IncomeSection
+            partners={appState.partners}
+            onUpdatePartner={handleUpdatePartner}
+            calculatedData={calculatedData}
           />
         )}
 
@@ -226,52 +198,40 @@ export default function App() {
             baselineExpenses={appState.expenses}
           />
         )}
-
       </main>
 
-      {/* Footer Disclaimer */}
-      <footer className="app-footer">
-        <div className="footer-content">
-          <p>
-            <strong>Project Tandem</strong> — Built for dual-income couples seeking shared household financial clarity.
-          </p>
-          <p className="footer-disclaimer">
-            Calculations strictly show mathematical cash flow models based on user inputs and ATO resident tax rates. This application does NOT recommend financial products, loans, or financial advice.
-          </p>
-        </div>
-      </footer>
+      {/* Mobile Floating 56px Frosted Navigation Pill Bar */}
+      <NavTabs
+        activeTab={activeTab}
+        onTabChange={setActiveTab}
+        scenarioMode={appState.scenarioMode}
+      />
 
-      {/* Assumptions & ATO Tax Modal */}
+      {/* Modals & Tools */}
+      <ExportModal
+        isOpen={isExportModalOpen}
+        onClose={() => setIsExportModalOpen(false)}
+        appState={appState}
+        onImportState={(newState) => setAppState(newState)}
+      />
+
       <AssumptionsModal
         isOpen={isAssumptionsModalOpen}
         onClose={() => setIsAssumptionsModalOpen(false)}
       />
 
-      {/* Export, Backup & Restore Modal */}
-      <ExportModal
-        isOpen={isExportModalOpen}
-        onClose={() => setIsExportModalOpen(false)}
-        appState={appState}
-        calculatedData={calculatedData}
-        onImportState={handleImportState}
-      />
-
-      {/* Feedback & Feature Requests Modal */}
       <FeedbackModal
         isOpen={isFeedbackModalOpen}
         onClose={() => setIsFeedbackModalOpen(false)}
       />
 
-      {/* 14-Day Free Trial Paywall Gate Modal */}
-      <PaywallModal
-        isOpen={isPaywallVisible}
-        onClose={() => {
-          setIsPaywallExplicitlyOpen(false);
-          setDismissedExpiredSession(true);
-        }}
-        trialState={trialState}
-        allowDismiss={!trialState.isExpired || dismissedExpiredSession || isPaywallExplicitlyOpen}
-      />
+      {isPaywallVisible && (
+        <PaywallModal
+          isOpen={true}
+          onClose={() => setDismissedExpiredSession(true)}
+          trialState={trialState}
+        />
+      )}
     </div>
   );
 }
