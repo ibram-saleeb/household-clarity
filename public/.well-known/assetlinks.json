@@ -1,12 +1,10 @@
-[
-  {
-    "relation": ["delegate_permission/common.handle_all_urls"],
-    "target": {
-      "namespace": "android_app",
-      "package_name": "app.pages.project_tandem.twa",
-      "sha256_cert_fingerprints": [
-        "00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00"
-      ]
-    }
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "dev.pages.project_tandem.twa",
+    "sha256_cert_fingerprints": [
+      "BA:FC:E0:F6:94:B7:2D:93:E8:6B:81:43:80:7A:C4:74:3F:96:4C:5C:45:60:67:EB:AF:70:13:B3:B1:82:8A:62"
+    ]
   }
-]
+}]
