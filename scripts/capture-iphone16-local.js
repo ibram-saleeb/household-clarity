@@ -1,7 +1,6 @@
 import { chromium } from '@playwright/test';
 import { spawn } from 'child_process';
 import path from 'path';
-import fs from 'fs';
 
 async function runLocalPreview() {
   const outDir = path.resolve(process.cwd(), 'public/store-assets');

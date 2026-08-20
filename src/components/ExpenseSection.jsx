@@ -7,10 +7,9 @@ export function ExpenseSection({ expenses, onUpdateExpenses, partners }) {
   const [newLabel, setNewLabel] = useState('');
   const [newAmount, setNewAmount] = useState('');
   const [newFrequency, setNewFrequency] = useState('monthly');
-  const [newAssignedTo, setNewAssignedTo] = useState('shared');
-  const [newCategory, setNewCategory] = useState('Living');
+  const newAssignedTo = 'shared';
+  const newCategory = 'Living';
   const [activeFilter, setActiveFilter] = useState('all');
-  const [showAddForm, setShowAddForm] = useState(false);
 
   const p1Name = partners?.[0]?.name || 'Alex';
   const p2Name = partners?.[1]?.name || 'Sam';
@@ -31,7 +30,6 @@ export function ExpenseSection({ expenses, onUpdateExpenses, partners }) {
     onUpdateExpenses([...expenses, newExpense]);
     setNewLabel('');
     setNewAmount('');
-    setShowAddForm(false);
   };
 
   const handleDeleteExpense = (id) => {

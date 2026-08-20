@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { ShieldCheck, RefreshCw, Zap, Trash2, Download, MessageSquarePlus, Sparkles, Lock, MoreHorizontal, ChevronDown } from 'lucide-react';
+import { ShieldCheck, RefreshCw, Zap, Trash2, Download, MessageSquarePlus, Sparkles, Lock, MoreHorizontal } from 'lucide-react';
 import { TandemLogo } from './TandemLogo';
 import { APP_VERSION, APP_NAME } from '../config/version.js';
 

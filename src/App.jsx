@@ -145,6 +145,7 @@ export default function App() {
         partners={appState.partners}
         trialDaysLeft={trialState.daysRemaining}
         onOpenExport={() => setIsExportModalOpen(true)}
+        onOpenPaywall={() => setIsPaywallExplicitlyOpen(true)}
       />
 
       {/* Main App Content Area */}

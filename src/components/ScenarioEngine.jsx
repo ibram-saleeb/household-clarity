@@ -6,9 +6,9 @@ export function ScenarioEngine({
   onToggleScenario,
   scenarioData,
   onUpdateScenario,
-  onAddScenario,
-  onDeleteScenario,
-  onSelectScenario,
+  _onAddScenario,
+  _onDeleteScenario,
+  _onSelectScenario,
   partners,
   baselineExpenses
 }) {

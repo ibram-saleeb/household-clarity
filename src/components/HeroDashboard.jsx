@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
 import { formatMoney } from '../utils/formatters.js';
 
-export function HeroDashboard({ data, scenarioMode, savingsTargetMonthly, onSavingsChange }) {
+export function HeroDashboard({ data, scenarioMode, savingsTargetMonthly, _onSavingsChange }) {
   const [isMonthClosed, setIsMonthClosed] = useState(false);
-  const { baseline, scenario, deltas } = data;
+  const { baseline, scenario } = data;
 
   const current = scenarioMode && scenario ? scenario : baseline;
-  const isSurplus = current.netCashflowMonthly >= 0;
 
   // Key cashflow figures
   const usable = current.combinedUsableMonthly || 0;
@@ -36,9 +35,6 @@ export function HeroDashboard({ data, scenarioMode, savingsTargetMonthly, onSavi
 
   const p1Usable = current.p1?.spendableIncomeMonthly || 0;
   const p2Usable = current.p2?.spendableIncomeMonthly || 0;
-  const totalUsable = (p1Usable + p2Usable) || 1;
-  const p1Pct = Math.round((p1Usable / totalUsable) * 100);
-  const p2Pct = 100 - p1Pct;
 
   return (
     <section className="hero-dashboard-section" aria-label="Monthly Household Overview">

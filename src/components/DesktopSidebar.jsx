@@ -5,7 +5,8 @@ export function DesktopSidebar({
   onTabChange,
   partners,
   trialDaysLeft = 14,
-  onOpenExport
+  onOpenExport,
+  onOpenPaywall
 }) {
   const p1Name = partners?.[0]?.name || 'Alex';
   const p2Name = partners?.[1]?.name || 'Sam';
@@ -50,8 +51,15 @@ export function DesktopSidebar({
 
       {/* Footer Meta & Trial */}
       <div className="sidebar-footer">
-        <div className="sidebar-trial-label">Trial · {trialDaysLeft} days left</div>
-        <div className="sidebar-trial-track">
+        <div 
+          className="sidebar-trial-label"
+          onClick={onOpenPaywall}
+          style={{ cursor: 'pointer' }}
+          title="Click to view 14-day access pass details"
+        >
+          Trial · {trialDaysLeft} days left
+        </div>
+        <div className="sidebar-trial-track" onClick={onOpenPaywall} style={{ cursor: 'pointer' }}>
           <div className="sidebar-trial-progress" style={{ width: '53%' }} />
         </div>
         <button

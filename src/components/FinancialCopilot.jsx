@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Sparkles, PieChart, Scale, ShieldCheck, Users, ChevronRight, ArrowUpRight } from 'lucide-react';
+import { Sparkles, PieChart, Scale, ShieldCheck, Users } from 'lucide-react';
 import { formatMoney } from '../utils/formatters.js';
 import { annualiseAmount, deannualiseToMonthly } from '../logic/calculator.js';
 
