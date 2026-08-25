@@ -8,6 +8,7 @@
     "build": "vite build",
     "lint": "oxlint",
     "test:unit": "vitest run",
+    "test:coverage": "vitest run --coverage",
     "test:e2e": "playwright test",
     "test": "vitest run && playwright test",
     "preview:capture": "node scripts/capture-preview.js",
